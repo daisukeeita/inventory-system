@@ -23,30 +23,51 @@ public class User {
   }
 
   public void setId(final UUID id) {
+    if (id == null) {
+      throw new IllegalArgumentException("User ID should not be empty.");
+    }
     this.id = id;
   }
 
   public void setUsername(final String username) {
+    if (username == null || username.trim().isBlank()) {
+      throw new IllegalArgumentException("Username should not be empty.");
+    }
     this.username = username;
   }
 
   public void setHashedPassword(final String hashedPassword) {
+    if (hashedPassword == null || hashedPassword.trim().isBlank()) {
+      throw new IllegalArgumentException("Hashed Password should not be empty.");
+    }
     this.hashedPassword = hashedPassword;
   }
 
   public void setRole(final Role role) {
+    if (role == null) {
+      throw new IllegalArgumentException("Role should not be empty.");
+    }
     this.role = role;
   }
 
   public void setPersonalDetails(final PersonalDetails personalDetails) {
+    if (personalDetails == null) {
+      throw new IllegalArgumentException("Personal Details should not be empty.");
+    }
     this.personalDetails = personalDetails;
   }
 
   public void setCreatedAt(final LocalDate date) {
+    if (date == null) {
+      throw new IllegalArgumentException("Created At Date should not be empty.");
+    }
     this.createdAt = date;
   }
 
   public void setUpdatedAt(final LocalDate date) {
+    if (date == null) {
+      throw new IllegalArgumentException("Updated At Date should not be empty.");
+    }
     this.updatedAt = date;
   }
 

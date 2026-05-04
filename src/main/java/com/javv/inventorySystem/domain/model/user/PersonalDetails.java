@@ -64,6 +64,18 @@ public class PersonalDetails {
     return userId;
   }
 
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public String getMiddleInitial() {
+    return middleInitial;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
   public String getDisplayName() {
     return displayName;
   }

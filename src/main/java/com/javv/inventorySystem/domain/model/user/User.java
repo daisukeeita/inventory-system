@@ -13,6 +13,9 @@ public class User {
   private LocalDate createdAt;
   private LocalDate updatedAt;
 
+  public User() {
+  }
+
   public User(
       UUID id, String username, String hashedPassword, Role role, PersonalDetails personalDetails) {
     this.id = id;

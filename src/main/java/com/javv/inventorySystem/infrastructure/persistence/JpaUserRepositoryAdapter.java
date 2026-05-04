@@ -4,9 +4,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.javv.inventorySystem.application.mapper.UserMapper;
 import com.javv.inventorySystem.domain.model.user.User;
 import com.javv.inventorySystem.domain.repository.user.UserRepositoryInterface;
+import com.javv.inventorySystem.infrastructure.persistence.mapper.UserJpaMapper;
 import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaEntity;
 
 /**
@@ -19,10 +19,10 @@ import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaEntity;
 @Repository
 public class JpaUserRepositoryAdapter implements UserRepositoryInterface {
   private final SpringDataJpaUserRepository springDataJpaUserRepository;
-  private final UserMapper userMapper;
+  private final UserJpaMapper userMapper;
 
   public JpaUserRepositoryAdapter(
-      SpringDataJpaUserRepository springDataJpaUserRepository, UserMapper userMapper) {
+      SpringDataJpaUserRepository springDataJpaUserRepository, UserJpaMapper userMapper) {
     this.springDataJpaUserRepository = springDataJpaUserRepository;
     this.userMapper = userMapper;
   }

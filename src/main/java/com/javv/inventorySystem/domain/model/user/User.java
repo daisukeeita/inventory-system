@@ -9,20 +9,26 @@ public class User {
   private String hashedPassword;
   private Role role;
   private PersonalDetails personalDetails;
+  private ContactInformation contactInformation;
   private boolean isActive;
   private LocalDate createdAt;
   private LocalDate updatedAt;
 
-  public User() {
-  }
+  public User() {}
 
   public User(
-      UUID id, String username, String hashedPassword, Role role, PersonalDetails personalDetails) {
+      UUID id,
+      String username,
+      String hashedPassword,
+      Role role,
+      PersonalDetails personalDetails,
+      ContactInformation contactInformation) {
     this.id = id;
     this.username = username;
     this.hashedPassword = hashedPassword;
     this.role = role;
     this.personalDetails = personalDetails;
+    this.contactInformation = contactInformation;
   }
 
   public void setId(final UUID id) {
@@ -58,6 +64,13 @@ public class User {
       throw new IllegalArgumentException("Personal Details should not be empty.");
     }
     this.personalDetails = personalDetails;
+  }
+
+  public void setContactInformation(final ContactInformation contactInformation) {
+    if (contactInformation == null) {
+      throw new IllegalArgumentException("Contract Information should not be empty.");
+    }
+    this.contactInformation = contactInformation;
   }
 
   public void setCreatedAt(final LocalDate date) {
@@ -106,18 +119,13 @@ public class User {
     return updatedAt;
   }
 
-  /**
-   * Activating the user.
-   */
+  /** Activating the user. */
   public void activateUser() {
     this.isActive = true;
   }
 
-  /**
-   * Deactivating the user.
-   */
+  /** Deactivating the user. */
   public void deactivateUser() {
     this.isActive = false;
   }
-
 }

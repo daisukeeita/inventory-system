@@ -8,11 +8,9 @@ public class ContactInformation {
   private String phoneNumber;
   private String mailingAddress;
 
-  public ContactInformation(
-      UUID userId,
-      String email,
-      String phoneNumber,
-      String mailingAddress) {
+  public ContactInformation() {}
+
+  public ContactInformation(UUID userId, String email, String phoneNumber, String mailingAddress) {
     this.userId = userId;
     this.email = email;
     this.phoneNumber = phoneNumber;

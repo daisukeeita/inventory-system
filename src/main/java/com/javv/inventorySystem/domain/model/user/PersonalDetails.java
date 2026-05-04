@@ -10,12 +10,10 @@ public class PersonalDetails {
   private String lastName;
   private String profilePicture;
 
+  public PersonalDetails() {}
+
   public PersonalDetails(
-      UUID userId,
-      String firstName,
-      String middleInitial,
-      String lastName,
-      String profilePicture) {
+      UUID userId, String firstName, String middleInitial, String lastName, String profilePicture) {
     this.userId = userId;
     this.firstName = firstName;
     this.middleInitial = middleInitial;

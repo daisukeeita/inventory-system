@@ -11,7 +11,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "contact_infomration")
+@Table(name = "contact_information")
 public class ContactInformationJpaEntity {
   @Id
   private UUID id;
@@ -19,7 +19,7 @@ public class ContactInformationJpaEntity {
   @OneToOne
   @MapsId
   @JoinColumn(name = "user_id")
-  private UserJpaEntity user;
+  private UserJpaEntity userJpaEntity;
 
   @Column(name = "email", length = 155, unique = true, nullable = false)
   private String email;
@@ -34,18 +34,18 @@ public class ContactInformationJpaEntity {
   }
 
   public ContactInformationJpaEntity(
-      UserJpaEntity user,
+      UserJpaEntity userJpaEntity,
       String email,
       String phoneNumber,
       String mailingAddress) {
-    this.user = user;
+    this.userJpaEntity = userJpaEntity;
     this.email = email;
     this.phoneNumber = phoneNumber;
     this.mailingAddress = mailingAddress;
   }
 
-  public void setUser(UserJpaEntity user) {
-    this.user = user;
+  public void setUser(UserJpaEntity userJpaEntity) {
+    this.userJpaEntity = userJpaEntity;
   }
 
   public void setEmail(String email) {

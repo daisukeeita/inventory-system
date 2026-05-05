@@ -19,7 +19,7 @@ public class PersonalDetailsJpaEntity {
   @OneToOne
   @MapsId
   @JoinColumn(name = "user_id")
-  private UserJpaEntity user;
+  private UserJpaEntity userJpaEntity;
 
   @Column(name = "display_name", length = 255, nullable = false)
   private String displayName;
@@ -40,18 +40,18 @@ public class PersonalDetailsJpaEntity {
   }
 
   public PersonalDetailsJpaEntity(
-      UserJpaEntity user,
+      UserJpaEntity userJpaEntity,
       String firstName,
       String middleInitial,
       String lastName) {
-    this.user = user;
+    this.userJpaEntity = userJpaEntity;
     this.firstName = firstName;
     this.middleInitial = middleInitial;
     this.lastName = lastName;
   }
 
-  public void setUser(UserJpaEntity user) {
-    this.user = user;
+  public void setUser(UserJpaEntity userJpaEntity) {
+    this.userJpaEntity = userJpaEntity;
   }
 
   public void setFirstName(String firstName) {

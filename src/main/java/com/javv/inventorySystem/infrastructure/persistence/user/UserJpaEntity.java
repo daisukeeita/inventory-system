@@ -14,7 +14,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class UserJpaEntity {
   @Id
   @Column(name = "id", nullable = false)
@@ -36,14 +36,14 @@ public class UserJpaEntity {
   @Column(name = "updated_at", nullable = false)
   private LocalDate updatedAt = LocalDate.now();
 
-  @OneToOne(mappedBy = "user")
+  @OneToOne
   @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
   private RoleJpaEntity role;
 
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(mappedBy = "userJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
   private PersonalDetailsJpaEntity personalDetailsJpaEntity;
 
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(mappedBy = "userJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
   private ContactInformationJpaEntity contactInformationJpaEntity;
 
   public UserJpaEntity() {

@@ -107,6 +107,10 @@ public class User {
     return personalDetails;
   }
 
+  public ContactInformation getContactInformation() {
+    return contactInformation;
+  }
+
   public boolean getIsActive() {
     return isActive;
   }

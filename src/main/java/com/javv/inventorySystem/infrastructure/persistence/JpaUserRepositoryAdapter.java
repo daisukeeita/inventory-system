@@ -10,10 +10,13 @@ import com.javv.inventorySystem.infrastructure.persistence.mapper.UserJpaMapper;
 import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaEntity;
 
 /**
- * This is where the system "translates" the JPA Entity (User) to Domain Entity (User) after getting
+ * This is where the system "translates" the JPA Entity (User) to Domain Entity
+ * (User) after getting
  * the data from the database.
  *
- * <p>This is where the system "translates" the Domain Entity (User) to JPA Entity (User) before
+ * <p>
+ * This is where the system "translates" the Domain Entity (User) to JPA Entity
+ * (User) before
  * inserting the object to the database.
  */
 @Repository
@@ -29,13 +32,12 @@ public class JpaUserRepositoryAdapter implements UserRepositoryInterface {
 
   @Override
   public Optional<User> findByUsername(String username) {
-    Optional<UserJpaEntity> entity = springDataJpaUserRepository.findById(null);
-
-    User user = new User();
+    Optional<UserJpaEntity> entity = springDataJpaUserRepository.findByUsername(username);
 
     return null;
   }
 
   @Override
-  public void save(User user) {}
+  public void save(User user) {
+  }
 }

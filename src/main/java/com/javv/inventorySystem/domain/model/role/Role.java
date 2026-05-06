@@ -1,10 +1,10 @@
 package com.javv.inventorySystem.domain.model.role;
 
 public class Role {
-  private int id = 0;
+  private Integer id = 0;
   private String name;
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     if (id == 0 || id == -1) {
       throw new IllegalArgumentException("Role ID should not be empty.");
     }
@@ -18,7 +18,7 @@ public class Role {
     this.name = name;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 

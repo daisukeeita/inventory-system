@@ -18,12 +18,9 @@ public class RoleJpaEntity {
   @Column(name = "name", length = 15, nullable = false)
   private String name;
 
-  public RoleJpaEntity() {
-  }
+  public RoleJpaEntity() {}
 
-  public RoleJpaEntity(
-      Integer id,
-      String name) {
+  public RoleJpaEntity(Integer id, String name) {
     this.id = id;
     this.name = name;
   }

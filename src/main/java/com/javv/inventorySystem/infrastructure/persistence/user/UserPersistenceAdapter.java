@@ -1,12 +1,11 @@
-package com.javv.inventorySystem.infrastructure.persistence;
+package com.javv.inventorySystem.infrastructure.persistence.user;
 
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import com.javv.inventorySystem.domain.model.user.User;
-import com.javv.inventorySystem.domain.repository.user.UserRepositoryInterface;
-import com.javv.inventorySystem.infrastructure.persistence.mapper.UserJpaMapper;
+import com.javv.inventorySystem.domain.repository.UserRepositoryInterface;
 
 /**
  * This is where the system "translates" the JPA Entity (User) to Domain Entity
@@ -19,19 +18,19 @@ import com.javv.inventorySystem.infrastructure.persistence.mapper.UserJpaMapper;
  * inserting the object to the database.
  */
 @Repository
-public class JpaUserRepositoryAdapter implements UserRepositoryInterface {
-  private final SpringJpaUserRepository springDataJpaUserRepository;
-  private final UserJpaMapper userMapper;
+public class UserPersistenceAdapter implements UserRepositoryInterface {
+  private final UserJpaRepository userJpaRepository;
+  private final UserPersistenceMapper userMapper;
 
-  public JpaUserRepositoryAdapter(
-      SpringJpaUserRepository springDataJpaUserRepository, UserJpaMapper userMapper) {
-    this.springDataJpaUserRepository = springDataJpaUserRepository;
-    this.userMapper = userMapper;
+  public UserPersistenceAdapter(
+      UserJpaRepository userJpaRepository, UserPersistenceMapper userPersistenceMapper) {
+    this.userJpaRepository = userJpaRepository;
+    this.userMapper = userPersistenceMapper;
   }
 
   @Override
   public Optional<User> findByUsername(String username) {
-    Optional<UserJpaEntity> jpaEntity = springDataJpaUserRepository.findByUsername(username);
+    Optional<UserJpaEntity> jpaEntity = userJpaRepository.findByUsername(username);
     Optional<User> user = jpaEntity.map(entity -> userMapper.jpaToDomainEntity(entity));
 
     return user;
@@ -42,6 +41,6 @@ public class JpaUserRepositoryAdapter implements UserRepositoryInterface {
     UserJpaEntity jpaEntity = userMapper.domainToJpaEntity(
         user.getRole(), user.getPersonalDetails(), user.getContactInformation(), user);
 
-    springDataJpaUserRepository.save(jpaEntity);
+    userJpaRepository.save(jpaEntity);
   }
 }

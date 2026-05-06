@@ -13,7 +13,7 @@ public class RoleJpaEntity {
   @Id
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private int id;
+  private Integer id;
 
   @Column(name = "name", length = 15, nullable = false)
   private String name;
@@ -22,13 +22,13 @@ public class RoleJpaEntity {
   }
 
   public RoleJpaEntity(
-      int id,
+      Integer id,
       String name) {
     this.id = id;
     this.name = name;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -36,7 +36,7 @@ public class RoleJpaEntity {
     this.name = name;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 

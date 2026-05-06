@@ -1,4 +1,4 @@
-package com.javv.inventorySystem.domain.repository.user;
+package com.javv.inventorySystem.domain.repository;
 
 import java.util.Optional;
 

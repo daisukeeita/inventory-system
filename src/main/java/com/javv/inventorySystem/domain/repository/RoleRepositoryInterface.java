@@ -5,5 +5,7 @@ import java.util.Optional;
 import com.javv.inventorySystem.domain.model.role.Role;
 
 public interface RoleRepositoryInterface {
-  public Optional<Role> findById(Integer id);
+  Optional<Role> findById(Integer id);
+
+  void save(Role role);
 }

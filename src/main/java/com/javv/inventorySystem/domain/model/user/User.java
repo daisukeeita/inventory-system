@@ -3,6 +3,8 @@ package com.javv.inventorySystem.domain.model.user;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.javv.inventorySystem.domain.model.role.Role;
+
 public class User {
   private UUID id;
   private String username;
@@ -14,7 +16,8 @@ public class User {
   private LocalDate createdAt;
   private LocalDate updatedAt;
 
-  public User() {}
+  public User() {
+  }
 
   public User(
       UUID id,

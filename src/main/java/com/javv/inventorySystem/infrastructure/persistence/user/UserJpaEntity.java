@@ -3,6 +3,8 @@ package com.javv.inventorySystem.infrastructure.persistence.user;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.javv.inventorySystem.infrastructure.persistence.role.RoleJpaEntity;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.javv.inventorySystem.infrastructure.persistence.user;
+package com.javv.inventorySystem.infrastructure.persistence.role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

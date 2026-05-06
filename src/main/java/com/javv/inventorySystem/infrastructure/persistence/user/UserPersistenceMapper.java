@@ -2,9 +2,9 @@ package com.javv.inventorySystem.infrastructure.persistence.mapper;
 
 import org.springframework.stereotype.Component;
 
+import com.javv.inventorySystem.domain.model.role.Role;
 import com.javv.inventorySystem.domain.model.user.ContactInformation;
 import com.javv.inventorySystem.domain.model.user.PersonalDetails;
-import com.javv.inventorySystem.domain.model.user.Role;
 import com.javv.inventorySystem.domain.model.user.User;
 import com.javv.inventorySystem.infrastructure.persistence.user.ContactInformationJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.user.PersonalDetailsJpaEntity;

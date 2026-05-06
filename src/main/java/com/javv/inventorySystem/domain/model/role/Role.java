@@ -1,4 +1,4 @@
-package com.javv.inventorySystem.domain.model.user;
+package com.javv.inventorySystem.domain.model.role;
 
 public class Role {
   private int id = 0;

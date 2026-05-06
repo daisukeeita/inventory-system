@@ -1,4 +1,4 @@
-package com.javv.inventorySystem.infrastructure.persistence.mapper;
+package com.javv.inventorySystem.infrastructure.persistence.user;
 
 import org.springframework.stereotype.Component;
 
@@ -6,13 +6,10 @@ import com.javv.inventorySystem.domain.model.role.Role;
 import com.javv.inventorySystem.domain.model.user.ContactInformation;
 import com.javv.inventorySystem.domain.model.user.PersonalDetails;
 import com.javv.inventorySystem.domain.model.user.User;
-import com.javv.inventorySystem.infrastructure.persistence.user.ContactInformationJpaEntity;
-import com.javv.inventorySystem.infrastructure.persistence.user.PersonalDetailsJpaEntity;
-import com.javv.inventorySystem.infrastructure.persistence.user.RoleJpaEntity;
-import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaEntity;
+import com.javv.inventorySystem.infrastructure.persistence.role.RoleJpaEntity;
 
 @Component
-public class UserJpaMapper {
+public class UserPersistenceMapper {
   public User jpaToDomainEntity(UserJpaEntity userJpaEntity) {
     Role role = new Role();
     role.setId(userJpaEntity.getRole().getId());

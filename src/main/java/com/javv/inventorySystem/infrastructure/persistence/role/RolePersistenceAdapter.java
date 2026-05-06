@@ -12,7 +12,8 @@ public class RolePersistenceAdapter implements RoleRepositoryInterface {
   private RoleJpaRepository roleJpaRepository;
   private RolePersistenceMapper rolePersistenceMapper;
 
-  public RolePersistenceAdapter(RoleJpaRepository roleJpaRepository, RolePersistenceMapper rolePersistenceMapper) {
+  public RolePersistenceAdapter(
+      RoleJpaRepository roleJpaRepository, RolePersistenceMapper rolePersistenceMapper) {
     this.roleJpaRepository = roleJpaRepository;
     this.rolePersistenceMapper = rolePersistenceMapper;
   }
@@ -21,6 +22,18 @@ public class RolePersistenceAdapter implements RoleRepositoryInterface {
   public Optional<Role> findById(Integer id) {
     Optional<RoleJpaEntity> roleEntity = roleJpaRepository.findById(id);
     Optional<Role> role = roleEntity.map(entity -> rolePersistenceMapper.entityToDomain(entity));
-    return null;
+    return role;
+  }
+
+  public Optional<Role> findByName(String name) {
+    Optional<RoleJpaEntity> roleEntity = roleJpaRepository.findByName(name);
+    Optional<Role> role = roleEntity.map(entity -> rolePersistenceMapper.entityToDomain(entity));
+    return role;
+  }
+
+  @Override
+  public void save(Role role) {
+    RoleJpaEntity roleJpaEntity = rolePersistenceMapper.domainToEntity(role);
+    roleJpaRepository.save(roleJpaEntity);
   }
 }

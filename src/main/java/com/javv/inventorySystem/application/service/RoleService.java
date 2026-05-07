@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.model.role.Role;
 import com.javv.inventorySystem.infrastructure.persistence.role.RolePersistenceAdapter;
 
@@ -19,7 +20,9 @@ public class RoleService {
 
   public Role getRoleById(int id) {
     Optional<Role> optionalRole = rolePersistenceAdapter.findById(id);
-    Role role = optionalRole.orElseThrow();
+    Role role = optionalRole
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "Role not found in database base using the id: " + id));
     return role;
   }
 

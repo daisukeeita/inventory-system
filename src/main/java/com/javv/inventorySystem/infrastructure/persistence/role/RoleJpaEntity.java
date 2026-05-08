@@ -15,10 +15,11 @@ public class RoleJpaEntity {
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Integer id;
 
-  @Column(name = "name", length = 15, nullable = false)
+  @Column(name = "name", length = 15, nullable = false, unique = true)
   private String name;
 
-  public RoleJpaEntity() {}
+  public RoleJpaEntity() {
+  }
 
   public RoleJpaEntity(Integer id, String name) {
     this.id = id;

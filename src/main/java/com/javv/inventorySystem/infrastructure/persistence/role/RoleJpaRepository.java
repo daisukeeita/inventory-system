@@ -6,4 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface RoleJpaRepository extends CrudRepository<RoleJpaEntity, Integer> {
   Optional<RoleJpaEntity> findByName(String name);
+
+  boolean existsByName(String name);
 }

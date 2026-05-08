@@ -20,9 +20,15 @@ public class RoleController {
     this.roleService = roleService;
   }
 
-  @GetMapping("/getRole/{id}")
+  @GetMapping("/getRoleById/{id}")
   public ApiResponse<Role> getRoleById(@PathVariable int id) {
     Role role = roleService.getRoleById(id);
     return ApiResponse.success(role, "Successfuly retrieved the role.", HttpStatus.FOUND.value());
+  }
+
+  @GetMapping("/getRoleByName/{name}")
+  public ApiResponse<Role> getRoleByName(@PathVariable String name) {
+    Role role = roleService.getRoleByName(name);
+    return ApiResponse.success(role, "Successfully retrieved the role.", HttpStatus.FOUND.value());
   }
 }

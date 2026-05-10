@@ -13,8 +13,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "personal_details")
 public class PersonalDetailsJpaEntity {
-  @Id
-  private UUID id;
+  @Id private UUID id;
 
   @OneToOne
   @MapsId
@@ -36,14 +35,10 @@ public class PersonalDetailsJpaEntity {
   @Column(name = "profile_picture", length = 255, nullable = true)
   private String profilePicture;
 
-  public PersonalDetailsJpaEntity() {
-  }
+  public PersonalDetailsJpaEntity() {}
 
   public PersonalDetailsJpaEntity(
-      UserJpaEntity userJpaEntity,
-      String firstName,
-      String middleInitial,
-      String lastName) {
+      UserJpaEntity userJpaEntity, String firstName, String middleInitial, String lastName) {
     this.userJpaEntity = userJpaEntity;
     this.firstName = firstName;
     this.middleInitial = middleInitial;
@@ -72,6 +67,10 @@ public class PersonalDetailsJpaEntity {
 
   public void setDisplayName(String displayName) {
     this.displayName = displayName;
+  }
+
+  public void setUserJpaEntity(UserJpaEntity userJpaEntity) {
+    this.userJpaEntity = userJpaEntity;
   }
 
   public UUID getUserId() {

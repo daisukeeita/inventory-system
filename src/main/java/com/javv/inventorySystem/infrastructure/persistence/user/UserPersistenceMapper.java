@@ -10,18 +10,19 @@ import com.javv.inventorySystem.infrastructure.persistence.role.RoleJpaEntity;
 
 @Component
 public class UserPersistenceMapper {
-  public User jpaToDomainEntity(UserJpaEntity userJpaEntity) {
+  public User toDomainEntity(UserJpaEntity userJpaEntity) {
     Role role = new Role();
+
     role.setId(userJpaEntity.getRole().getId());
     role.setName(userJpaEntity.getRole().getName());
 
     PersonalDetails personalDetails = new PersonalDetails();
-    personalDetails.setUserId(userJpaEntity.getUserId());
+    personalDetails.setUserId(userJpaEntity.getPersonalDetailsJpaEntity().getUserId());
     personalDetails.setFirstName(userJpaEntity.getPersonalDetailsJpaEntity().getFirstName());
     personalDetails.setMiddleInitial(
         userJpaEntity.getPersonalDetailsJpaEntity().getMiddleInitial());
     personalDetails.setLastName(userJpaEntity.getPersonalDetailsJpaEntity().getLastName());
-    personalDetails.setDisplayName();
+    personalDetails.setFullName(userJpaEntity.getPersonalDetailsJpaEntity().getDisplayName());
     personalDetails.setProfilePicture(
         userJpaEntity.getPersonalDetailsJpaEntity().getProfilePicture());
 
@@ -43,28 +44,27 @@ public class UserPersistenceMapper {
     return user;
   }
 
-  public UserJpaEntity domainToJpaEntity(
-      Role role,
-      PersonalDetails personalDetails,
-      ContactInformation contactInformation,
-      User user) {
-    PersonalDetailsJpaEntity personalDetailsJpaEntity = new PersonalDetailsJpaEntity();
-    personalDetailsJpaEntity.setDisplayName(personalDetails.getDisplayName());
-    personalDetailsJpaEntity.setFirstName(personalDetails.getFirstName());
-    personalDetailsJpaEntity.setMiddleInitial(personalDetails.getMiddleInitial());
-    personalDetailsJpaEntity.setLastName(personalDetails.getLastName());
-    personalDetailsJpaEntity.setProfilePicture(personalDetailsJpaEntity.getProfilePicture());
+  public UserJpaEntity toJpaEntity(User user) {
+    RoleJpaEntity roleJpaEntity = new RoleJpaEntity();
+    UserJpaEntity userJpaEntity = new UserJpaEntity();
+
+    roleJpaEntity.setId(user.getRole().getId());
+    roleJpaEntity.setName(user.getRole().getName());
 
     ContactInformationJpaEntity contactInformationJpaEntity = new ContactInformationJpaEntity();
-    contactInformationJpaEntity.setEmail(contactInformation.getEmail());
-    contactInformationJpaEntity.setMailingAddress(contactInformation.getMailingAddress());
-    contactInformationJpaEntity.setPhoneNumber(contactInformation.getPhoneNumber());
+    contactInformationJpaEntity.setUser(userJpaEntity);
+    contactInformationJpaEntity.setEmail(user.getContactInformation().getEmail());
+    contactInformationJpaEntity.setPhoneNumber(user.getContactInformation().getPhoneNumber());
+    contactInformationJpaEntity.setMailingAddress(user.getContactInformation().getMailingAddress());
 
-    RoleJpaEntity roleJpaEntity = new RoleJpaEntity();
-    roleJpaEntity.setId(role.getId());
-    roleJpaEntity.setName(role.getName());
+    PersonalDetailsJpaEntity personalDetailsJpaEntity = new PersonalDetailsJpaEntity();
+    personalDetailsJpaEntity.setUser(userJpaEntity);
+    personalDetailsJpaEntity.setFirstName(user.getPersonalDetails().getFirstName());
+    personalDetailsJpaEntity.setMiddleInitial(user.getPersonalDetails().getMiddleInitial());
+    personalDetailsJpaEntity.setLastName(user.getPersonalDetails().getLastName());
+    personalDetailsJpaEntity.setDisplayName(user.getPersonalDetails().getDisplayName());
+    personalDetailsJpaEntity.setProfilePicture(user.getPersonalDetails().getProfilePicture());
 
-    UserJpaEntity userJpaEntity = new UserJpaEntity();
     userJpaEntity.setUsername(user.getUsername());
     userJpaEntity.setHashedPassword(user.getHashedPassword());
     userJpaEntity.setRole(roleJpaEntity);

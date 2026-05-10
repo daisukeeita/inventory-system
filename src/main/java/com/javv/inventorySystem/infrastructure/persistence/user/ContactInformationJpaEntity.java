@@ -13,8 +13,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "contact_information")
 public class ContactInformationJpaEntity {
-  @Id
-  private UUID id;
+  @Id private UUID id;
 
   @OneToOne
   @MapsId
@@ -30,14 +29,10 @@ public class ContactInformationJpaEntity {
   @Column(name = "mailing_address", length = 255, nullable = true)
   private String mailingAddress;
 
-  public ContactInformationJpaEntity() {
-  }
+  public ContactInformationJpaEntity() {}
 
   public ContactInformationJpaEntity(
-      UserJpaEntity userJpaEntity,
-      String email,
-      String phoneNumber,
-      String mailingAddress) {
+      UserJpaEntity userJpaEntity, String email, String phoneNumber, String mailingAddress) {
     this.userJpaEntity = userJpaEntity;
     this.email = email;
     this.phoneNumber = phoneNumber;
@@ -58,6 +53,10 @@ public class ContactInformationJpaEntity {
 
   public void setMailingAddress(String mailingAddress) {
     this.mailingAddress = mailingAddress;
+  }
+
+  public void setUserJpaEntity(UserJpaEntity userJpaEntity) {
+    this.userJpaEntity = userJpaEntity;
   }
 
   public UUID getUserId() {

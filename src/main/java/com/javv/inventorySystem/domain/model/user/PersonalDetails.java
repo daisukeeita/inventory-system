@@ -60,6 +60,10 @@ public class PersonalDetails {
     this.displayName = firstName + " " + middleInitial + " " + lastName;
   }
 
+  public void setFullName(String fullName) {
+    this.displayName = fullName;
+  }
+
   public UUID getUserId() {
     return userId;
   }

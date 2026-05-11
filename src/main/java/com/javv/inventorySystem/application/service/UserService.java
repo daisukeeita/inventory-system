@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.javv.inventorySystem.application.dto.user.UserCreateDto;
+import com.javv.inventorySystem.application.dto.user.UserResponseDto;
 import com.javv.inventorySystem.application.mapper.UserRestMapper;
 import com.javv.inventorySystem.domain.model.role.Role;
 import com.javv.inventorySystem.domain.model.user.User;
 import com.javv.inventorySystem.domain.repository.UserRepositoryInterface;
-import com.javv.inventorySystem.infrastructure.persistence.user.UserPersistenceMapper;
 
 @Service
 @Transactional(readOnly = true)
@@ -18,31 +18,30 @@ public class UserService {
   private RoleService roleService;
   private UserRestMapper userRestMapper;
   private BCryptPasswordEncoder passwordEncoder;
-  private UserPersistenceMapper userPersistenceMapper;
   private UserRepositoryInterface userRepositoryInterface;
 
   public UserService(
       RoleService roleService,
       UserRestMapper userRestMapper,
       BCryptPasswordEncoder passwordEncoder,
-      UserPersistenceMapper userPersistenceMapper,
       UserRepositoryInterface userRepositoryInterface) {
     this.roleService = roleService;
     this.userRestMapper = userRestMapper;
     this.passwordEncoder = passwordEncoder;
-    this.userPersistenceMapper = userPersistenceMapper;
     this.userRepositoryInterface = userRepositoryInterface;
   }
 
   @Transactional
-  public User saveUser(UserCreateDto userCreateDto) {
+  public UserResponseDto saveUser(UserCreateDto userCreateDto) {
     Role role = roleService.getRoleByName(userCreateDto.getRoleName());
 
     String hashedPassword = hashPassword(userCreateDto.getPassword());
 
     User user = userRestMapper.toDomainEntity(userCreateDto, hashedPassword, role);
 
-    return userRepositoryInterface.save(user);
+    User savedUser = userRepositoryInterface.save(user);
+
+    return userRestMapper.toDtoEntity(savedUser);
   }
 
   private String hashPassword(String plainPassword) {

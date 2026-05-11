@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javv.inventorySystem.application.dto.user.UserCreateDto;
+import com.javv.inventorySystem.application.dto.user.UserResponseDto;
 import com.javv.inventorySystem.application.service.UserService;
-import com.javv.inventorySystem.domain.model.user.User;
 import com.javv.inventorySystem.presentation.payload.ApiResponse;
 
 @RestController
@@ -23,8 +23,9 @@ public class UserController {
 
   @PostMapping("/save")
   @ResponseStatus(HttpStatus.CREATED)
-  public ApiResponse<User> saveUser(@RequestBody UserCreateDto userCreateDto) {
-    User user = userService.saveUser(userCreateDto);
-    return ApiResponse.success(user, "Successfully created new user.", HttpStatus.CREATED.value());
+  public ApiResponse<UserResponseDto> saveUser(@RequestBody UserCreateDto userCreateDto) {
+    UserResponseDto userResponseDto = userService.saveUser(userCreateDto);
+    return ApiResponse.success(
+        userResponseDto, "Successfully created new user.", HttpStatus.CREATED.value());
   }
 }

@@ -6,6 +6,7 @@ import com.javv.inventorySystem.domain.model.role.Role;
 import com.javv.inventorySystem.domain.model.user.ContactInformation;
 import com.javv.inventorySystem.domain.model.user.PersonalDetails;
 import com.javv.inventorySystem.domain.model.user.User;
+import com.javv.inventorySystem.domain.model.user.UserStatus;
 import com.javv.inventorySystem.infrastructure.persistence.role.RoleJpaEntity;
 
 @Component
@@ -39,7 +40,12 @@ public class UserPersistenceMapper {
     user.setUsername(userJpaEntity.getUsername());
     user.setHashedPassword(userJpaEntity.getHashedPassword());
     user.setRole(role);
+    user.setUserStatus(setStatus(userJpaEntity.getUserStatus()));
     user.setPersonalDetails(personalDetails);
+    user.setContactInformation(contactInformation);
+    user.setCreatedAt(userJpaEntity.getCreatedAt());
+    user.setUpdatedAt(userJpaEntity.getUpdatedAt());
+    user.setIsActive(userJpaEntity.getIsActive());
 
     return user;
   }
@@ -68,9 +74,21 @@ public class UserPersistenceMapper {
     userJpaEntity.setUsername(user.getUsername());
     userJpaEntity.setHashedPassword(user.getHashedPassword());
     userJpaEntity.setRole(roleJpaEntity);
+    userJpaEntity.setUserStatus(user.getUserStatus().toString());
     userJpaEntity.setPersonalDetails(personalDetailsJpaEntity);
     userJpaEntity.setContactInformation(contactInformationJpaEntity);
 
     return userJpaEntity;
+  }
+
+  private UserStatus setStatus(String status) {
+    switch (status.toUpperCase()) {
+      case "ONLINE":
+        return UserStatus.ONLINE;
+      case "OFFLINE":
+        return UserStatus.OFFLINE;
+      default:
+        throw new IllegalArgumentException("Given status is invalid: " + status);
+    }
   }
 }

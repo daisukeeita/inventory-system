@@ -4,6 +4,7 @@ public class UserCreateDto {
   private String username;
   private String password;
   private String roleName;
+  private String status;
   private String firstName;
   private String middleInitial;
   private String lastName;
@@ -12,12 +13,14 @@ public class UserCreateDto {
   private String phoneNumber;
   private String mailingAddress;
 
-  public UserCreateDto() {}
+  public UserCreateDto() {
+  }
 
   public UserCreateDto(
       final String username,
       final String password,
       final String roleName,
+      final String status,
       final String firstName,
       final String middleInitial,
       final String lastName,
@@ -28,8 +31,10 @@ public class UserCreateDto {
     this.username = username;
     this.password = password;
     this.roleName = roleName;
+    this.status = status;
     this.firstName = firstName;
     this.middleInitial = middleInitial;
+    this.lastName = lastName;
     this.profilePicture = profilePicture;
     this.email = email;
     this.phoneNumber = phoneNumber;
@@ -55,6 +60,13 @@ public class UserCreateDto {
       throw new IllegalArgumentException("Role Name is empty.");
     }
     this.roleName = roleName;
+  }
+
+  public final void setUserStatus(final String status) {
+    if (status == null || status.trim().isBlank()) {
+      throw new IllegalArgumentException("Status is empty.");
+    }
+    this.status = status;
   }
 
   public final void setFirstName(final String firstName) {
@@ -101,6 +113,10 @@ public class UserCreateDto {
 
   public final String getRoleName() {
     return roleName;
+  }
+
+  public final String getUserStatus() {
+    return status;
   }
 
   public final String getFirstName() {

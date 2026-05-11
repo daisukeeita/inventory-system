@@ -12,6 +12,7 @@ public class User {
   private Role role;
   private PersonalDetails personalDetails;
   private ContactInformation contactInformation;
+  private UserStatus status;
   private boolean isActive;
   private LocalDate createdAt;
   private LocalDate updatedAt;
@@ -24,12 +25,14 @@ public class User {
       String username,
       String hashedPassword,
       Role role,
+      UserStatus status,
       PersonalDetails personalDetails,
       ContactInformation contactInformation) {
     this.id = id;
     this.username = username;
     this.hashedPassword = hashedPassword;
     this.role = role;
+    this.status = status;
     this.personalDetails = personalDetails;
     this.contactInformation = contactInformation;
   }
@@ -62,6 +65,13 @@ public class User {
     this.role = role;
   }
 
+  public void setUserStatus(UserStatus status) {
+    if (status == null) {
+      throw new IllegalArgumentException("Status should not be empty.");
+    }
+    this.status = status;
+  }
+
   public void setPersonalDetails(final PersonalDetails personalDetails) {
     if (personalDetails == null) {
       throw new IllegalArgumentException("Personal Details should not be empty.");
@@ -90,6 +100,10 @@ public class User {
     this.updatedAt = date;
   }
 
+  public void setIsActive(final boolean isActive) {
+    this.isActive = isActive;
+  }
+
   public UUID getId() {
     return id;
   }
@@ -104,6 +118,10 @@ public class User {
 
   public Role getRole() {
     return role;
+  }
+
+  public UserStatus getUserStatus() {
+    return status;
   }
 
   public PersonalDetails getPersonalDetails() {

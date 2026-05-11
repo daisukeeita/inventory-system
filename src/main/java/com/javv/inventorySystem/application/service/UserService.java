@@ -34,6 +34,7 @@ public class UserService {
     this.userRepositoryInterface = userRepositoryInterface;
   }
 
+  @Transactional
   public User saveUser(UserCreateDto userCreateDto) {
     Role role = roleService.getRoleByName(userCreateDto.getRoleName());
 

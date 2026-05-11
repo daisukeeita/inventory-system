@@ -1,4 +1,4 @@
-package com.javv.inventorySystem.application.dto;
+package com.javv.inventorySystem.application.dto.user;
 
 import java.util.UUID;
 
@@ -8,16 +8,25 @@ public class UserResponseDto {
   private String displayName;
   private String role;
   private String profilePicture;
+  private String email;
+  private String phoneNumber;
+  private boolean isActive;
+  private String status;
 
   public UserResponseDto() {
   }
 
-  public UserResponseDto(UUID id, String username, String displayName, String role, String profilePicture) {
+  public UserResponseDto(UUID id, String username, String displayName, String role, String profilePicture, String email,
+      String phoneNumber, boolean isActive, String status) {
     this.id = id;
     this.username = username;
     this.displayName = displayName;
     this.role = role;
     this.profilePicture = profilePicture;
+    this.email = email;
+    this.phoneNumber = phoneNumber;
+    this.isActive = isActive;
+    this.status = status;
   }
 
   public void setId(UUID id) {
@@ -40,6 +49,22 @@ public class UserResponseDto {
     this.profilePicture = profilePicture;
   }
 
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  public void setIsActive(boolean isActive) {
+    this.isActive = isActive;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
   public UUID getId() {
     return id;
   }
@@ -58,5 +83,21 @@ public class UserResponseDto {
 
   public String getProfilePicture() {
     return profilePicture;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public boolean getIsActive() {
+    return isActive;
+  }
+
+  public String getStatus() {
+    return status;
   }
 }

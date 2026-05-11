@@ -3,6 +3,7 @@ package com.javv.inventorySystem.application.mapper;
 import org.springframework.stereotype.Component;
 
 import com.javv.inventorySystem.application.dto.user.UserCreateDto;
+import com.javv.inventorySystem.application.dto.user.UserResponseDto;
 import com.javv.inventorySystem.domain.model.role.Role;
 import com.javv.inventorySystem.domain.model.user.ContactInformation;
 import com.javv.inventorySystem.domain.model.user.PersonalDetails;
@@ -24,6 +25,26 @@ public class UserRestMapper {
     user.setContactInformation(contactInformationDtoToDomainEntity(userCreateDto));
 
     return user;
+  }
+
+  public UserResponseDto toDtoEntity(User user) {
+    UserResponseDto userResponseDto = new UserResponseDto();
+
+    userResponseDto.setId(user.getId());
+    userResponseDto.setUsername(user.getUsername());
+    userResponseDto.setIsActive(user.getIsActive());
+
+    userResponseDto.setRole(user.getRole().getName());
+
+    userResponseDto.setDisplayName(user.getPersonalDetails().getDisplayName());
+    userResponseDto.setProfilePicture(user.getPersonalDetails().getProfilePicture());
+
+    userResponseDto.setEmail(user.getContactInformation().getEmail());
+    userResponseDto.setPhoneNumber(user.getContactInformation().getPhoneNumber());
+
+    userResponseDto.setStatus(user.getUserStatus().toString());
+
+    return userResponseDto;
   }
 
   private ContactInformation contactInformationDtoToDomainEntity(UserCreateDto userCreateDto) {

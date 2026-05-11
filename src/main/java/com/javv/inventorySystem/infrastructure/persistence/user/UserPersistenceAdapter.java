@@ -10,10 +10,13 @@ import com.javv.inventorySystem.domain.model.user.User;
 import com.javv.inventorySystem.domain.repository.UserRepositoryInterface;
 
 /**
- * This is where the system "translates" the JPA Entity (User) to Domain Entity (User) after getting
+ * This is where the system "translates" the JPA Entity (User) to Domain Entity
+ * (User) after getting
  * the data from the database.
  *
- * <p>This is where the system "translates" the Domain Entity (User) to JPA Entity (User) before
+ * <p>
+ * This is where the system "translates" the Domain Entity (User) to JPA Entity
+ * (User) before
  * inserting the object to the database.
  */
 @Repository
@@ -38,13 +41,14 @@ public class UserPersistenceAdapter implements UserRepositoryInterface {
   @Override
   public User save(User user) {
     UserJpaEntity jpaEntity = userPersistenceMapper.toJpaEntity(user);
+    UserJpaEntity savedEntity;
 
     try {
-      userJpaRepository.save(jpaEntity);
+      savedEntity = userJpaRepository.save(jpaEntity);
     } catch (DataAccessResourceFailureException exception) {
       throw new SystemUnavailableException("Persistence service is down", exception);
     }
 
-    return userPersistenceMapper.toDomainEntity(jpaEntity);
+    return userPersistenceMapper.toDomainEntity(savedEntity);
   }
 }

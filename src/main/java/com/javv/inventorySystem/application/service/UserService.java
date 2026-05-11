@@ -1,5 +1,7 @@
 package com.javv.inventorySystem.application.service;
 
+import java.util.Optional;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +44,14 @@ public class UserService {
     User savedUser = userRepositoryInterface.save(user);
 
     return userRestMapper.toDtoEntity(savedUser);
+  }
+
+  @Transactional
+  public UserResponseDto getUserByUsername(String username) {
+    Optional<User> optionalUser = userRepositoryInterface.findByUsername(username);
+    User user = optionalUser.orElseThrow();
+
+    return userRestMapper.toDtoEntity(user);
   }
 
   private String hashPassword(String plainPassword) {

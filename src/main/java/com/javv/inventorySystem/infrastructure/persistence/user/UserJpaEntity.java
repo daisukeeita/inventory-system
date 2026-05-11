@@ -32,6 +32,9 @@ public class UserJpaEntity {
   @Column(name = "is_active", nullable = false)
   private boolean isActive = true;
 
+  @Column(name = "status", nullable = false)
+  private String status;
+
   @Column(name = "created_at", nullable = false)
   private LocalDate createdAt = LocalDate.now();
 
@@ -54,11 +57,13 @@ public class UserJpaEntity {
   public UserJpaEntity(
       String username,
       String hashedPassword,
+      String status,
       RoleJpaEntity role,
       PersonalDetailsJpaEntity personalDetailsJpaEntity,
       ContactInformationJpaEntity contactInformationJpaEntity) {
     this.username = username;
     this.hashedPassword = hashedPassword;
+    this.status = status;
     this.role = role;
     this.personalDetailsJpaEntity = personalDetailsJpaEntity;
     this.contactInformationJpaEntity = contactInformationJpaEntity;
@@ -78,6 +83,10 @@ public class UserJpaEntity {
 
   public void setRole(RoleJpaEntity role) {
     this.role = role;
+  }
+
+  public void setUserStatus(String status) {
+    this.status = status;
   }
 
   public void setPersonalDetails(PersonalDetailsJpaEntity personalDetailsJpaEntity) {
@@ -100,6 +109,10 @@ public class UserJpaEntity {
     return hashedPassword;
   }
 
+  public String getUserStatus() {
+    return status;
+  }
+
   public RoleJpaEntity getRole() {
     return role;
   }
@@ -110,6 +123,10 @@ public class UserJpaEntity {
 
   public LocalDate getUpdatedAt() {
     return updatedAt;
+  }
+
+  public boolean getIsActive() {
+    return isActive;
   }
 
   public PersonalDetailsJpaEntity getPersonalDetailsJpaEntity() {

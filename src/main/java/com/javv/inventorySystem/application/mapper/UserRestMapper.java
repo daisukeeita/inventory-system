@@ -7,6 +7,7 @@ import com.javv.inventorySystem.domain.model.role.Role;
 import com.javv.inventorySystem.domain.model.user.ContactInformation;
 import com.javv.inventorySystem.domain.model.user.PersonalDetails;
 import com.javv.inventorySystem.domain.model.user.User;
+import com.javv.inventorySystem.domain.model.user.UserStatus;
 
 @Component
 public class UserRestMapper {
@@ -17,6 +18,7 @@ public class UserRestMapper {
 
     user.setUsername(userCreateDto.getUsername());
     user.setHashedPassword(hashedPassword);
+    user.setUserStatus(setStatus(userCreateDto.getUserStatus()));
     user.setRole(role);
     user.setPersonalDetails(personalDetailsDtoToDomainEntity(userCreateDto));
     user.setContactInformation(contactInformationDtoToDomainEntity(userCreateDto));
@@ -42,5 +44,16 @@ public class UserRestMapper {
     personalDetails.setDisplayName();
 
     return personalDetails;
+  }
+
+  private UserStatus setStatus(String status) {
+    switch (status.toUpperCase()) {
+      case "ONLINE":
+        return UserStatus.ONLINE;
+      case "OFFLINE":
+        return UserStatus.OFFLINE;
+      default:
+        throw new IllegalArgumentException("Given status is invalid: " + status);
+    }
   }
 }

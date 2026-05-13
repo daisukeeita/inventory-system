@@ -2,15 +2,15 @@ package com.javv.inventorySystem.application.service;
 
 import java.util.Optional;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.javv.inventorySystem.application.dto.user.UserCreateDto;
-import com.javv.inventorySystem.application.dto.user.UserResponseDto;
-import com.javv.inventorySystem.application.mapper.UserRestMapper;
+import com.javv.inventorySystem.application.command.user.UserRegisterCommand;
 import com.javv.inventorySystem.domain.model.role.Role;
+import com.javv.inventorySystem.domain.model.user.ContactInformation;
+import com.javv.inventorySystem.domain.model.user.PersonalDetails;
 import com.javv.inventorySystem.domain.model.user.User;
+import com.javv.inventorySystem.domain.model.user.UserStatus;
 import com.javv.inventorySystem.domain.repository.UserRepositoryInterface;
 
 @Service
@@ -18,47 +18,51 @@ import com.javv.inventorySystem.domain.repository.UserRepositoryInterface;
 public class UserService {
 
   private RoleService roleService;
-  private UserRestMapper userRestMapper;
-  private BCryptPasswordEncoder passwordEncoder;
   private UserRepositoryInterface userRepositoryInterface;
 
-  public UserService(
-      RoleService roleService,
-      UserRestMapper userRestMapper,
-      BCryptPasswordEncoder passwordEncoder,
-      UserRepositoryInterface userRepositoryInterface) {
+  public UserService(RoleService roleService, UserRepositoryInterface userRepositoryInterface) {
     this.roleService = roleService;
-    this.userRestMapper = userRestMapper;
-    this.passwordEncoder = passwordEncoder;
     this.userRepositoryInterface = userRepositoryInterface;
   }
 
   @Transactional
-  public UserResponseDto saveUser(UserCreateDto userCreateDto) {
-    Role role = roleService.getRoleByName(userCreateDto.getRoleName());
+  public User saveUser(UserRegisterCommand userRegisterCommand) {
+    Role role = roleService.getRoleByName(userRegisterCommand.roleName());
 
-    String hashedPassword = hashPassword(userCreateDto.getPassword());
-
-    User user = userRestMapper.toDomainEntity(userCreateDto, hashedPassword, role);
+    User user = toDomainEntity(userRegisterCommand, role);
 
     User savedUser = userRepositoryInterface.save(user);
 
-    return userRestMapper.toDtoEntity(savedUser);
+    return savedUser;
   }
 
-  @Transactional
-  public UserResponseDto getUserByUsername(String username) {
+  public User getUserByUsername(String username) {
     Optional<User> optionalUser = userRepositoryInterface.findByUsername(username);
-    User user = optionalUser.orElseThrow();
 
-    return userRestMapper.toDtoEntity(user);
+    return optionalUser.orElseThrow();
   }
 
-  private String hashPassword(String plainPassword) {
-    return passwordEncoder.encode(plainPassword);
-  }
+  private User toDomainEntity(UserRegisterCommand userRegisterCommand, Role role) {
+    PersonalDetails personalDetails = new PersonalDetails();
+    personalDetails.setFirstName(userRegisterCommand.firstName());
+    personalDetails.setMiddleInitial(userRegisterCommand.middleInitial());
+    personalDetails.setLastName(userRegisterCommand.lastName());
+    personalDetails.setProfilePicture(userRegisterCommand.profilePicture());
+    personalDetails.setDisplayName();
 
-  private boolean verifyPassword(String plainPassword, String hashedPassword) {
-    return passwordEncoder.matches(plainPassword, hashedPassword);
+    ContactInformation contactInformation = new ContactInformation();
+    contactInformation.setPhoneNumber(userRegisterCommand.phoneNumber());
+    contactInformation.setEmail(userRegisterCommand.email());
+    contactInformation.setMailingAddress(userRegisterCommand.mailingAddress());
+
+    User user = new User();
+    user.setUsername(userRegisterCommand.username());
+    user.setHashedPassword(userRegisterCommand.hashedPassword());
+    user.setRole(role);
+    user.setUserStatus(UserStatus.OFFLINE);
+    user.setPersonalDetails(personalDetails);
+    user.setContactInformation(contactInformation);
+
+    return user;
   }
 }

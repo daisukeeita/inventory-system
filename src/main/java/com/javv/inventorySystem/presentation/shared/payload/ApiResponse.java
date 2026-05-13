@@ -1,4 +1,4 @@
-package com.javv.inventorySystem.presentation.payload;
+package com.javv.inventorySystem.presentation.shared.payload;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

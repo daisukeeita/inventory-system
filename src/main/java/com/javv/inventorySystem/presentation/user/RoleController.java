@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.javv.inventorySystem.application.service.RoleService;
+import com.javv.inventorySystem.application.service.user.RoleService;
 import com.javv.inventorySystem.domain.model.role.Role;
 import com.javv.inventorySystem.presentation.shared.payload.ApiResponse;
 

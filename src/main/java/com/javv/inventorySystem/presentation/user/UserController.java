@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javv.inventorySystem.application.command.user.UserRegisterCommand;
-import com.javv.inventorySystem.application.service.UserService;
+import com.javv.inventorySystem.application.service.user.UserService;
 import com.javv.inventorySystem.domain.model.user.User;
 import com.javv.inventorySystem.presentation.shared.payload.ApiResponse;
 import com.javv.inventorySystem.presentation.user.dto.UserRegistrationDto;
 import com.javv.inventorySystem.presentation.user.dto.UserResponseDto;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "api/v1/user")
@@ -30,7 +32,7 @@ public class UserController {
   @PostMapping("/save")
   @ResponseStatus(HttpStatus.CREATED)
   public ApiResponse<UserResponseDto> saveUser(
-      @RequestBody UserRegistrationDto userRegistrationDto) {
+      @Valid @RequestBody UserRegistrationDto userRegistrationDto) {
 
     UserRegisterCommand userRegisterCommand = userDtoMapper.toCommandRecord(userRegistrationDto);
 

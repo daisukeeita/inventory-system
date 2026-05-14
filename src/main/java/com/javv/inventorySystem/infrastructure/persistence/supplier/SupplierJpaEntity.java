@@ -33,14 +33,20 @@ public class SupplierJpaEntity {
   @OneToOne(mappedBy = "supplierJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
   private SupplierAddressJpaEntity supplierAddressJpaEntity;
 
-  public SupplierJpaEntity() {}
+  public SupplierJpaEntity() {
+  }
 
   public SupplierJpaEntity(
-      String companyName, String contactName, String phoneNumber, String email) {
+      String companyName,
+      String contactName,
+      String phoneNumber,
+      String email,
+      SupplierAddressJpaEntity supplierAddressJpaEntity) {
     this.companyName = companyName;
     this.contactName = contactName;
     this.phoneNumber = phoneNumber;
     this.email = email;
+    this.supplierAddressJpaEntity = supplierAddressJpaEntity;
   }
 
   public void setId(int id) {
@@ -63,6 +69,10 @@ public class SupplierJpaEntity {
     this.email = email;
   }
 
+  public void setSupplierAddress(SupplierAddressJpaEntity supplierAddressJpaEntity) {
+    this.supplierAddressJpaEntity = supplierAddressJpaEntity;
+  }
+
   public int getId() {
     return id;
   }
@@ -81,5 +91,9 @@ public class SupplierJpaEntity {
 
   public String getEmail() {
     return email;
+  }
+
+  public SupplierAddressJpaEntity getSupplierAddressJpaEntity() {
+    return supplierAddressJpaEntity;
   }
 }

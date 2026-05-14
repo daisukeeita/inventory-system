@@ -1,4 +1,4 @@
-package com.javv.inventorySystem.application.service;
+package com.javv.inventorySystem.application.service.user;
 
 import java.util.Optional;
 
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.javv.inventorySystem.application.command.user.UserRegisterCommand;
+import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.model.role.Role;
 import com.javv.inventorySystem.domain.model.user.ContactInformation;
 import com.javv.inventorySystem.domain.model.user.PersonalDetails;
@@ -39,7 +40,11 @@ public class UserService {
   public User getUserByUsername(String username) {
     Optional<User> optionalUser = userRepositoryInterface.findByUsername(username);
 
-    return optionalUser.orElseThrow();
+    User user = optionalUser.orElseThrow(
+        () -> new ResourceNotFoundException(
+            "User not found in database by the username: '" + username + "'"));
+
+    return user;
   }
 
   private User toDomainEntity(UserRegisterCommand userRegisterCommand, Role role) {

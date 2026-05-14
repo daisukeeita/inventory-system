@@ -1,4 +1,4 @@
-package com.javv.inventorySystem.application.service;
+package com.javv.inventorySystem.application.service.user;
 
 import java.util.Optional;
 

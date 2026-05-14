@@ -23,11 +23,11 @@ public class ApiResponse<T> {
     return response;
   }
 
-  public static <T> ApiResponse<T> error(String message, int httpStatus) {
+  public static <T> ApiResponse<T> error(T data, String message, int httpStatus) {
     ApiResponse<T> response = new ApiResponse<>();
     response.setSuccess(false);
     response.setMessage(message);
-    response.setData(null);
+    response.setData(data);
     response.setHttpStatus(httpStatus);
     response.setTimestamp(now.format(formatter));
     return response;

@@ -1,0 +1,55 @@
+package com.javv.inventorySystem.infrastructure.persistence.supplier;
+
+import org.springframework.stereotype.Component;
+
+import com.javv.inventorySystem.domain.model.supplier.Supplier;
+import com.javv.inventorySystem.domain.model.supplier.SupplierAddress;
+
+@Component
+public class SupplierPersistenceMapper {
+
+  public SupplierJpaEntity toJpaEntity(Supplier supplier) {
+    SupplierJpaEntity supplierJpaEntity = new SupplierJpaEntity();
+
+    SupplierAddressJpaEntity supplierAddressJpaEntity = new SupplierAddressJpaEntity();
+    supplierAddressJpaEntity.setCity(supplier.getSupplierAddress().getCity());
+    supplierAddressJpaEntity.setCountry(supplier.getSupplierAddress().getCountry());
+    supplierAddressJpaEntity.setPostalCode(supplier.getSupplierAddress().getPostalCode());
+    supplierAddressJpaEntity.setState(supplier.getSupplierAddress().getState());
+    supplierAddressJpaEntity.setStreet(supplier.getSupplierAddress().getStreet());
+    supplierAddressJpaEntity.setSupplier(supplierJpaEntity);
+
+    supplierJpaEntity.setCompanyName(supplier.getCompanyName());
+    supplierJpaEntity.setContactName(supplier.getContactName());
+    supplierJpaEntity.setPhoneNumber(supplier.getPhoneNumber());
+    supplierJpaEntity.setEmail(supplier.getEmail());
+    supplierJpaEntity.setSupplierAddress(supplierAddressJpaEntity);
+
+    return supplierJpaEntity;
+  }
+
+  public Supplier toDomainEntity(SupplierJpaEntity supplierJpaEntity) {
+
+    SupplierAddress supplierAddress = new SupplierAddress();
+    supplierAddress.setSupplierId(
+        supplierJpaEntity.getSupplierAddressJpaEntity().getSupplierId());
+    supplierAddress.setStreet(
+        supplierJpaEntity.getSupplierAddressJpaEntity().getStreet());
+    supplierAddress.setCity(
+        supplierJpaEntity.getSupplierAddressJpaEntity().getCity());
+    supplierAddress.setState(supplierJpaEntity.getSupplierAddressJpaEntity().getState());
+    supplierAddress.setCountry(
+        supplierJpaEntity.getSupplierAddressJpaEntity().getCountry());
+    supplierAddress.setPostalCode(supplierJpaEntity.getSupplierAddressJpaEntity().getPostalCode());
+
+    Supplier supplier = new Supplier();
+    supplier.setId(supplierJpaEntity.getId());
+    supplier.setCompanyName(supplierJpaEntity.getCompanyName());
+    supplier.setContactName(supplierJpaEntity.getContactName());
+    supplier.setPhoneNumber(supplierJpaEntity.getPhoneNumber());
+    supplier.setEmail(supplierJpaEntity.getEmail());
+    supplier.setSupplierAddress(supplierAddress);
+
+    return supplier;
+  }
+}

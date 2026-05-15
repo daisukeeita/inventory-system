@@ -35,6 +35,7 @@ public class SupplierPersistenceAdapter implements SupplierRepositoryInterface {
     return jpaEntity.map(entity -> supplierPersistenceMapper.toDomainEntity(entity));
   }
 
+  @Override
   public Optional<Supplier> findById(int id) {
     Optional<SupplierJpaEntity> jpaEntity = supplierJpaRepository.findById(id);
 

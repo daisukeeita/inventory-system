@@ -8,4 +8,6 @@ public interface SupplierRepositoryInterface {
   Supplier save(Supplier supplier);
 
   Optional<Supplier> findByName(String companyName);
+
+  Optional<Supplier> findById(int id);
 }

@@ -8,7 +8,8 @@ public class SupplierAddress {
   private String postalCode;
   private String country;
 
-  public SupplierAddress() {}
+  public SupplierAddress() {
+  }
 
   public SupplierAddress(
       int supplierId, String street, String city, String state, String postalCode, String country) {
@@ -17,7 +18,7 @@ public class SupplierAddress {
     this.city = city;
     this.state = state;
     this.postalCode = postalCode;
-    this.city = city;
+    this.country = country;
   }
 
   public void setSupplierId(int supplierId) {

@@ -41,7 +41,9 @@ public class UserController {
     UserResponseDto userResponseDto = userDtoMapper.toDtoEntity(user);
 
     return ApiResponse.success(
-        userResponseDto, "Successfully created new user.", HttpStatus.CREATED.value());
+        userResponseDto,
+        "Successfully created new user.",
+        HttpStatus.CREATED.value());
   }
 
   @GetMapping("/getByUsername/{username}")
@@ -53,6 +55,8 @@ public class UserController {
     UserResponseDto userResponseDto = userDtoMapper.toDtoEntity(user);
 
     return ApiResponse.success(
-        userResponseDto, "Successfully found the user", HttpStatus.FOUND.value());
+        userResponseDto,
+        "Successfully found the user",
+        HttpStatus.FOUND.value());
   }
 }

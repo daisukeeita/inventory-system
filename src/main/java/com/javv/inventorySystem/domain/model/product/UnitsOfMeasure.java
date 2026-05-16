@@ -1,18 +1,24 @@
 package com.javv.inventorySystem.domain.model.product;
 
+import java.time.Instant;
+
 public class UnitsOfMeasure {
-  private int id;
+  private Integer id;
   private String name;
   private String abbreviation;
+  private Instant createdAt;
+  private Instant updatedAt;
 
   public UnitsOfMeasure() {}
 
-  public UnitsOfMeasure(String name, String abbreviation) {
+  public UnitsOfMeasure(String name, String abbreviation, Instant createdAt, Instant updatedAt) {
     this.name = name;
     this.abbreviation = abbreviation;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -24,7 +30,15 @@ public class UnitsOfMeasure {
     this.abbreviation = abbreviation;
   }
 
-  public int getId() {
+  public void setCreatedAt(Instant createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public void setUpdatedAt(Instant updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  public Integer getId() {
     return id;
   }
 
@@ -34,5 +48,13 @@ public class UnitsOfMeasure {
 
   public String getAbbreviation() {
     return abbreviation;
+  }
+
+  public Instant getCreatedAt() {
+    return createdAt;
+  }
+
+  public Instant getUpdatedAt() {
+    return updatedAt;
   }
 }

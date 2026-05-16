@@ -9,6 +9,7 @@ public class UnitsOfMeasurePersistenceMapper {
 
   public UnitsOfMeasureJpaEntity toJpaEntity(UnitsOfMeasure unitsOfMeasure) {
     UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity = new UnitsOfMeasureJpaEntity();
+    unitsOfMeasureJpaEntity.setId(unitsOfMeasure.getId());
     unitsOfMeasureJpaEntity.setName(unitsOfMeasure.getName());
     unitsOfMeasureJpaEntity.setAbbreviation(unitsOfMeasure.getAbbreviation());
 
@@ -18,8 +19,8 @@ public class UnitsOfMeasurePersistenceMapper {
   public UnitsOfMeasure toDomainEntity(UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity) {
     UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure();
     unitsOfMeasure.setId(unitsOfMeasureJpaEntity.getId());
-    unitsOfMeasure.setName(unitsOfMeasure.getName());
-    unitsOfMeasure.setAbbreviation(unitsOfMeasure.getAbbreviation());
+    unitsOfMeasure.setName(unitsOfMeasureJpaEntity.getName());
+    unitsOfMeasure.setAbbreviation(unitsOfMeasureJpaEntity.getAbbreviation());
 
     return unitsOfMeasure;
   }

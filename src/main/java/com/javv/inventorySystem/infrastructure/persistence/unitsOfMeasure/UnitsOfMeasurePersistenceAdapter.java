@@ -31,7 +31,7 @@ public class UnitsOfMeasurePersistenceAdapter implements UnitsOfMeasureRepositor
   }
 
   @Override
-  public Optional<UnitsOfMeasure> getById(int id) {
+  public Optional<UnitsOfMeasure> getById(Integer id) {
     Optional<UnitsOfMeasureJpaEntity> optionalEntity = unitsOfMeasureJpaRepository.findById(id);
 
     return optionalEntity.map(entity -> unitsOfMeasurePersistenceMapper.toDomainEntity(entity));

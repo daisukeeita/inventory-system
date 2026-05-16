@@ -2,6 +2,8 @@ package com.javv.inventorySystem.infrastructure.persistence.product;
 
 import java.math.BigDecimal;
 
+import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasureJpaEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,9 +15,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "product_packaging", uniqueConstraints = {
-    @UniqueConstraint(columnNames = { "product_sku", "uom_id" })
-})
+@Table(
+    name = "product_packaging",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"product_sku", "uom_id"})})
 public class ProductPackagingJpaEntity {
 
   @Id
@@ -39,8 +41,7 @@ public class ProductPackagingJpaEntity {
   @Column(name = "price", nullable = false)
   private BigDecimal price;
 
-  public ProductPackagingJpaEntity() {
-  }
+  public ProductPackagingJpaEntity() {}
 
   public ProductPackagingJpaEntity(
       String packagingCode,

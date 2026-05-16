@@ -1,6 +1,7 @@
 package com.javv.inventorySystem.infrastructure.persistence.product;
 
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
+import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasureJpaEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,11 +29,12 @@ public class ProductJpaEntity {
   @JoinColumn(name = "base_uom_id", nullable = false)
   private UnitsOfMeasureJpaEntity baseUnitsOfMeasure;
 
-  public ProductJpaEntity() {
-  }
+  public ProductJpaEntity() {}
 
   public ProductJpaEntity(
-      String sku, String name, SupplierJpaEntity supplierJpaEntity,
+      String sku,
+      String name,
+      SupplierJpaEntity supplierJpaEntity,
       UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity) {
     this.sku = sku;
     this.name = name;

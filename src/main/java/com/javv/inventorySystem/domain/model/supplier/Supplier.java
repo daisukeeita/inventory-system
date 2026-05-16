@@ -1,5 +1,7 @@
 package com.javv.inventorySystem.domain.model.supplier;
 
+import java.time.Instant;
+
 public class Supplier {
   private int id;
   private String companyName;
@@ -7,17 +9,26 @@ public class Supplier {
   private String phoneNumber;
   private String email;
   private SupplierAddress supplierAddress;
+  private Instant createdAt;
+  private Instant updatedAt;
 
-  public Supplier() {
-  }
+  public Supplier() {}
 
-  public Supplier(String companyName, String contactName, String phoneNumber, String email,
-      SupplierAddress supplierAddress) {
+  public Supplier(
+      String companyName,
+      String contactName,
+      String phoneNumber,
+      String email,
+      SupplierAddress supplierAddress,
+      Instant createdAt,
+      Instant updatedAt) {
     this.companyName = companyName;
     this.contactName = contactName;
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.supplierAddress = supplierAddress;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
   public void setId(int id) {
@@ -44,6 +55,14 @@ public class Supplier {
     this.supplierAddress = supplierAddress;
   }
 
+  public void setCreatedAt(Instant createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public void setUpdatedAt(Instant updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
   public int getId() {
     return id;
   }
@@ -66,5 +85,13 @@ public class Supplier {
 
   public SupplierAddress getSupplierAddress() {
     return supplierAddress;
+  }
+
+  public Instant getCreatedAt() {
+    return createdAt;
+  }
+
+  public Instant getUpdatedAt() {
+    return updatedAt;
   }
 }

@@ -49,7 +49,6 @@ public class SupplierPersistenceAdapter implements SupplierRepositoryInterface {
     }
 
     SupplierJpaEntity savedEntity = supplierJpaRepository.saveAndFlush(fetchedEntity);
-
     return supplierPersistenceMapper.toDomainEntity(savedEntity);
   }
 

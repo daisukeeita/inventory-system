@@ -1,18 +1,22 @@
 package com.javv.inventorySystem.domain.model.supplier;
 
 public class SupplierAddress {
-  private int supplierId;
+  private Integer supplierId;
   private String street;
   private String city;
   private String state;
   private String postalCode;
   private String country;
 
-  public SupplierAddress() {
-  }
+  public SupplierAddress() {}
 
   public SupplierAddress(
-      int supplierId, String street, String city, String state, String postalCode, String country) {
+      Integer supplierId,
+      String street,
+      String city,
+      String state,
+      String postalCode,
+      String country) {
     this.supplierId = supplierId;
     this.street = street;
     this.city = city;
@@ -21,7 +25,7 @@ public class SupplierAddress {
     this.country = country;
   }
 
-  public void setSupplierId(int supplierId) {
+  public void setSupplierId(Integer supplierId) {
     this.supplierId = supplierId;
   }
 
@@ -45,7 +49,7 @@ public class SupplierAddress {
     this.country = country;
   }
 
-  public int getSupplierId() {
+  public Integer getSupplierId() {
     return supplierId;
   }
 

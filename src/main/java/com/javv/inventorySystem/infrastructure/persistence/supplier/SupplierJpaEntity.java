@@ -16,7 +16,7 @@ public class SupplierJpaEntity {
   @Id
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private int id;
+  private Integer id;
 
   @Column(name = "company_name", nullable = false, length = 255)
   private String companyName;
@@ -33,8 +33,7 @@ public class SupplierJpaEntity {
   @OneToOne(mappedBy = "supplierJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
   private SupplierAddressJpaEntity supplierAddressJpaEntity;
 
-  public SupplierJpaEntity() {
-  }
+  public SupplierJpaEntity() {}
 
   public SupplierJpaEntity(
       String companyName,
@@ -49,7 +48,7 @@ public class SupplierJpaEntity {
     this.supplierAddressJpaEntity = supplierAddressJpaEntity;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -73,7 +72,7 @@ public class SupplierJpaEntity {
     this.supplierAddressJpaEntity = supplierAddressJpaEntity;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
@@ -95,5 +94,19 @@ public class SupplierJpaEntity {
 
   public SupplierAddressJpaEntity getSupplierAddressJpaEntity() {
     return supplierAddressJpaEntity;
+  }
+
+  public void updateAddress(
+      String street, String city, String state, String postalCode, String country) {
+    if (this.supplierAddressJpaEntity == null) {
+      this.supplierAddressJpaEntity = new SupplierAddressJpaEntity();
+      this.supplierAddressJpaEntity.setSupplier(this);
+    }
+    this.supplierAddressJpaEntity.setSupplier(this);
+    this.supplierAddressJpaEntity.setStreet(street);
+    this.supplierAddressJpaEntity.setCity(city);
+    this.supplierAddressJpaEntity.setState(state);
+    this.supplierAddressJpaEntity.setPostalCode(postalCode);
+    this.supplierAddressJpaEntity.setCountry(country);
   }
 }

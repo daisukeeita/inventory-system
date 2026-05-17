@@ -17,8 +17,7 @@ public class User {
   private LocalDate createdAt;
   private LocalDate updatedAt;
 
-  public User() {
-  }
+  public User() {}
 
   public User(
       UUID id,
@@ -81,7 +80,7 @@ public class User {
 
   public void setContactInformation(final ContactInformation contactInformation) {
     if (contactInformation == null) {
-      throw new IllegalArgumentException("Contract Information should not be empty.");
+      throw new IllegalArgumentException("Contact Information should not be empty.");
     }
     this.contactInformation = contactInformation;
   }

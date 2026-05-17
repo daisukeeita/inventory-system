@@ -43,13 +43,18 @@ public class UnitsOfMeasureService {
 
     UnitsOfMeasure unitsOfMeasure =
         optionalMeasure.orElseThrow(
-            () -> new ResourceNotFoundException("Units of Measure not found by id: ;" + id + "'"));
+            () -> new ResourceNotFoundException("Units of Measure not found by id: '" + id + "'"));
     unitsOfMeasure.setName(unitsOfMeasureCommand.name());
     unitsOfMeasure.setAbbreviation(unitsOfMeasureCommand.abbreviation());
 
-    UnitsOfMeasure savedMeasure = unitsOfMeasureRepositoryInterface.save(unitsOfMeasure);
+    try {
+      UnitsOfMeasure savedUnitsOfMeasure = unitsOfMeasureRepositoryInterface.update(unitsOfMeasure);
+      return savedUnitsOfMeasure;
 
-    return savedMeasure;
+    } catch (DataIntegrityViolationException exception) {
+      throw new EntityAlreadyExistsException(
+          "This unit of measure is already registered.", exception);
+    }
   }
 
   public UnitsOfMeasure getById(int id) {

@@ -3,7 +3,7 @@ package com.javv.inventorySystem.domain.model.supplier;
 import java.time.Instant;
 
 public class Supplier {
-  private int id;
+  private Integer id;
   private String companyName;
   private String contactName;
   private String phoneNumber;
@@ -31,7 +31,7 @@ public class Supplier {
     this.updatedAt = updatedAt;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -63,7 +63,7 @@ public class Supplier {
     this.updatedAt = updatedAt;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
@@ -93,5 +93,10 @@ public class Supplier {
 
   public Instant getUpdatedAt() {
     return updatedAt;
+  }
+
+  public void updateAddress(
+      String street, String city, String state, String postalCode, String country) {
+    this.supplierAddress = new SupplierAddress(id, street, city, state, postalCode, country);
   }
 }

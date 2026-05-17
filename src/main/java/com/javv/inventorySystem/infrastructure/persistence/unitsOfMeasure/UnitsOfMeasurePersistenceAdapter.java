@@ -31,6 +31,17 @@ public class UnitsOfMeasurePersistenceAdapter implements UnitsOfMeasureRepositor
   }
 
   @Override
+  public UnitsOfMeasure update(UnitsOfMeasure unitsOfMeasure) {
+    UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity =
+        unitsOfMeasurePersistenceMapper.toJpaEntity(unitsOfMeasure);
+
+    UnitsOfMeasureJpaEntity savedEntity =
+        unitsOfMeasureJpaRepository.saveAndFlush(unitsOfMeasureJpaEntity);
+
+    return unitsOfMeasurePersistenceMapper.toDomainEntity(savedEntity);
+  }
+
+  @Override
   public Optional<UnitsOfMeasure> getById(Integer id) {
     Optional<UnitsOfMeasureJpaEntity> optionalEntity = unitsOfMeasureJpaRepository.findById(id);
 

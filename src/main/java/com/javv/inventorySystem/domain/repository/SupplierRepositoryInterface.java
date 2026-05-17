@@ -7,7 +7,9 @@ import com.javv.inventorySystem.domain.model.supplier.Supplier;
 public interface SupplierRepositoryInterface {
   Supplier save(Supplier supplier);
 
+  Supplier updateAddress(Supplier supplier);
+
   Optional<Supplier> findByName(String companyName);
 
-  Optional<Supplier> findById(int id);
+  Optional<Supplier> findById(Integer id);
 }

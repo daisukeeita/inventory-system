@@ -16,6 +16,10 @@ public class UnitsOfMeasureDtoMapper {
 
   public UnitsOfMeasureResponseDto toResponseDto(UnitsOfMeasure unitsOfMeasure) {
     return new UnitsOfMeasureResponseDto(
-        unitsOfMeasure.getId(), unitsOfMeasure.getName(), unitsOfMeasure.getAbbreviation());
+        unitsOfMeasure.getId(),
+        unitsOfMeasure.getName(),
+        unitsOfMeasure.getAbbreviation(),
+        unitsOfMeasure.getCreatedAt(),
+        unitsOfMeasure.getUpdatedAt());
   }
 }

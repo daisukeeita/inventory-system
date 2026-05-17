@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 @Table(name = "supplier_address")
 public class SupplierAddressJpaEntity {
 
-  @Id private int id;
+  @Id private Integer id;
 
   @OneToOne
   @MapsId
@@ -69,7 +69,7 @@ public class SupplierAddressJpaEntity {
     this.country = country;
   }
 
-  public int getSupplierId() {
+  public Integer getSupplierId() {
     return id;
   }
 

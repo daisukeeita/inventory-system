@@ -28,18 +28,31 @@ public class SupplierPersistenceMapper {
     return supplierJpaEntity;
   }
 
+  public SupplierJpaEntity toUpdateJpaEntity(Supplier supplier, SupplierAddress supplierAddress) {
+    SupplierJpaEntity supplierJpaEntity = new SupplierJpaEntity();
+    supplierJpaEntity.setId(supplier.getId());
+    supplierJpaEntity.setCompanyName(supplier.getCompanyName());
+    supplierJpaEntity.setContactName(supplier.getContactName());
+    supplierJpaEntity.setPhoneNumber(supplier.getPhoneNumber());
+    supplierJpaEntity.setEmail(supplier.getEmail());
+    supplierJpaEntity.updateAddress(
+        supplierAddress.getStreet(),
+        supplierAddress.getCity(),
+        supplierAddress.getState(),
+        supplierAddress.getPostalCode(),
+        supplierAddress.getCountry());
+
+    return supplierJpaEntity;
+  }
+
   public Supplier toDomainEntity(SupplierJpaEntity supplierJpaEntity) {
 
     SupplierAddress supplierAddress = new SupplierAddress();
-    supplierAddress.setSupplierId(
-        supplierJpaEntity.getSupplierAddressJpaEntity().getSupplierId());
-    supplierAddress.setStreet(
-        supplierJpaEntity.getSupplierAddressJpaEntity().getStreet());
-    supplierAddress.setCity(
-        supplierJpaEntity.getSupplierAddressJpaEntity().getCity());
+    supplierAddress.setSupplierId(supplierJpaEntity.getSupplierAddressJpaEntity().getSupplierId());
+    supplierAddress.setStreet(supplierJpaEntity.getSupplierAddressJpaEntity().getStreet());
+    supplierAddress.setCity(supplierJpaEntity.getSupplierAddressJpaEntity().getCity());
     supplierAddress.setState(supplierJpaEntity.getSupplierAddressJpaEntity().getState());
-    supplierAddress.setCountry(
-        supplierJpaEntity.getSupplierAddressJpaEntity().getCountry());
+    supplierAddress.setCountry(supplierJpaEntity.getSupplierAddressJpaEntity().getCountry());
     supplierAddress.setPostalCode(supplierJpaEntity.getSupplierAddressJpaEntity().getPostalCode());
 
     Supplier supplier = new Supplier();

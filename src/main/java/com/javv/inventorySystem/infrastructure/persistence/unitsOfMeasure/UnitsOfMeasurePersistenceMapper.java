@@ -12,6 +12,8 @@ public class UnitsOfMeasurePersistenceMapper {
     unitsOfMeasureJpaEntity.setId(unitsOfMeasure.getId());
     unitsOfMeasureJpaEntity.setName(unitsOfMeasure.getName());
     unitsOfMeasureJpaEntity.setAbbreviation(unitsOfMeasure.getAbbreviation());
+    unitsOfMeasureJpaEntity.setCreatedAt(unitsOfMeasure.getCreatedAt());
+    unitsOfMeasureJpaEntity.setUpdatedAt(unitsOfMeasure.getUpdatedAt());
 
     return unitsOfMeasureJpaEntity;
   }
@@ -21,6 +23,8 @@ public class UnitsOfMeasurePersistenceMapper {
     unitsOfMeasure.setId(unitsOfMeasureJpaEntity.getId());
     unitsOfMeasure.setName(unitsOfMeasureJpaEntity.getName());
     unitsOfMeasure.setAbbreviation(unitsOfMeasureJpaEntity.getAbbreviation());
+    unitsOfMeasure.setCreatedAt(unitsOfMeasureJpaEntity.getCreatedAt());
+    unitsOfMeasure.setUpdatedAt(unitsOfMeasureJpaEntity.getUpdatedAt());
 
     return unitsOfMeasure;
   }

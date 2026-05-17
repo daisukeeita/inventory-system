@@ -28,23 +28,6 @@ public class SupplierPersistenceMapper {
     return supplierJpaEntity;
   }
 
-  public SupplierJpaEntity toUpdateJpaEntity(Supplier supplier, SupplierAddress supplierAddress) {
-    SupplierJpaEntity supplierJpaEntity = new SupplierJpaEntity();
-    supplierJpaEntity.setId(supplier.getId());
-    supplierJpaEntity.setCompanyName(supplier.getCompanyName());
-    supplierJpaEntity.setContactName(supplier.getContactName());
-    supplierJpaEntity.setPhoneNumber(supplier.getPhoneNumber());
-    supplierJpaEntity.setEmail(supplier.getEmail());
-    supplierJpaEntity.updateAddress(
-        supplierAddress.getStreet(),
-        supplierAddress.getCity(),
-        supplierAddress.getState(),
-        supplierAddress.getPostalCode(),
-        supplierAddress.getCountry());
-
-    return supplierJpaEntity;
-  }
-
   public Supplier toDomainEntity(SupplierJpaEntity supplierJpaEntity) {
 
     SupplierAddress supplierAddress = new SupplierAddress();

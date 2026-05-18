@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.domain.model.product;
 
+import java.time.Instant;
 
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
 
@@ -8,8 +9,11 @@ public class Product {
   private String name;
   private Supplier supplier;
   private UnitsOfMeasure baseUom;
+  private Instant createdAt;
+  private Instant updatedAt;
 
-  public Product() {}
+  public Product() {
+  }
 
   public Product(String sku, String name, Supplier supplier, UnitsOfMeasure baseUom) {
     this.sku = sku;
@@ -34,6 +38,14 @@ public class Product {
     this.baseUom = baseUom;
   }
 
+  public void setCreatedAt(Instant createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public void setUpdatedAt(Instant updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
   public String getSku() {
     return sku;
   }
@@ -48,5 +60,13 @@ public class Product {
 
   public UnitsOfMeasure getBaseUnitsOfMeasure() {
     return baseUom;
+  }
+
+  public Instant getCreatedAt() {
+    return createdAt;
+  }
+
+  public Instant getUpdatedAt() {
+    return updatedAt;
   }
 }

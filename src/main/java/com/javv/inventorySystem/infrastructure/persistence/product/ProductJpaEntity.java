@@ -1,10 +1,17 @@
 package com.javv.inventorySystem.infrastructure.persistence.product;
 
+import java.time.Instant;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasureJpaEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -13,6 +20,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "product")
+@EntityListeners(AuditingEntityListener.class)
 public class ProductJpaEntity {
   @Id
   @Column(name = "sku", nullable = false, length = 50)
@@ -29,7 +37,16 @@ public class ProductJpaEntity {
   @JoinColumn(name = "base_uom_id", nullable = false)
   private UnitsOfMeasureJpaEntity baseUnitsOfMeasure;
 
-  public ProductJpaEntity() {}
+  @CreatedDate
+  @Column(name = "created_at", nullable = false, updatable = false)
+  private Instant createdAt;
+
+  @LastModifiedDate
+  @Column(name = "updated_at", nullable = false)
+  private Instant updatedAt;
+
+  public ProductJpaEntity() {
+  }
 
   public ProductJpaEntity(
       String sku,
@@ -58,6 +75,14 @@ public class ProductJpaEntity {
     this.baseUnitsOfMeasure = unitsOfMeasureJpaEntity;
   }
 
+  protected void setCreatedAt(Instant createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  protected void setUpdatedAt(Instant updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
   public String getSku() {
     return sku;
   }
@@ -72,5 +97,13 @@ public class ProductJpaEntity {
 
   public UnitsOfMeasureJpaEntity getBaseUnitOfMeasure() {
     return baseUnitsOfMeasure;
+  }
+
+  public Instant getCreatedAt() {
+    return createdAt;
+  }
+
+  public Instant getUpdatedAt() {
+    return updatedAt;
   }
 }

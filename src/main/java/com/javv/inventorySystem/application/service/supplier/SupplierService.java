@@ -39,12 +39,10 @@ public class SupplierService {
   public Supplier updateSupplierAddress(
       Integer id, SupplierUpdateAddressCommand supplierUpdateAddressCommand) {
 
-    Supplier supplier =
-        supplierRepositoryInterface
-            .findById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException("Supplier was not found using id: '" + id + "'"));
+    Supplier supplier = supplierRepositoryInterface
+        .findById(id)
+        .orElseThrow(
+            () -> new ResourceNotFoundException("Supplier was not found using id: '" + id + "'"));
 
     supplier.updateAddress(
         supplierUpdateAddressCommand.street(),
@@ -63,11 +61,9 @@ public class SupplierService {
   public Supplier findByName(String companyName) {
     Optional<Supplier> optionalSupplier = supplierRepositoryInterface.findByName(companyName);
 
-    Supplier supplier =
-        optionalSupplier.orElseThrow(
-            () ->
-                new ResourceNotFoundException(
-                    "Supplier was not found using companyName: ''" + companyName + "'"));
+    Supplier supplier = optionalSupplier.orElseThrow(
+        () -> new ResourceNotFoundException(
+            "Supplier was not found using companyName: ''" + companyName + "'"));
 
     return supplier;
   }
@@ -75,9 +71,8 @@ public class SupplierService {
   public Supplier findById(int id) {
     Optional<Supplier> optionalSupplier = supplierRepositoryInterface.findById(id);
 
-    Supplier supplier =
-        optionalSupplier.orElseThrow(
-            () -> new ResourceNotFoundException("Supplier was not found using ID: ''" + id + "'"));
+    Supplier supplier = optionalSupplier.orElseThrow(
+        () -> new ResourceNotFoundException("Supplier was not found using ID: ''" + id + "'"));
 
     return supplier;
   }

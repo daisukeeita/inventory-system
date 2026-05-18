@@ -18,7 +18,7 @@ public class SupplierJpaEntity {
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Integer id;
 
-  @Column(name = "company_name", nullable = false, length = 255)
+  @Column(name = "company_name", nullable = false, length = 255, unique = true)
   private String companyName;
 
   @Column(name = "contact_name", nullable = false, length = 155)
@@ -33,7 +33,8 @@ public class SupplierJpaEntity {
   @OneToOne(mappedBy = "supplierJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
   private SupplierAddressJpaEntity supplierAddressJpaEntity;
 
-  public SupplierJpaEntity() {}
+  public SupplierJpaEntity() {
+  }
 
   public SupplierJpaEntity(
       String companyName,

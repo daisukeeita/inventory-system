@@ -25,17 +25,16 @@ public class SupplierPersistenceAdapter implements SupplierRepositoryInterface {
   public Supplier save(Supplier supplier) {
     SupplierJpaEntity supplierJpaEntity = supplierPersistenceMapper.toJpaEntity(supplier);
 
-    SupplierJpaEntity savedEntity = supplierJpaRepository.save(supplierJpaEntity);
+    SupplierJpaEntity savedEntity = supplierJpaRepository.saveAndFlush(supplierJpaEntity);
 
     return supplierPersistenceMapper.toDomainEntity(savedEntity);
   }
 
   @Override
   public Supplier updateAddress(Supplier supplier) {
-    SupplierJpaEntity fetchedEntity =
-        supplierJpaRepository
-            .findById(supplier.getId())
-            .orElseThrow(() -> new ResourceNotFoundException("Entity not found."));
+    SupplierJpaEntity fetchedEntity = supplierJpaRepository
+        .findById(supplier.getId())
+        .orElseThrow(() -> new ResourceNotFoundException("Entity not found."));
 
     SupplierAddress supplierAddress = supplier.getSupplierAddress();
 

@@ -2,5 +2,15 @@ package com.javv.inventorySystem.presentation.unitsOfMeasure.dto;
 
 import java.time.Instant;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public record UnitsOfMeasureResponseDto(
-    Integer id, String name, String abbreviation, Instant createdAt, Instant updatedAt) {}
+    @NotNull(message = "Measure Response DTO: Measure ID is required for response.") Integer id,
+    @NotBlank(message = "Measure Response DTO: Measure Name is required for response.") String name,
+    @NotBlank(message = "Measure Response DTO: Measure Abbreviation is required for response.")
+        String abbreviation,
+    @NotNull(message = "Measure Response DTO: Measure Created At is required for response.")
+        Instant createdAt,
+    @NotNull(message = "Measure Response DTO: Measure Updated At is required for response.")
+        Instant updatedAt) {}

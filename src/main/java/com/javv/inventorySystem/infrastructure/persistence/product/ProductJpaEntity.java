@@ -45,8 +45,7 @@ public class ProductJpaEntity {
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  public ProductJpaEntity() {
-  }
+  public ProductJpaEntity() {}
 
   public ProductJpaEntity(
       String sku,

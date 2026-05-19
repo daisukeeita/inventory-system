@@ -20,7 +20,8 @@ public class ProductService {
   private final SupplierService supplierService;
   private final UnitsOfMeasureService unitsOfMeasureService;
 
-  public ProductService(ProductRepositoryInterface productRepositoryInterface,
+  public ProductService(
+      ProductRepositoryInterface productRepositoryInterface,
       SupplierService supplierService,
       UnitsOfMeasureService unitsOfMeasureService) {
     this.productRepositoryInterface = productRepositoryInterface;
@@ -31,22 +32,18 @@ public class ProductService {
   @Transactional
   public Product saveProduct(ProductRegisterCommand productRegisterCommand) {
 
-    Supplier supplier = supplierService.findByName(
-        productRegisterCommand.supplier());
-    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.getByName(
-        productRegisterCommand.baseUnitOfMeasure());
+    Supplier supplier = supplierService.findByName(productRegisterCommand.supplier());
+    UnitsOfMeasure unitsOfMeasure =
+        unitsOfMeasureService.getByName(productRegisterCommand.baseUnitOfMeasure());
 
-    Product product = new Product(
-        productRegisterCommand.sku(),
-        productRegisterCommand.name(),
-        supplier,
-        unitsOfMeasure);
+    Product product =
+        new Product(
+            productRegisterCommand.sku(), productRegisterCommand.name(), supplier, unitsOfMeasure);
 
     try {
       return productRepositoryInterface.save(product);
     } catch (DataIntegrityViolationException exception) {
-      throw new EntityAlreadyExistsException(
-          "Product already registered.");
+      throw new EntityAlreadyExistsException("Product already registered.");
     }
   }
 }

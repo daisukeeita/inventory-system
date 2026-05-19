@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.javv.inventorySystem.application.command.product.UnitsOfMeasureCommand;
+import com.javv.inventorySystem.application.command.unitsOfMeasure.UnitsOfMeasureRegisterCommand;
+import com.javv.inventorySystem.application.command.unitsOfMeasure.UnitsOfMeasureUpdateCommand;
 import com.javv.inventorySystem.application.service.product.UnitsOfMeasureService;
 import com.javv.inventorySystem.domain.model.product.UnitsOfMeasure;
 import com.javv.inventorySystem.presentation.shared.payload.ApiResponse;
-import com.javv.inventorySystem.presentation.unitsOfMeasure.dto.UnitsOfMeasureDto;
+import com.javv.inventorySystem.presentation.unitsOfMeasure.dto.UnitsOfMeasureRegisterDto;
 import com.javv.inventorySystem.presentation.unitsOfMeasure.dto.UnitsOfMeasureResponseDto;
+import com.javv.inventorySystem.presentation.unitsOfMeasure.dto.UnitsOfMeasureUpdateDto;
 
 import jakarta.validation.Valid;
 
@@ -34,12 +36,13 @@ public class UnitsOfMeasureController {
   @PostMapping("/save")
   @ResponseStatus(HttpStatus.CREATED)
   public ApiResponse<UnitsOfMeasureResponseDto> saveUom(
-      @Valid @RequestBody UnitsOfMeasureDto unitsOfMeasurementDto) {
+      @Valid @RequestBody UnitsOfMeasureRegisterDto unitsOfMeasureRegisterDto) {
 
-    UnitsOfMeasureCommand unitsOfMeasureCommand =
-        unitsOfMeasureDtoMapper.toCommandRecord(unitsOfMeasurementDto);
+    UnitsOfMeasureRegisterCommand unitsOfMeasureRegisterCommand =
+        unitsOfMeasureDtoMapper.toRegisterCommandRecord(unitsOfMeasureRegisterDto);
 
-    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.saveMeasure(unitsOfMeasureCommand);
+    UnitsOfMeasure unitsOfMeasure =
+        unitsOfMeasureService.saveMeasure(unitsOfMeasureRegisterCommand);
 
     UnitsOfMeasureResponseDto responseDto = unitsOfMeasureDtoMapper.toResponseDto(unitsOfMeasure);
 
@@ -50,12 +53,14 @@ public class UnitsOfMeasureController {
   @PutMapping("/update/{id}")
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<UnitsOfMeasureResponseDto> updateUom(
-      @PathVariable Integer id, @RequestBody UnitsOfMeasureDto unitsOfMeasureDto) {
+      @PathVariable Integer id,
+      @Valid @RequestBody UnitsOfMeasureUpdateDto unitsOfMeasureUpdateDto) {
 
-    UnitsOfMeasureCommand unitsOfMeasureCommand =
-        unitsOfMeasureDtoMapper.toCommandRecord(unitsOfMeasureDto);
+    UnitsOfMeasureUpdateCommand unitsOfMeasureUpdateCommand =
+        unitsOfMeasureDtoMapper.toUpdateCommandRecord(unitsOfMeasureUpdateDto);
 
-    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.updateMeasure(id, unitsOfMeasureCommand);
+    UnitsOfMeasure unitsOfMeasure =
+        unitsOfMeasureService.updateMeasure(id, unitsOfMeasureUpdateCommand);
 
     UnitsOfMeasureResponseDto responseDto = unitsOfMeasureDtoMapper.toResponseDto(unitsOfMeasure);
 

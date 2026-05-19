@@ -1,12 +1,14 @@
 package com.javv.inventorySystem.application.service.product;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.javv.inventorySystem.application.command.product.UnitsOfMeasureCommand;
+import com.javv.inventorySystem.application.command.unitsOfMeasure.UnitsOfMeasureRegisterCommand;
+import com.javv.inventorySystem.application.command.unitsOfMeasure.UnitsOfMeasureUpdateCommand;
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.model.product.UnitsOfMeasure;
@@ -24,28 +26,31 @@ public class UnitsOfMeasureService {
   }
 
   @Transactional
-  public UnitsOfMeasure saveMeasure(UnitsOfMeasureCommand unitsOfMeasureCommand) {
-    UnitsOfMeasure unitsOfMeasure = toDomainEntity(unitsOfMeasureCommand);
+  public UnitsOfMeasure saveMeasure(UnitsOfMeasureRegisterCommand unitsOfMeasureRegisterCommand) {
+    UnitsOfMeasure unitsOfMeasure = registerToDomainEntity(unitsOfMeasureRegisterCommand);
 
     try {
       UnitsOfMeasure savedUnitsOfMeasure = unitsOfMeasureRepositoryInterface.save(unitsOfMeasure);
       return savedUnitsOfMeasure;
 
     } catch (DataIntegrityViolationException exception) {
-      throw new EntityAlreadyExistsException(
-          "This unit of measure is already registered.", exception);
+      throw new EntityAlreadyExistsException("Service: Unit of Measure is already registered.");
     }
   }
 
   @Transactional
-  public UnitsOfMeasure updateMeasure(Integer id, UnitsOfMeasureCommand unitsOfMeasureCommand) {
+  public UnitsOfMeasure updateMeasure(
+      Integer id, UnitsOfMeasureUpdateCommand unitsOfMeasureUpdateCommand) {
     Optional<UnitsOfMeasure> optionalMeasure = unitsOfMeasureRepositoryInterface.getById(id);
 
     UnitsOfMeasure unitsOfMeasure =
         optionalMeasure.orElseThrow(
-            () -> new ResourceNotFoundException("Units of Measure not found by id: '" + id + "'"));
-    unitsOfMeasure.setName(unitsOfMeasureCommand.name());
-    unitsOfMeasure.setAbbreviation(unitsOfMeasureCommand.abbreviation());
+            () ->
+                new ResourceNotFoundException(
+                    "Service: Units of Measure not found by id: '" + id + "'"));
+
+    unitsOfMeasure.setName(unitsOfMeasureUpdateCommand.name());
+    unitsOfMeasure.setAbbreviation(unitsOfMeasureUpdateCommand.abbreviation());
 
     try {
       UnitsOfMeasure savedUnitsOfMeasure = unitsOfMeasureRepositoryInterface.update(unitsOfMeasure);
@@ -72,10 +77,15 @@ public class UnitsOfMeasureService {
         () -> new ResourceNotFoundException("Units of Measure not found by name: '" + name + "'"));
   }
 
-  private UnitsOfMeasure toDomainEntity(UnitsOfMeasureCommand unitsOfMeasureCommand) {
+  private UnitsOfMeasure registerToDomainEntity(
+      UnitsOfMeasureRegisterCommand unitsOfMeasureRegisterCommand) {
+    Objects.requireNonNull(
+        unitsOfMeasureRegisterCommand,
+        "Cannot map a null UnitsOfMeasureRegisterCommand to a Domain Entity.");
+
     UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure();
-    unitsOfMeasure.setName(unitsOfMeasureCommand.name());
-    unitsOfMeasure.setAbbreviation(unitsOfMeasureCommand.abbreviation());
+    unitsOfMeasure.setName(unitsOfMeasureRegisterCommand.name());
+    unitsOfMeasure.setAbbreviation(unitsOfMeasureRegisterCommand.abbreviation());
 
     return unitsOfMeasure;
   }

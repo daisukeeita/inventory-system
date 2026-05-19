@@ -12,8 +12,6 @@ import com.javv.inventorySystem.presentation.supplier.dto.SupplierUpdateAddressD
 @Component
 public class SupplierDtoMapper {
 
-  public SupplierDtoMapper() {}
-
   public SupplierRegisterCommand toCommandRecord(SupplierRegistrationDto supplierRegistrationDto) {
 
     return new SupplierRegisterCommand(
@@ -40,16 +38,15 @@ public class SupplierDtoMapper {
   }
 
   public SupplierResponseDto toResponseDto(Supplier supplier) {
-    String address =
-        supplier.getSupplierAddress().getStreet()
-            + ", "
-            + supplier.getSupplierAddress().getCity()
-            + ", "
-            + supplier.getSupplierAddress().getState()
-            + ", "
-            + supplier.getSupplierAddress().getPostalCode()
-            + ", "
-            + supplier.getSupplierAddress().getCountry();
+    String address = supplier.getSupplierAddress().getStreet()
+        + ", "
+        + supplier.getSupplierAddress().getCity()
+        + ", "
+        + supplier.getSupplierAddress().getState()
+        + ", "
+        + supplier.getSupplierAddress().getPostalCode()
+        + ", "
+        + supplier.getSupplierAddress().getCountry();
 
     return new SupplierResponseDto(
         supplier.getCompanyName(),

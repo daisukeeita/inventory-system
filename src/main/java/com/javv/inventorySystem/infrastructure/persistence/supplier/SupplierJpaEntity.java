@@ -15,7 +15,7 @@ public class SupplierJpaEntity {
 
   @Id
   @Column(name = "id", nullable = false)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
   @Column(name = "company_name", nullable = false, length = 255, unique = true)

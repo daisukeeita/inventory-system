@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javv.inventorySystem.application.command.supplier.SupplierRegisterCommand;
-import com.javv.inventorySystem.application.command.supplier.SupplierUpdateAddressCommand;
+import com.javv.inventorySystem.application.command.supplier.SupplierUpdateCommand;
 import com.javv.inventorySystem.application.service.supplier.SupplierService;
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
 import com.javv.inventorySystem.presentation.shared.payload.ApiResponse;
-import com.javv.inventorySystem.presentation.supplier.dto.SupplierRegistrationDto;
+import com.javv.inventorySystem.presentation.supplier.dto.SupplierRegisterDto;
 import com.javv.inventorySystem.presentation.supplier.dto.SupplierResponseDto;
-import com.javv.inventorySystem.presentation.supplier.dto.SupplierUpdateAddressDto;
+import com.javv.inventorySystem.presentation.supplier.dto.SupplierUpdateDto;
 
 import jakarta.validation.Valid;
 
@@ -35,10 +35,9 @@ public class SupplierController {
   @PostMapping("/register")
   @ResponseStatus(HttpStatus.CREATED)
   public ApiResponse<SupplierResponseDto> registerSupplier(
-      @Valid @RequestBody SupplierRegistrationDto supplierRegistrationDto) {
+      @Valid @RequestBody SupplierRegisterDto supplierRegisterDto) {
 
-    SupplierRegisterCommand supplierRegisterCommand =
-        supplierDtoMapper.toCommandRecord(supplierRegistrationDto);
+    SupplierRegisterCommand supplierRegisterCommand = supplierDtoMapper.toRegisterCommandRecord(supplierRegisterDto);
 
     Supplier supplier = supplierService.saveSupplier(supplierRegisterCommand);
 
@@ -48,16 +47,16 @@ public class SupplierController {
         supplierResponseDto, "Successfully created new Supplier.", HttpStatus.CREATED.value());
   }
 
-  @PutMapping("updateAddress/{id}")
+  @PutMapping("update/{id}")
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<SupplierResponseDto> updateSupplier(
       @PathVariable Integer id,
-      @Valid @RequestBody SupplierUpdateAddressDto supplierRegistrationDto) {
+      @Valid @RequestBody SupplierUpdateDto supplierUpdateDto) {
 
-    SupplierUpdateAddressCommand supplierUpdateAddressCommand =
-        supplierDtoMapper.toAddressUpdateCommandRecord(supplierRegistrationDto);
+    SupplierUpdateCommand supplierUpdateCommand = supplierDtoMapper
+        .toUpdateCommandRecord(supplierUpdateDto);
 
-    Supplier supplier = supplierService.updateSupplierAddress(id, supplierUpdateAddressCommand);
+    Supplier supplier = supplierService.updateSupplier(id, supplierUpdateCommand);
 
     SupplierResponseDto supplierResponseDto = supplierDtoMapper.toResponseDto(supplier);
 

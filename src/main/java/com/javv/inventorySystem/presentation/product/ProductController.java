@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.javv.inventorySystem.application.command.product.ProductRegisterCommand;
 import com.javv.inventorySystem.application.service.product.ProductService;
 import com.javv.inventorySystem.domain.model.product.Product;
-import com.javv.inventorySystem.presentation.product.dto.ProductRegistrationDto;
+import com.javv.inventorySystem.presentation.product.dto.ProductRegisterDto;
 import com.javv.inventorySystem.presentation.product.dto.ProductResponseDto;
 import com.javv.inventorySystem.presentation.shared.payload.ApiResponse;
 
@@ -28,13 +28,12 @@ public class ProductController {
     this.productDtoMapper = productDtoMapper;
   }
 
-  @PostMapping("/save")
+  @PostMapping("/register")
   @ResponseStatus(HttpStatus.CREATED)
   public ApiResponse<ProductResponseDto> saveProduct(
-      @Valid @RequestBody ProductRegistrationDto productRegistrationDto) {
+      @Valid @RequestBody ProductRegisterDto productRegisterDto) {
 
-    ProductRegisterCommand productRegisterCommand =
-        productDtoMapper.toRegisterCommand(productRegistrationDto);
+    ProductRegisterCommand productRegisterCommand = productDtoMapper.toRegisterCommand(productRegisterDto);
 
     Product product = productService.saveProduct(productRegisterCommand);
 

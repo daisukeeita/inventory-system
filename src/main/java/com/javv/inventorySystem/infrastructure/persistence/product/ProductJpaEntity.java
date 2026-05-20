@@ -15,7 +15,6 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -33,7 +32,7 @@ public class ProductJpaEntity {
   @JoinColumn(name = "supplier_id", nullable = false)
   private SupplierJpaEntity supplierJpaEntity;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "base_uom_id", nullable = false)
   private UnitsOfMeasureJpaEntity baseUnitsOfMeasure;
 
@@ -45,7 +44,8 @@ public class ProductJpaEntity {
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  public ProductJpaEntity() {}
+  public ProductJpaEntity() {
+  }
 
   public ProductJpaEntity(
       String sku,

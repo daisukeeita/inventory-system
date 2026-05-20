@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
-import com.javv.inventorySystem.domain.model.supplier.SupplierAddress;
 import com.javv.inventorySystem.domain.repository.SupplierRepositoryInterface;
 
 @Repository
@@ -25,29 +24,22 @@ public class SupplierPersistenceAdapter implements SupplierRepositoryInterface {
   public Supplier save(Supplier supplier) {
     SupplierJpaEntity supplierJpaEntity = supplierPersistenceMapper.toJpaEntity(supplier);
 
-    SupplierJpaEntity savedEntity = supplierJpaRepository.saveAndFlush(supplierJpaEntity);
+    SupplierJpaEntity savedEntity = supplierJpaRepository.save(supplierJpaEntity);
 
     return supplierPersistenceMapper.toDomainEntity(savedEntity);
   }
 
   @Override
-  public Supplier updateAddress(Supplier supplier) {
+  public Supplier update(Supplier supplier) {
     SupplierJpaEntity fetchedEntity = supplierJpaRepository
         .findById(supplier.getId())
         .orElseThrow(() -> new ResourceNotFoundException("Entity not found."));
 
-    SupplierAddress supplierAddress = supplier.getSupplierAddress();
+    SupplierJpaEntity updatedEntity = supplierPersistenceMapper.updateEntity(
+        supplier,
+        fetchedEntity);
 
-    if (supplierAddress != null) {
-      fetchedEntity.updateAddress(
-          supplierAddress.getStreet(),
-          supplierAddress.getCity(),
-          supplierAddress.getState(),
-          supplierAddress.getPostalCode(),
-          supplierAddress.getCountry());
-    }
-
-    SupplierJpaEntity savedEntity = supplierJpaRepository.saveAndFlush(fetchedEntity);
+    SupplierJpaEntity savedEntity = supplierJpaRepository.saveAndFlush(updatedEntity);
     return supplierPersistenceMapper.toDomainEntity(savedEntity);
   }
 

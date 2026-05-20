@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.javv.inventorySystem.application.command.supplier.SupplierRegisterCommand;
-import com.javv.inventorySystem.application.command.supplier.SupplierUpdateAddressCommand;
+import com.javv.inventorySystem.application.command.supplier.SupplierUpdateCommand;
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
@@ -29,30 +29,36 @@ public class SupplierService {
     Supplier supplier = toDomainEntity(supplierRegisterCommand);
 
     try {
-      return supplierRepositoryInterface.save(supplier);
+      Supplier savedEntity = supplierRepositoryInterface.save(supplier);
+      return savedEntity;
     } catch (DataIntegrityViolationException exception) {
       throw new EntityAlreadyExistsException("Supplier already exists.");
     }
   }
 
   @Transactional
-  public Supplier updateSupplierAddress(
-      Integer id, SupplierUpdateAddressCommand supplierUpdateAddressCommand) {
+  public Supplier updateSupplier(
+      Integer id, SupplierUpdateCommand supplierUpdateCommand) {
 
     Supplier supplier = supplierRepositoryInterface
         .findById(id)
         .orElseThrow(
             () -> new ResourceNotFoundException("Supplier was not found using id: '" + id + "'"));
 
+    supplier.setCompanyName(supplierUpdateCommand.companyName());
+    supplier.setContactName(supplierUpdateCommand.contactName());
+    supplier.setPhoneNumber(supplierUpdateCommand.phoneNumber());
+    supplier.setEmail(supplierUpdateCommand.email());
+
     supplier.updateAddress(
-        supplierUpdateAddressCommand.street(),
-        supplierUpdateAddressCommand.city(),
-        supplierUpdateAddressCommand.state(),
-        supplierUpdateAddressCommand.postalCode(),
-        supplierUpdateAddressCommand.country());
+        supplierUpdateCommand.street(),
+        supplierUpdateCommand.city(),
+        supplierUpdateCommand.state(),
+        supplierUpdateCommand.postalCode(),
+        supplierUpdateCommand.country());
 
     try {
-      return supplierRepositoryInterface.updateAddress(supplier);
+      return supplierRepositoryInterface.update(supplier);
     } catch (DataIntegrityViolationException exception) {
       throw new EntityAlreadyExistsException("Supplier already exists.", exception.getCause());
     }

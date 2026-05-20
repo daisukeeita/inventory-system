@@ -33,12 +33,14 @@ public class ProductService {
   public Product saveProduct(ProductRegisterCommand productRegisterCommand) {
 
     Supplier supplier = supplierService.findByName(productRegisterCommand.supplier());
-    UnitsOfMeasure unitsOfMeasure =
-        unitsOfMeasureService.getByName(productRegisterCommand.baseUnitOfMeasure());
 
-    Product product =
-        new Product(
-            productRegisterCommand.sku(), productRegisterCommand.name(), supplier, unitsOfMeasure);
+    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.getByName(productRegisterCommand.baseUnitOfMeasure());
+
+    Product product = new Product();
+    product.setSku(productRegisterCommand.sku());
+    product.setName(productRegisterCommand.name());
+    product.setSupplier(supplier);
+    product.setUnitsOfMeasure(unitsOfMeasure);
 
     try {
       return productRepositoryInterface.save(product);

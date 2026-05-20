@@ -1,30 +1,35 @@
 package com.javv.inventorySystem.presentation.product;
 
+import java.util.Objects;
+
 import org.springframework.stereotype.Component;
 
 import com.javv.inventorySystem.application.command.product.ProductRegisterCommand;
 import com.javv.inventorySystem.domain.model.product.Product;
-import com.javv.inventorySystem.presentation.product.dto.ProductRegistrationDto;
+import com.javv.inventorySystem.presentation.product.dto.ProductRegisterDto;
 import com.javv.inventorySystem.presentation.product.dto.ProductResponseDto;
 
 @Component
 public class ProductDtoMapper {
 
-  public ProductRegisterCommand toRegisterCommand(ProductRegistrationDto productRegistrationDto) {
+  public ProductRegisterCommand toRegisterCommand(ProductRegisterDto productRegisterDto) {
+
+    Objects.requireNonNull(productRegisterDto,
+        "Product DTO Mapper: Cannot map a null ProductRegisterDto to a Command Record.");
 
     return new ProductRegisterCommand(
-        productRegistrationDto.sku(),
-        productRegistrationDto.name(),
-        productRegistrationDto.supplier(),
-        productRegistrationDto.baseUnitOfMeasure());
+        productRegisterDto.sku().trim(),
+        productRegisterDto.name().trim(),
+        productRegisterDto.supplier().trim(),
+        productRegisterDto.baseUnitOfMeasure().trim());
   }
 
   public ProductResponseDto toResponseDto(Product product) {
 
     return new ProductResponseDto(
-        product.getSku(),
-        product.getName(),
-        product.getSupplier().getCompanyName(),
-        product.getBaseUnitsOfMeasure().getName());
+        product.getSku().trim(),
+        product.getName().trim(),
+        product.getSupplier().getCompanyName().trim(),
+        product.getBaseUnitsOfMeasure().getName().trim());
   }
 }

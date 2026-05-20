@@ -19,6 +19,7 @@ public class SupplierPersistenceMapper {
     supplierAddressJpaEntity.setStreet(supplier.getSupplierAddress().getStreet());
     supplierAddressJpaEntity.setSupplier(supplierJpaEntity);
 
+    supplierJpaEntity.setId(supplier.getId());
     supplierJpaEntity.setCompanyName(supplier.getCompanyName());
     supplierJpaEntity.setContactName(supplier.getContactName());
     supplierJpaEntity.setPhoneNumber(supplier.getPhoneNumber());
@@ -47,5 +48,27 @@ public class SupplierPersistenceMapper {
     supplier.setSupplierAddress(supplierAddress);
 
     return supplier;
+  }
+
+  public SupplierJpaEntity updateEntity(Supplier supplier, SupplierJpaEntity supplierJpaEntity) {
+
+    SupplierAddress supplierAddress = supplier.getSupplierAddress();
+
+    supplierJpaEntity.setCompanyName(supplier.getCompanyName());
+    supplierJpaEntity.setContactName(supplier.getContactName());
+    supplierJpaEntity.setPhoneNumber(supplier.getPhoneNumber());
+    supplierJpaEntity.setEmail(supplier.getEmail());
+
+    if (supplierAddress != null) {
+      supplierJpaEntity.updateAddress(
+          supplierAddress.getStreet(),
+          supplierAddress.getCity(),
+          supplierAddress.getState(),
+          supplierAddress.getPostalCode(),
+          supplierAddress.getCountry());
+    }
+
+    return supplierJpaEntity;
+
   }
 }

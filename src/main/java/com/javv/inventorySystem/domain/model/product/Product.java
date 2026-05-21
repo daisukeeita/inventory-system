@@ -5,6 +5,7 @@ import java.time.Instant;
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
 
 public class Product {
+  private Long id;
   private String sku;
   private String name;
   private Supplier supplier;
@@ -20,6 +21,10 @@ public class Product {
     this.name = name;
     this.supplier = supplier;
     this.baseUom = baseUom;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setSku(String sku) {
@@ -44,6 +49,10 @@ public class Product {
 
   public void setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public String getSku() {

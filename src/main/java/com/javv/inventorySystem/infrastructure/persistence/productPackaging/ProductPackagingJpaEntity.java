@@ -1,7 +1,8 @@
-package com.javv.inventorySystem.infrastructure.persistence.product;
+package com.javv.inventorySystem.infrastructure.persistence.productPackaging;
 
 import java.math.BigDecimal;
 
+import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasureJpaEntity;
 
 import jakarta.persistence.Column;
@@ -21,8 +22,8 @@ import jakarta.persistence.UniqueConstraint;
 public class ProductPackagingJpaEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private int id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
   @Column(name = "packaging_code", nullable = false, length = 20)
   private String packagingCode;
@@ -55,7 +56,7 @@ public class ProductPackagingJpaEntity {
     this.conversionFactor = conversionFactor;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -79,7 +80,7 @@ public class ProductPackagingJpaEntity {
     this.price = price;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 

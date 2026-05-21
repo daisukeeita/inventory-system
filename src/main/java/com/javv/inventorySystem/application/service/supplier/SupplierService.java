@@ -64,7 +64,7 @@ public class SupplierService {
     }
   }
 
-  public Supplier findByName(String companyName) {
+  public Supplier getByName(String companyName) {
     Optional<Supplier> optionalSupplier = supplierRepositoryInterface.findByName(companyName);
 
     Supplier supplier = optionalSupplier.orElseThrow(
@@ -74,7 +74,7 @@ public class SupplierService {
     return supplier;
   }
 
-  public Supplier findById(int id) {
+  public Supplier getById(int id) {
     Optional<Supplier> optionalSupplier = supplierRepositoryInterface.findById(id);
 
     Supplier supplier = optionalSupplier.orElseThrow(

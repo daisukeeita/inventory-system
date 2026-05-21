@@ -12,6 +12,8 @@ import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsO
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -22,7 +24,11 @@ import jakarta.persistence.Table;
 @EntityListeners(AuditingEntityListener.class)
 public class ProductJpaEntity {
   @Id
-  @Column(name = "sku", nullable = false, length = 50)
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column(name = "sku", nullable = false)
   private String sku;
 
   @Column(name = "name", nullable = false, length = 50)
@@ -58,6 +64,10 @@ public class ProductJpaEntity {
     this.baseUnitsOfMeasure = unitsOfMeasureJpaEntity;
   }
 
+  public void setId(Long id) {
+    this.id = id;
+  }
+
   public void setSku(String sku) {
     this.sku = sku;
   }
@@ -80,6 +90,10 @@ public class ProductJpaEntity {
 
   protected void setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public String getSku() {

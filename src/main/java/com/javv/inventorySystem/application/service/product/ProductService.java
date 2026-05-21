@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.javv.inventorySystem.application.command.product.ProductRegisterCommand;
+import com.javv.inventorySystem.application.command.product.ProductUpdateCommand;
 import com.javv.inventorySystem.application.service.supplier.SupplierService;
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
+import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.model.product.Product;
 import com.javv.inventorySystem.domain.model.product.UnitsOfMeasure;
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
@@ -32,7 +34,7 @@ public class ProductService {
   @Transactional
   public Product saveProduct(ProductRegisterCommand productRegisterCommand) {
 
-    Supplier supplier = supplierService.findByName(productRegisterCommand.supplier());
+    Supplier supplier = supplierService.getByName(productRegisterCommand.supplier());
 
     UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.getByName(productRegisterCommand.baseUnitOfMeasure());
 
@@ -44,6 +46,30 @@ public class ProductService {
 
     try {
       return productRepositoryInterface.save(product);
+    } catch (DataIntegrityViolationException exception) {
+      throw new EntityAlreadyExistsException("Product already registered.");
+    }
+  }
+
+  @Transactional
+  public Product updateProduct(Long id, ProductUpdateCommand productUpdateCommand) {
+    Supplier supplier = supplierService.getByName(
+        productUpdateCommand.supplier());
+    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.getByName(
+        productUpdateCommand.baseUnitOfMeasure());
+
+    Product product = productRepositoryInterface
+        .getById(id)
+        .orElseThrow(
+            () -> new ResourceNotFoundException("Product was not found using id: '" + id + "'"));
+
+    product.setSku(productUpdateCommand.sku());
+    product.setName(productUpdateCommand.name());
+    product.setSupplier(supplier);
+    product.setUnitsOfMeasure(unitsOfMeasure);
+
+    try {
+      return productRepositoryInterface.update(product);
     } catch (DataIntegrityViolationException exception) {
       throw new EntityAlreadyExistsException("Product already registered.");
     }

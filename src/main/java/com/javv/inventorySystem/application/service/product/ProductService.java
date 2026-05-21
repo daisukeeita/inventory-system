@@ -36,7 +36,8 @@ public class ProductService {
 
     Supplier supplier = supplierService.getByName(productRegisterCommand.supplier());
 
-    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.getByName(productRegisterCommand.baseUnitOfMeasure());
+    UnitsOfMeasure unitsOfMeasure =
+        unitsOfMeasureService.getByName(productRegisterCommand.baseUnitOfMeasure());
 
     Product product = new Product();
     product.setSku(productRegisterCommand.sku());
@@ -53,15 +54,16 @@ public class ProductService {
 
   @Transactional
   public Product updateProduct(Long id, ProductUpdateCommand productUpdateCommand) {
-    Supplier supplier = supplierService.getByName(
-        productUpdateCommand.supplier());
-    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.getByName(
-        productUpdateCommand.baseUnitOfMeasure());
+    Supplier supplier = supplierService.getByName(productUpdateCommand.supplier());
+    UnitsOfMeasure unitsOfMeasure =
+        unitsOfMeasureService.getByName(productUpdateCommand.baseUnitOfMeasure());
 
-    Product product = productRepositoryInterface
-        .getById(id)
-        .orElseThrow(
-            () -> new ResourceNotFoundException("Product was not found using id: '" + id + "'"));
+    Product product =
+        productRepositoryInterface
+            .getById(id)
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException("Product was not found using id: '" + id + "'"));
 
     product.setSku(productUpdateCommand.sku());
     product.setName(productUpdateCommand.name());

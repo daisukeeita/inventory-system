@@ -24,16 +24,33 @@ public class ProductPersistenceAdapter implements ProductRepositoryInterface {
 
     ProductJpaEntity productJpaEntity = productPersistenceMapper.toJpaEntity(product);
 
-    ProductJpaEntity savedProduct = productJpaRepository.saveAndFlush(productJpaEntity);
+    ProductJpaEntity savedProduct = productJpaRepository.save(productJpaEntity);
 
     return productPersistenceMapper.toDomainEntity(savedProduct);
 
   }
 
   @Override
+  public Product update(Product product) {
+    ProductJpaEntity productJpaEntity = productPersistenceMapper.toJpaEntity(product);
+
+    ProductJpaEntity savedProduct = productJpaRepository.saveAndFlush(productJpaEntity);
+
+    return productPersistenceMapper.toDomainEntity(savedProduct);
+  }
+
+  @Override
   public Optional<Product> getBySku(String sku) {
 
-    Optional<ProductJpaEntity> jpaEntity = productJpaRepository.findById(sku);
+    Optional<ProductJpaEntity> jpaEntity = productJpaRepository.findBySku(sku);
+
+    return jpaEntity.map(entity -> productPersistenceMapper.toDomainEntity(entity));
+  }
+
+  @Override
+  public Optional<Product> getById(Long id) {
+
+    Optional<ProductJpaEntity> jpaEntity = productJpaRepository.findById(id);
 
     return jpaEntity.map(entity -> productPersistenceMapper.toDomainEntity(entity));
   }

@@ -22,6 +22,7 @@ public class ProductPersistenceMapper {
   public ProductJpaEntity toJpaEntity(Product product) {
     ProductJpaEntity productJpaEntity = new ProductJpaEntity();
 
+    productJpaEntity.setId(product.getId());
     productJpaEntity.setSku(product.getSku());
     productJpaEntity.setName(product.getName());
     productJpaEntity.setSupplier(
@@ -38,6 +39,7 @@ public class ProductPersistenceMapper {
 
     Product product = new Product();
 
+    product.setId(productJpaEntity.getId());
     product.setSku(productJpaEntity.getSku());
     product.setName(productJpaEntity.getName());
     product.setSupplier(supplierPersistenceMapper.toDomainEntity(

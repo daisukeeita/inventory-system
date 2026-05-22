@@ -1,5 +1,7 @@
 package com.javv.inventorySystem.application.service.product;
 
+import java.util.Optional;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,5 +77,17 @@ public class ProductService {
     } catch (DataIntegrityViolationException exception) {
       throw new EntityAlreadyExistsException("Product already registered.");
     }
+  }
+
+  public Product getBySku(String sku) {
+    Optional<Product> optionalProduct = productRepositoryInterface.getBySku(sku);
+
+    Product product =
+        optionalProduct.orElseThrow(
+            () ->
+                new ResourceNotFoundException(
+                    "Product Service: Product was not found using SKU: '" + sku + "'"));
+
+    return product;
   }
 }

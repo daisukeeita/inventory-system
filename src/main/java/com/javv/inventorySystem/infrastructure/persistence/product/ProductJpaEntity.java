@@ -28,7 +28,7 @@ public class ProductJpaEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "sku", nullable = false)
+  @Column(name = "sku", nullable = false, unique = true)
   private String sku;
 
   @Column(name = "name", nullable = false, length = 50)
@@ -50,8 +50,7 @@ public class ProductJpaEntity {
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  public ProductJpaEntity() {
-  }
+  public ProductJpaEntity() {}
 
   public ProductJpaEntity(
       String sku,

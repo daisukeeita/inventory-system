@@ -2,6 +2,8 @@ package com.javv.inventorySystem.presentation.productPackaging;
 
 import java.util.Objects;
 
+import org.springframework.stereotype.Component;
+
 import com.javv.inventorySystem.application.command.productPackaging.ProductPackagingRegisterCommand;
 import com.javv.inventorySystem.application.command.productPackaging.ProductPackagingUpdateCommand;
 import com.javv.inventorySystem.domain.model.product.ProductPackaging;
@@ -9,6 +11,7 @@ import com.javv.inventorySystem.presentation.productPackaging.dto.ProductPackagi
 import com.javv.inventorySystem.presentation.productPackaging.dto.ProductPackagingResponseDto;
 import com.javv.inventorySystem.presentation.productPackaging.dto.ProductPackagingUpdateDto;
 
+@Component
 public class ProductPackagingDtoMapper {
 
   public ProductPackagingRegisterCommand toRegisterCommand(

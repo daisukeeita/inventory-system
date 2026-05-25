@@ -1,4 +1,4 @@
-package com.javv.inventorySystem.domain.model.inventory;
+package com.javv.inventorySystem.domain.model.mainInventory;
 
 import java.time.Instant;
 
@@ -61,11 +61,11 @@ public class MainInventory {
     this.reorderLevel = reorderLevel;
   }
 
-  protected void setCreatedAt(Instant createdAt) {
+  public void setCreatedAt(Instant createdAt) {
     this.createdAt = createdAt;
   }
 
-  protected void setUpdatedAt(Instant updatedAt) {
+  public void setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
   }
 

@@ -1,4 +1,4 @@
-package com.javv.inventorySystem.infrastructure.persistence.inventory;
+package com.javv.inventorySystem.infrastructure.persistence.mainInventory;
 
 import java.time.Instant;
 
@@ -48,8 +48,7 @@ public class MainInventoryJpaEntity {
   public MainInventoryJpaEntity() {}
 
   public MainInventoryJpaEntity(
-      Integer id, ProductJpaEntity productJpaEntity, int quantityOnHand, int reorderLevel) {
-    this.id = id;
+      ProductJpaEntity productJpaEntity, int quantityOnHand, int reorderLevel) {
     this.productJpaEntity = productJpaEntity;
     this.quantityOnHand = quantityOnHand;
     this.reorderLevel = reorderLevel;

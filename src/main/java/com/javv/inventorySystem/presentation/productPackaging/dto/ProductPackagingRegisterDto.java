@@ -3,6 +3,7 @@ package com.javv.inventorySystem.presentation.productPackaging.dto;
 import java.math.BigDecimal;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record ProductPackagingRegisterDto(
     @NotBlank(
@@ -15,9 +16,9 @@ public record ProductPackagingRegisterDto(
             message =
                 "Product Packaging Register DTO: Unit of Measure is required for registration.")
         String unitsOfMeasure,
-    @NotBlank(
+    @NotNull(
             message =
                 "Product Packaging Register DTO: Conversion Factor is required for registration.")
         int conversionFactor,
-    @NotBlank(message = "Product Packaging Register DTO: Price is required for registration.")
+    @NotNull(message = "Product Packaging Register DTO: Price is required for registration.")
         BigDecimal price) {}

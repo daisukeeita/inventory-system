@@ -8,7 +8,7 @@ public interface ProductPackagingRepositoryInterface {
 
   ProductPackaging save(ProductPackaging productPackaging);
 
-  ProductPackaging updated(ProductPackaging productPackaging);
+  ProductPackaging update(ProductPackaging productPackaging);
 
   Optional<ProductPackaging> getByPackagingCode(String packagingCode);
 

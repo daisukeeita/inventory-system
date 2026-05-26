@@ -2,10 +2,9 @@ package com.javv.inventorySystem.infrastructure.persistence.mainInventory;
 
 import java.util.Optional;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
-import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
+import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.model.mainInventory.MainInventory;
 import com.javv.inventorySystem.domain.repository.MainInventoryRepositoryInterface;
 
@@ -29,27 +28,36 @@ public class MainInventoryPersistenceAdapter implements MainInventoryRepositoryI
 
     MainInventoryJpaEntity savedEntity = mainInventoryJpaRepository.save(jpaEntity);
 
-    try {
-      return mainInventoryPersistenceMapper.toDomainEntity(savedEntity);
-    } catch (DataIntegrityViolationException exception) {
+    return mainInventoryPersistenceMapper.toDomainEntity(savedEntity);
 
-      throw new EntityAlreadyExistsException(
-          "Main Inventory Persistence Adapter: Inventory for this product already exists.");
-    }
   }
 
   @Override
   public MainInventory update(MainInventory mainInventory) {
-    return null;
+    MainInventoryJpaEntity fetchedEntity = mainInventoryJpaRepository.findByProductJpaEntitySku(
+        mainInventory.getProduct().getSku()).orElseThrow(
+            () -> new ResourceNotFoundException(
+                "Main Inventory Persistence Adapter: Product Inventory not found."));
+
+    MainInventoryJpaEntity updatedEntity = mainInventoryPersistenceMapper
+        .updateJpaEntity(mainInventory, fetchedEntity);
+
+    MainInventoryJpaEntity savedEntity = mainInventoryJpaRepository.saveAndFlush(updatedEntity);
+
+    return mainInventoryPersistenceMapper.toDomainEntity(savedEntity);
   }
 
   @Override
   public Optional<MainInventory> getById(Integer id) {
-    return null;
+    Optional<MainInventoryJpaEntity> fetchedEntity = mainInventoryJpaRepository.findById(id);
+
+    return fetchedEntity.map(entity -> mainInventoryPersistenceMapper.toDomainEntity(entity));
   }
 
   @Override
   public Optional<MainInventory> getBySku(String sku) {
-    return null;
+    Optional<MainInventoryJpaEntity> fetchedEntity = mainInventoryJpaRepository.findByProductJpaEntitySku(sku);
+
+    return fetchedEntity.map(entity -> mainInventoryPersistenceMapper.toDomainEntity(entity));
   }
 }

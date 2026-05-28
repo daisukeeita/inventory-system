@@ -29,6 +29,7 @@ public class InboundPersistenceAdapter implements InboundRepositoryInterface {
 
   @Override
   public Optional<Inbound> getById(Long id) {
+    Optional<InboundJpaEntity> optionalEntity = inboundJpaRepository.findById(id);
     return null;
   }
 

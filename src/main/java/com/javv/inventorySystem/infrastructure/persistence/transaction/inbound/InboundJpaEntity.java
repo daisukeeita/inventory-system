@@ -2,48 +2,64 @@ package com.javv.inventorySystem.infrastructure.persistence.transaction.inbound;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "inbound")
+@EntityListeners(AuditingEntityListener.class)
 public class InboundJpaEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToMany
-  @JoinColumn(name = "username", referencedColumnName = "username")
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "supplier", referencedColumnName = "company_name", nullable = false)
+  private SupplierJpaEntity supplier;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
   private UserJpaEntity encoder;
 
-  @Column(name = "invoice_number")
+  @Column(name = "invoice_number", nullable = false)
   private String invoiceNumber;
 
-  @Column(name = "date_received")
+  @Column(name = "date_received", nullable = false)
   private LocalDateTime dateReceived;
 
-  @Column(name = "list_inbound_item")
-  private List<InboundItemJpaEntity> listInboundItem;
+  @OneToMany(mappedBy = "inboundJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<InboundItemJpaEntity> listInboundItem = new ArrayList<>();
 
-  @Column(name = "created_at", updatable = false)
+  @CreatedDate
+  @Column(name = "created_at", updatable = false, nullable = false)
   private Instant createdAt;
 
-  @Column(name = "updated_at")
+  @LastModifiedDate
+  @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  public InboundJpaEntity() {
-  }
+  public InboundJpaEntity() {}
 
   public InboundJpaEntity(
       Long id,

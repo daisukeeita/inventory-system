@@ -2,6 +2,7 @@ package com.javv.inventorySystem.domain.model.transaction.inbound;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
@@ -14,12 +15,11 @@ public class Inbound {
   private User encoder;
   private String invoiceNumber;
   private LocalDateTime dateReceived;
-  private List<InboundItem> listInboundItem;
+  private List<InboundItem> listInboundItem = new ArrayList<>();
   private Instant createdAt;
   private Instant updatedAt;
 
-  public Inbound() {
-  }
+  public Inbound() {}
 
   public Inbound(
       Long id,

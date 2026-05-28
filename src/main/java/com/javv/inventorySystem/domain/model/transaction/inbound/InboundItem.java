@@ -5,36 +5,40 @@ import com.javv.inventorySystem.domain.model.product.ProductPackaging;
 
 public class InboundItem {
 
-  private Long inboundId;
+  private Long id;
+  private Inbound inbound;
   private Product product;
   private ProductPackaging packagingType;
   private int quantityReceived;
   private int baseQuantityEquivalent;
 
-  public InboundItem() {
-  }
+  public InboundItem() {}
 
   public InboundItem(
-      Long inboundId,
+      Inbound inbound,
       Product product,
       ProductPackaging packagingType,
       int quantityReceived,
       int baseQuantityEquivalent) {
-    this.inboundId = inboundId;
+    this.inbound = inbound;
     this.packagingType = packagingType;
     this.quantityReceived = quantityReceived;
     this.baseQuantityEquivalent = baseQuantityEquivalent;
   }
 
-  public void setId(Long inboundId) {
-    this.inboundId = inboundId;
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setInboud(Inbound inbound) {
+    this.inbound = inbound;
   }
 
   public void setProduct(Product product) {
     this.product = product;
   }
 
-  public void setPackagingType(ProductPackaging productPackaging) {
+  public void setPackagingType(ProductPackaging packagingType) {
     this.packagingType = packagingType;
   }
 
@@ -46,8 +50,12 @@ public class InboundItem {
     this.baseQuantityEquivalent = baseQuantityEquivalent;
   }
 
-  public Long getInboundId() {
-    return inboundId;
+  public Long getId() {
+    return id;
+  }
+
+  public Inbound getInbound() {
+    return inbound;
   }
 
   public Product getProduct() {

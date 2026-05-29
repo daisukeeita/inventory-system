@@ -4,48 +4,62 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.javv.inventorySystem.domain.model.supplier.Supplier;
-import com.javv.inventorySystem.domain.model.user.User;
+import java.util.UUID;
 
 public class Inbound {
 
   private Long id;
-  private Supplier supplier;
-  private User encoder;
+  private int supplierId;
+  private UUID encoderId;
   private String invoiceNumber;
   private LocalDateTime dateReceived;
   private List<InboundItem> listInboundItem = new ArrayList<>();
   private Instant createdAt;
   private Instant updatedAt;
 
-  public Inbound() {}
+  public Inbound() {
+  }
 
   public Inbound(
       Long id,
-      Supplier supplier,
-      User encoder,
+      int supplierId,
+      UUID encoderId,
       String invoiceNumber,
       LocalDateTime dateReceived,
       List<InboundItem> listInboundItem) {
     this.id = id;
-    this.supplier = supplier;
-    this.encoder = encoder;
+    this.supplierId = supplierId;
+    this.encoderId = encoderId;
     this.invoiceNumber = invoiceNumber;
     this.dateReceived = dateReceived;
     this.listInboundItem = listInboundItem;
+  }
+
+  public void addInboundItem(
+      String productSku,
+      String packagingCode,
+      int quantityReceived,
+      int baseQuantityEquivalent) {
+    InboundItem item = new InboundItem();
+    item.setInboud(this);
+    item.setProductSku(productSku);
+    item.setPackagingCode(packagingCode);
+    item.setQuantityReceived(quantityReceived);
+    item.setBasedQuantityEquivalent(baseQuantityEquivalent);
+
+    this.listInboundItem.add(item);
   }
 
   public void setId(Long id) {
     this.id = id;
   }
 
-  public void setSupplier(Supplier supplier) {
-    this.supplier = supplier;
+  public void setSupplierId(int supplierId) {
+    this.supplierId = supplierId;
   }
 
-  public void setEncoder(User encoder) {
-    this.encoder = encoder;
+  public void setEncoderId(UUID encoderId) {
+    this.encoderId = encoderId;
   }
 
   public void setInvoiceNumber(String invoiceNumber) {
@@ -72,12 +86,12 @@ public class Inbound {
     return id;
   }
 
-  public Supplier getSupplier() {
-    return supplier;
+  public int getSupplierId() {
+    return supplierId;
   }
 
-  public User getEncoder() {
-    return encoder;
+  public UUID getEncoderId() {
+    return encoderId;
   }
 
   public String getInvoiceNumber() {

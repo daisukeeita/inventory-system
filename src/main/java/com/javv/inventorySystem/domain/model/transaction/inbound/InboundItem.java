@@ -1,27 +1,26 @@
 package com.javv.inventorySystem.domain.model.transaction.inbound;
 
-import com.javv.inventorySystem.domain.model.product.Product;
-import com.javv.inventorySystem.domain.model.product.ProductPackaging;
-
 public class InboundItem {
 
   private Long id;
   private Inbound inbound;
-  private Product product;
-  private ProductPackaging packagingType;
+  private String productSku;
+  private String packagingCode;
   private int quantityReceived;
   private int baseQuantityEquivalent;
 
-  public InboundItem() {}
+  public InboundItem() {
+  }
 
   public InboundItem(
       Inbound inbound,
-      Product product,
-      ProductPackaging packagingType,
+      String productSku,
+      String packagingCode,
       int quantityReceived,
       int baseQuantityEquivalent) {
     this.inbound = inbound;
-    this.packagingType = packagingType;
+    this.productSku = productSku;
+    this.packagingCode = packagingCode;
     this.quantityReceived = quantityReceived;
     this.baseQuantityEquivalent = baseQuantityEquivalent;
   }
@@ -34,12 +33,12 @@ public class InboundItem {
     this.inbound = inbound;
   }
 
-  public void setProduct(Product product) {
-    this.product = product;
+  public void setProductSku(String productSku) {
+    this.productSku = productSku;
   }
 
-  public void setPackagingType(ProductPackaging packagingType) {
-    this.packagingType = packagingType;
+  public void setPackagingCode(String packagingCode) {
+    this.packagingCode = packagingCode;
   }
 
   public void setQuantityReceived(int quantityReceived) {
@@ -58,12 +57,12 @@ public class InboundItem {
     return inbound;
   }
 
-  public Product getProduct() {
-    return product;
+  public String getProductSku() {
+    return productSku;
   }
 
-  public ProductPackaging getPackagingType() {
-    return packagingType;
+  public String getPackagingCode() {
+    return packagingCode;
   }
 
   public int getQuantityReceived() {

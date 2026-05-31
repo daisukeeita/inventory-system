@@ -41,7 +41,8 @@ public class InboundItemJpaEntity {
   @Column(name = "base_quantity_equivalent", nullable = false)
   private int baseQuantityEquivalent;
 
-  public InboundItemJpaEntity() {}
+  public InboundItemJpaEntity() {
+  }
 
   public InboundItemJpaEntity(
       InboundJpaEntity inboundJpaEntity,

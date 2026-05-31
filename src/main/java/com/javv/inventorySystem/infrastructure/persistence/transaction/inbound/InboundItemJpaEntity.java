@@ -1,7 +1,5 @@
 package com.javv.inventorySystem.infrastructure.persistence.transaction.inbound;
 
-import java.time.Instant;
-
 import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaEntity;
 
@@ -24,16 +22,12 @@ public class InboundItemJpaEntity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "inbound_id", nullable = false)
-  private InboundJpaEntity inboundJpaEntity;
-
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "product_sku", referencedColumnName = "sku", nullable = false)
   private ProductJpaEntity productJpaEntity;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "packaging_type", referencedColumnName = "packaging_code", nullable = false)
-  private ProductPackagingJpaEntity packagingType;
+  @JoinColumn(name = "packaging_id", referencedColumnName = "packaging_id", nullable = false)
+  private ProductPackagingJpaEntity productPackagingJpaEntity;
 
   @Column(name = "quantity_received", nullable = false)
   private int quantityReceived;
@@ -45,28 +39,22 @@ public class InboundItemJpaEntity {
   }
 
   public InboundItemJpaEntity(
-      InboundJpaEntity inboundJpaEntity,
       ProductJpaEntity productJpaEntity,
       ProductPackagingJpaEntity productPackagingJpaEntity,
       int quantityReceived,
       int baseQuantityEquivalent) {
-    this.inboundJpaEntity = inboundJpaEntity;
     this.productJpaEntity = productJpaEntity;
     this.quantityReceived = quantityReceived;
     this.baseQuantityEquivalent = baseQuantityEquivalent;
     this.productPackagingJpaEntity = productPackagingJpaEntity;
   }
 
-  public void setInbound(InboundJpaEntity inboundJpaEntity) {
-    this.inboundJpaEntity = inboundJpaEntity;
-  }
-
   public void setProduct(ProductJpaEntity productJpaEntity) {
     this.productJpaEntity = productJpaEntity;
   }
 
-  public void setProductPackaging(ProductPackagingJpaEntity productPackagingJpaEntity) {
-    this.productPackagingJpaEntity = productPackagingJpaEntity;
+  public void setProductPackaging(ProductPackagingJpaEntity packagingType) {
+    this.productPackagingJpaEntity = packagingType;
   }
 
   public void setQuantityReceived(int quantityReceived) {
@@ -77,14 +65,6 @@ public class InboundItemJpaEntity {
     this.baseQuantityEquivalent = baseQuantityEquivalent;
   }
 
-  protected void setCreatedAt(Instant createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  protected void setUpdatedAt(Instant updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
   public Long getId() {
     return id;
   }
@@ -93,7 +73,7 @@ public class InboundItemJpaEntity {
     return productJpaEntity;
   }
 
-  public ProductPackagingJpaEntity getProductPackaging() {
+  public ProductPackagingJpaEntity getProductPackagingJpaEntity() {
     return productPackagingJpaEntity;
   }
 
@@ -103,13 +83,5 @@ public class InboundItemJpaEntity {
 
   public int getBaseQuantityEquivalent() {
     return baseQuantityEquivalent;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
   }
 }

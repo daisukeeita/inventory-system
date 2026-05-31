@@ -48,7 +48,8 @@ public class InboundJpaEntity {
   @Column(name = "date_received", nullable = false)
   private LocalDateTime dateReceived;
 
-  @OneToMany(mappedBy = "inboundJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "inbound_item_id", nullable = false)
   private List<InboundItemJpaEntity> listInboundItem = new ArrayList<>();
 
   @CreatedDate
@@ -59,7 +60,8 @@ public class InboundJpaEntity {
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  public InboundJpaEntity() {}
+  public InboundJpaEntity() {
+  }
 
   public InboundJpaEntity(
       Long id,

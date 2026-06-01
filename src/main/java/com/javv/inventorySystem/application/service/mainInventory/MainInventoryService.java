@@ -45,7 +45,7 @@ public class MainInventoryService {
 
     MainInventory mainInventory = new MainInventory();
 
-    mainInventory.setProduct(product);
+    mainInventory.setProductSku(product.getSku());
     mainInventory.setQuantityOnHand(mainInventoryRegisterCommand.quantityOnHand());
     mainInventory.setReorderLevel(mainInventoryRegisterCommand.reorderLevel());
 

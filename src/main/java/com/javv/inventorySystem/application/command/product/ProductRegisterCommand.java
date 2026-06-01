@@ -1,12 +1,16 @@
 package com.javv.inventorySystem.application.command.product;
 
+import java.util.List;
 import java.util.Objects;
+
+import com.javv.inventorySystem.application.command.productPackaging.ProductPackagingRegisterCommand;
 
 public record ProductRegisterCommand(
     String sku,
     String name,
     int supplierId,
-    int baseUnitOfMeasureId) {
+    int baseUnitOfMeasureId,
+    List<ProductPackagingRegisterCommand> listPackaging) {
 
   public ProductRegisterCommand {
 

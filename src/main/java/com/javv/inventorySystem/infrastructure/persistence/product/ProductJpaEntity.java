@@ -1,22 +1,28 @@
 package com.javv.inventorySystem.infrastructure.persistence.product;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasureJpaEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -34,13 +40,16 @@ public class ProductJpaEntity {
   @Column(name = "name", nullable = false, length = 50)
   private String name;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "supplier_id", nullable = false)
   private SupplierJpaEntity supplierJpaEntity;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "base_uom_id", nullable = false)
   private UnitsOfMeasureJpaEntity baseUnitsOfMeasure;
+
+  @OneToMany(mappedBy = "productJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<ProductPackagingJpaEntity> listProductPackages = new ArrayList<ProductPackagingJpaEntity>();
 
   @CreatedDate
   @Column(name = "created_at", nullable = false, updatable = false)
@@ -50,7 +59,8 @@ public class ProductJpaEntity {
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  public ProductJpaEntity() {}
+  public ProductJpaEntity() {
+  }
 
   public ProductJpaEntity(
       String sku,

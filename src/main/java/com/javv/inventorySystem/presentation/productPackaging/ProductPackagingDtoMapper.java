@@ -57,8 +57,8 @@ public class ProductPackagingDtoMapper {
     return new ProductPackagingResponseDto(
         productPackaging.getId(),
         productPackaging.getPackagingCode(),
-        productPackaging.getProductSku().getSku(),
-        productPackaging.getProductSku().getName(),
+        productPackaging.getProductId().getSku(),
+        productPackaging.getProductId().getName(),
         productPackaging.getUnitsOfMeasureId().getName(),
         productPackaging.getConversionFactor(),
         productPackaging.getPrice());

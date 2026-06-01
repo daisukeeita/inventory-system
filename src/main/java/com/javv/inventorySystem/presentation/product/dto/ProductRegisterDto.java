@@ -1,5 +1,9 @@
 package com.javv.inventorySystem.presentation.product.dto;
 
+import java.util.List;
+
+import com.javv.inventorySystem.presentation.productPackaging.dto.ProductPackagingRegisterDto;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,5 +19,9 @@ public record ProductRegisterDto(
     int supplierId,
 
     @NotNull(message = "Product Register DTO: Base Unit of Measure is required.") 
-    int baseUnitOfMeasureId) {
+    int baseUnitOfMeasureId,
+
+    @NotNull(message = "Product Register DTO: Product Packaging is required.")
+    List<ProductPackagingRegisterDto> listPackagingDto
+    ) {
 }

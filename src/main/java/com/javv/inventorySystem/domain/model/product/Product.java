@@ -1,6 +1,9 @@
 package com.javv.inventorySystem.domain.model.product;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Product {
   private Long id;
@@ -8,17 +11,39 @@ public class Product {
   private String name;
   private int supplierId;
   private int baseUomId;
+  private List<ProductPackaging> packages = new ArrayList<ProductPackaging>();
   private Instant createdAt;
   private Instant updatedAt;
 
   public Product() {
   }
 
-  public Product(String sku, String name, int supplierId, int baseUomId) {
+  public Product(
+      String sku,
+      String name,
+      int supplierId,
+      int baseUomId,
+      List<ProductPackaging> packages) {
     this.sku = sku;
     this.name = name;
     this.supplierId = supplierId;
     this.baseUomId = baseUomId;
+    this.packages = packages;
+  }
+
+  public void addPackaging(
+      String packagingCode,
+      int unitsOfMeasureId,
+      int conversionFactor,
+      BigDecimal price) {
+
+    ProductPackaging productPackaging = new ProductPackaging();
+    productPackaging.setPackagingCode(packagingCode);
+    productPackaging.setUnitsOfMeasureId(unitsOfMeasureId);
+    productPackaging.setConversionFactor(conversionFactor);
+    productPackaging.setProductId(this.getId());
+
+    this.packages.add(productPackaging);
   }
 
   public void setId(Long id) {
@@ -37,7 +62,7 @@ public class Product {
     this.supplierId = supplierId;
   }
 
-  public void setUnitsOfMeasureId(int baseUomId) {
+  public void setBaseUnitsOfMeasureId(int baseUomId) {
     this.baseUomId = baseUomId;
   }
 

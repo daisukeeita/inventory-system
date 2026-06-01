@@ -36,41 +36,40 @@ public class ProductService {
   @Transactional
   public Product saveProduct(ProductRegisterCommand productRegisterCommand) {
 
-    Supplier supplier = supplierService.getByName(productRegisterCommand.supplier());
+    Supplier supplier = supplierService
+        .getById(productRegisterCommand.supplierId());
 
-    UnitsOfMeasure unitsOfMeasure =
-        unitsOfMeasureService.getByName(productRegisterCommand.baseUnitOfMeasure());
+    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService
+        .getById(productRegisterCommand.baseUnitOfMeasureId());
 
     Product product = new Product();
     product.setSku(productRegisterCommand.sku());
     product.setName(productRegisterCommand.name());
-    product.setSupplier(supplier);
-    product.setUnitsOfMeasure(unitsOfMeasure);
+    product.setSupplierId(supplier.getId());
+    product.setUnitsOfMeasureId(unitsOfMeasure.getId());
 
     try {
       return productRepositoryInterface.save(product);
     } catch (DataIntegrityViolationException exception) {
-      throw new EntityAlreadyExistsException("Product already registered.");
+      throw new EntityAlreadyExistsException(
+          "Product Service: " + exception.getMessage());
     }
   }
 
   @Transactional
   public Product updateProduct(Long id, ProductUpdateCommand productUpdateCommand) {
-    Supplier supplier = supplierService.getByName(productUpdateCommand.supplier());
-    UnitsOfMeasure unitsOfMeasure =
-        unitsOfMeasureService.getByName(productUpdateCommand.baseUnitOfMeasure());
+    Supplier supplier = supplierService.getById(productUpdateCommand.supplierId());
+    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.getById(productUpdateCommand.baseUnitOfMeasureId());
 
-    Product product =
-        productRepositoryInterface
-            .getById(id)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException("Product was not found using id: '" + id + "'"));
+    Product product = productRepositoryInterface
+        .getById(id)
+        .orElseThrow(
+            () -> new ResourceNotFoundException("Product was not found using id: '" + id + "'"));
 
     product.setSku(productUpdateCommand.sku());
     product.setName(productUpdateCommand.name());
-    product.setSupplier(supplier);
-    product.setUnitsOfMeasure(unitsOfMeasure);
+    product.setSupplierId(supplier.getId());
+    product.setUnitsOfMeasureId(unitsOfMeasure.getId());
 
     try {
       return productRepositoryInterface.update(product);
@@ -81,12 +80,18 @@ public class ProductService {
 
   public Product getBySku(String sku) {
     Optional<Product> optionalProduct = productRepositoryInterface.getBySku(sku);
+    Product product = optionalProduct.orElseThrow(
+        () -> new ResourceNotFoundException(
+            "Product Service: Product was not found using SKU: '" + sku + "'"));
 
-    Product product =
-        optionalProduct.orElseThrow(
-            () ->
-                new ResourceNotFoundException(
-                    "Product Service: Product was not found using SKU: '" + sku + "'"));
+    return product;
+  }
+
+  public Product getById(Long id) {
+    Optional<Product> optionalProduct = productRepositoryInterface.getById(id);
+    Product product = optionalProduct.orElseThrow(
+        () -> new ResourceNotFoundException(
+            "Product Service: Product was not found using ID: '" + id + "'"));
 
     return product;
   }

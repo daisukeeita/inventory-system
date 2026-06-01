@@ -5,8 +5,8 @@ import java.util.Objects;
 public record ProductRegisterCommand(
     String sku,
     String name,
-    String supplier,
-    String baseUnitOfMeasure) {
+    int supplierId,
+    int baseUnitOfMeasureId) {
 
   public ProductRegisterCommand {
 
@@ -16,10 +16,10 @@ public record ProductRegisterCommand(
     Objects.requireNonNull(name,
         "Product Register Command: Product Name cannot be null.");
 
-    Objects.requireNonNull(supplier,
+    Objects.requireNonNull(supplierId,
         "Product Register Command: Supplier Name cannot be null.");
 
-    Objects.requireNonNull(baseUnitOfMeasure,
+    Objects.requireNonNull(baseUnitOfMeasureId,
         "Product Register Command: Base Unit of Measure cannot be null.");
   }
 }

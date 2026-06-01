@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class ProductPackaging {
   private Integer id;
   private String packagingCode;
-  private String productSku;
+  private Long productId;
   private int unitsOfMeasureId;
   private int conversionFactor;
   private BigDecimal price;
@@ -16,13 +16,13 @@ public class ProductPackaging {
   public ProductPackaging(
       Integer id,
       String packagingCode,
-      String productSku,
+      Long productId,
       int unitsOfMeasureId,
       int conversionFactor,
       BigDecimal price) {
     this.id = id;
     this.packagingCode = packagingCode;
-    this.productSku = productSku;
+    this.productId = productId;
     this.unitsOfMeasureId = unitsOfMeasureId;
     this.conversionFactor = conversionFactor;
     this.price = price;
@@ -36,8 +36,8 @@ public class ProductPackaging {
     this.packagingCode = packagingCode;
   }
 
-  public void setProductSku(String productSku) {
-    this.productSku = productSku;
+  public void setProductId(Long productId) {
+    this.productId = productId;
   }
 
   public void setUnitsOfMeasureId(int unitsOfMeasureId) {
@@ -60,8 +60,8 @@ public class ProductPackaging {
     return packagingCode;
   }
 
-  public String getProductSku() {
-    return productSku;
+  public Long getProductId() {
+    return productId;
   }
 
   public int getUnitsOfMeasureId() {

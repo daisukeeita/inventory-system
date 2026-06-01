@@ -35,7 +35,7 @@ public class MainInventoryPersistenceAdapter implements MainInventoryRepositoryI
   @Override
   public MainInventory update(MainInventory mainInventory) {
     MainInventoryJpaEntity fetchedEntity = mainInventoryJpaRepository.findByProductJpaEntitySku(
-        mainInventory.getProduct().getSku()).orElseThrow(
+        mainInventory.getProductSku().getSku()).orElseThrow(
             () -> new ResourceNotFoundException(
                 "Main Inventory Persistence Adapter: Product Inventory not found."));
 

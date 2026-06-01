@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.javv.inventorySystem.application.command.product.ProductRegisterCommand;
 import com.javv.inventorySystem.application.command.product.ProductUpdateCommand;
 import com.javv.inventorySystem.application.service.product.ProductService;
+import com.javv.inventorySystem.application.service.product.UnitsOfMeasureService;
+import com.javv.inventorySystem.application.service.supplier.SupplierService;
 import com.javv.inventorySystem.domain.model.product.Product;
 import com.javv.inventorySystem.presentation.product.dto.ProductRegisterDto;
 import com.javv.inventorySystem.presentation.product.dto.ProductResponseDto;
@@ -25,11 +27,19 @@ import jakarta.validation.Valid;
 public class ProductController {
 
   private final ProductService productService;
+  private final SupplierService supplierService;
   private final ProductDtoMapper productDtoMapper;
+  private final UnitsOfMeasureService unitsOfMeasureService;
 
-  public ProductController(ProductService productService, ProductDtoMapper productDtoMapper) {
+  public ProductController(
+      ProductService productService,
+      SupplierService supplierService,
+      ProductDtoMapper productDtoMapper,
+      UnitsOfMeasureService unitsOfMeasureService) {
     this.productService = productService;
+    this.supplierService = supplierService;
     this.productDtoMapper = productDtoMapper;
+    this.unitsOfMeasureService = unitsOfMeasureService;
   }
 
   @PostMapping("/register")
@@ -40,11 +50,18 @@ public class ProductController {
     ProductRegisterCommand productRegisterCommand = productDtoMapper.toRegisterCommand(productRegisterDto);
 
     Product product = productService.saveProduct(productRegisterCommand);
+    String supplierName = supplierService
+        .getById(product.getSupplierId()).getCompanyName();
+    String uomName = unitsOfMeasureService
+        .getById(product.getBaseUnitsOfMeasureId()).getName();
 
-    ProductResponseDto responseDto = productDtoMapper.toResponseDto(product);
+    ProductResponseDto responseDto = productDtoMapper
+        .toResponseDto(product, supplierName, uomName);
 
     return ApiResponse.success(
-        responseDto, "Product registered successfully.", HttpStatus.CREATED.value());
+        responseDto,
+        "Product registered successfully.",
+        HttpStatus.CREATED.value());
   }
 
   @PutMapping("/update/{id}")
@@ -55,8 +72,13 @@ public class ProductController {
     ProductUpdateCommand productUpdateCommand = productDtoMapper.toUpdateCommand(productUpdateDto);
 
     Product product = productService.updateProduct(id, productUpdateCommand);
+    String supplierName = supplierService
+        .getById(product.getSupplierId()).getCompanyName();
+    String uomName = unitsOfMeasureService
+        .getById(product.getBaseUnitsOfMeasureId()).getName();
 
-    ProductResponseDto responseDto = productDtoMapper.toResponseDto(product);
+    ProductResponseDto responseDto = productDtoMapper
+        .toResponseDto(product, supplierName, uomName);
 
     return ApiResponse.success(
         responseDto,

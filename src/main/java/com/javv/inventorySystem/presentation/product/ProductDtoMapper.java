@@ -22,8 +22,8 @@ public class ProductDtoMapper {
     return new ProductRegisterCommand(
         productRegisterDto.sku().trim(),
         productRegisterDto.name().trim(),
-        productRegisterDto.supplier().trim(),
-        productRegisterDto.baseUnitOfMeasure().trim());
+        productRegisterDto.supplierId(),
+        productRegisterDto.baseUnitOfMeasureId());
   }
 
   public ProductUpdateCommand toUpdateCommand(ProductUpdateDto productUpdateDto) {
@@ -34,21 +34,26 @@ public class ProductDtoMapper {
     return new ProductUpdateCommand(
         productUpdateDto.sku(),
         productUpdateDto.name(),
-        productUpdateDto.supplier(),
-        productUpdateDto.baseUnitOfMeasure());
+        productUpdateDto.supplierId(),
+        productUpdateDto.baseUnitOfMeasureId());
   }
 
-  public ProductResponseDto toResponseDto(Product product) {
+  public ProductResponseDto toResponseDto(
+      Product product,
+      String supplierName,
+      String baseUnitOfMeasureName) {
 
     Objects.requireNonNull(product,
         "Product DTO Mapper: Cannot map a null Product to a Response DTO Record.");
 
     return new ProductResponseDto(
         product.getId(),
-        product.getSku().trim(),
-        product.getName().trim(),
-        product.getSupplier().getCompanyName().trim(),
-        product.getBaseUnitsOfMeasure().getName().trim());
+        product.getSku(),
+        product.getName(),
+        product.getSupplierId(),
+        supplierName,
+        product.getBaseUnitsOfMeasureId(),
+        baseUnitOfMeasureName);
   }
 
 }

@@ -2,25 +2,23 @@ package com.javv.inventorySystem.domain.model.product;
 
 import java.time.Instant;
 
-import com.javv.inventorySystem.domain.model.supplier.Supplier;
-
 public class Product {
   private Long id;
   private String sku;
   private String name;
-  private Supplier supplier;
-  private UnitsOfMeasure baseUom;
+  private int supplierId;
+  private int baseUomId;
   private Instant createdAt;
   private Instant updatedAt;
 
   public Product() {
   }
 
-  public Product(String sku, String name, Supplier supplier, UnitsOfMeasure baseUom) {
+  public Product(String sku, String name, int supplierId, int baseUomId) {
     this.sku = sku;
     this.name = name;
-    this.supplier = supplier;
-    this.baseUom = baseUom;
+    this.supplierId = supplierId;
+    this.baseUomId = baseUomId;
   }
 
   public void setId(Long id) {
@@ -35,12 +33,12 @@ public class Product {
     this.name = name;
   }
 
-  public void setSupplier(Supplier supplier) {
-    this.supplier = supplier;
+  public void setSupplierId(int supplierId) {
+    this.supplierId = supplierId;
   }
 
-  public void setUnitsOfMeasure(UnitsOfMeasure baseUom) {
-    this.baseUom = baseUom;
+  public void setUnitsOfMeasureId(int baseUomId) {
+    this.baseUomId = baseUomId;
   }
 
   public void setCreatedAt(Instant createdAt) {
@@ -63,12 +61,12 @@ public class Product {
     return name;
   }
 
-  public Supplier getSupplier() {
-    return supplier;
+  public int getSupplierId() {
+    return supplierId;
   }
 
-  public UnitsOfMeasure getBaseUnitsOfMeasure() {
-    return baseUom;
+  public int getBaseUnitsOfMeasureId() {
+    return baseUomId;
   }
 
   public Instant getCreatedAt() {

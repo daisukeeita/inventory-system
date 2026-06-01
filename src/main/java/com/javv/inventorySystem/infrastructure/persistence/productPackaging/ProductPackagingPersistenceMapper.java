@@ -25,7 +25,7 @@ public class ProductPackagingPersistenceMapper {
 
   public ProductPackagingJpaEntity toJpaEntity(ProductPackaging productPackaging) {
 
-    ProductJpaEntity productJpaEntity = productPersistenceMapper.toJpaEntity(productPackaging.getProductSku());
+    ProductJpaEntity productJpaEntity = productPersistenceMapper.toJpaEntity(productPackaging.getProductId());
 
     UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity = unitsOfMeasurePersistenceMapper
         .toJpaEntity(productPackaging.getUnitsOfMeasureId());

@@ -7,6 +7,7 @@ import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsO
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,9 +17,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(
-    name = "product_packaging",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"product_sku", "uom_id"})})
+@Table(name = "product_packaging", uniqueConstraints = { @UniqueConstraint(columnNames = { "product_sku", "uom_id" }) })
 public class ProductPackagingJpaEntity {
 
   @Id
@@ -28,12 +27,12 @@ public class ProductPackagingJpaEntity {
   @Column(name = "packaging_code", nullable = false, length = 20)
   private String packagingCode;
 
-  @ManyToOne
-  @JoinColumn(name = "product_sku", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
   private ProductJpaEntity productJpaEntity;
 
-  @ManyToOne
-  @JoinColumn(name = "uom_id", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "uom_id", referencedColumnName = "id", nullable = false)
   private UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity;
 
   @Column(name = "conversion_factor", nullable = false)
@@ -42,7 +41,8 @@ public class ProductPackagingJpaEntity {
   @Column(name = "price", nullable = false)
   private BigDecimal price;
 
-  public ProductPackagingJpaEntity() {}
+  public ProductPackagingJpaEntity() {
+  }
 
   public ProductPackagingJpaEntity(
       String packagingCode,

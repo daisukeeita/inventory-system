@@ -2,21 +2,20 @@ package com.javv.inventorySystem.domain.model.mainInventory;
 
 import java.time.Instant;
 
-import com.javv.inventorySystem.domain.model.product.Product;
-
 public class MainInventory {
 
   private Integer id;
-  private Product product;
+  private String productSku;
   private int quantityOnHand;
   private int reorderLevel;
   private Instant createdAt;
   private Instant updatedAt;
 
-  public MainInventory() {}
+  public MainInventory() {
+  }
 
-  public MainInventory(Integer id, Product product, int quantityOnHand, int reorderLevel) {
-    if (product == null) {
+  public MainInventory(Integer id, String productSku, int quantityOnHand, int reorderLevel) {
+    if (productSku == null) {
       throw new IllegalArgumentException("Main Inventory Domain: Product is required.");
     }
 
@@ -25,7 +24,7 @@ public class MainInventory {
           "Main Inventory Domain: Inventory counts cannot be negative.");
     }
     this.id = id;
-    this.product = product;
+    this.productSku = productSku;
     this.quantityOnHand = quantityOnHand;
     this.reorderLevel = reorderLevel;
   }
@@ -49,8 +48,8 @@ public class MainInventory {
     this.id = id;
   }
 
-  public void setProduct(Product product) {
-    this.product = product;
+  public void setProductSku(String productSku) {
+    this.productSku = productSku;
   }
 
   public void setQuantityOnHand(int quantityOnHand) {
@@ -73,8 +72,8 @@ public class MainInventory {
     return id;
   }
 
-  public Product getProduct() {
-    return product;
+  public String getProductSku() {
+    return productSku;
   }
 
   public int getQuantityOnHand() {

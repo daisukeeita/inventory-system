@@ -66,11 +66,13 @@ public class ProductJpaEntity {
       String sku,
       String name,
       SupplierJpaEntity supplierJpaEntity,
-      UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity) {
+      UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity,
+      List<ProductPackagingJpaEntity> listProductPackages) {
     this.sku = sku;
     this.name = name;
     this.supplierJpaEntity = supplierJpaEntity;
     this.baseUnitsOfMeasure = unitsOfMeasureJpaEntity;
+    this.listProductPackages = listProductPackages;
   }
 
   public void setId(Long id) {

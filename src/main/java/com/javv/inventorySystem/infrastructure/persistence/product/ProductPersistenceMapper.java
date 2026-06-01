@@ -3,7 +3,9 @@ package com.javv.inventorySystem.infrastructure.persistence.product;
 import org.springframework.stereotype.Component;
 
 import com.javv.inventorySystem.domain.model.product.Product;
+import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierPersistenceMapper;
+import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasureJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasurePersistenceMapper;
 
 @Component
@@ -19,18 +21,15 @@ public class ProductPersistenceMapper {
     this.unitsOfMeasurePersistenceMapper = unitsOfMeasurePersistenceMapper;
   }
 
-  public ProductJpaEntity toJpaEntity(Product product) {
+  public ProductJpaEntity toJpaEntity(Product product, SupplierJpaEntity supplierJpaEntity,
+      UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity) {
     ProductJpaEntity productJpaEntity = new ProductJpaEntity();
 
     productJpaEntity.setId(product.getId());
     productJpaEntity.setSku(product.getSku());
     productJpaEntity.setName(product.getName());
-    productJpaEntity.setSupplier(
-        supplierPersistenceMapper.toJpaEntity(
-            product.getSupplier()));
-    productJpaEntity.setBaseUom(
-        unitsOfMeasurePersistenceMapper.toJpaEntity(
-            product.getBaseUnitsOfMeasure()));
+    productJpaEntity.setSupplier(supplierJpaEntity);
+    productJpaEntity.setBaseUom(unitsOfMeasureJpaEntity);
 
     return productJpaEntity;
   }
@@ -42,10 +41,9 @@ public class ProductPersistenceMapper {
     product.setId(productJpaEntity.getId());
     product.setSku(productJpaEntity.getSku());
     product.setName(productJpaEntity.getName());
-    product.setSupplier(supplierPersistenceMapper.toDomainEntity(
-        productJpaEntity.getSupplier()));
-    product.setUnitsOfMeasure(unitsOfMeasurePersistenceMapper.toDomainEntity(
-        productJpaEntity.getBaseUnitOfMeasure()));
+    product.setSupplierId(productJpaEntity.getSupplier().getId());
+    product.setUnitsOfMeasureId(
+        productJpaEntity.getBaseUnitOfMeasure().getId());
     product.setCreatedAt(productJpaEntity.getCreatedAt());
     product.setUpdatedAt(productJpaEntity.getUpdatedAt());
 

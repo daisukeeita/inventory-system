@@ -14,10 +14,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "product_packaging", uniqueConstraints = { @UniqueConstraint(columnNames = { "product_sku", "uom_id" }) })
+@Table(name = "product_packaging")
 public class ProductPackagingJpaEntity {
 
   @Id

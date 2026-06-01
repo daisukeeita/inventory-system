@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.javv.inventorySystem.application.command.product.ProductRegisterCommand;
 import com.javv.inventorySystem.application.command.product.ProductUpdateCommand;
+import com.javv.inventorySystem.application.command.productPackaging.ProductPackagingRegisterCommand;
 import com.javv.inventorySystem.application.service.supplier.SupplierService;
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
@@ -46,7 +47,18 @@ public class ProductService {
     product.setSku(productRegisterCommand.sku());
     product.setName(productRegisterCommand.name());
     product.setSupplierId(supplier.getId());
-    product.setUnitsOfMeasureId(unitsOfMeasure.getId());
+    product.setBaseUnitsOfMeasureId(unitsOfMeasure.getId());
+
+    for (ProductPackagingRegisterCommand packaging : productRegisterCommand.listPackaging()) {
+      UnitsOfMeasure unitMeasure = unitsOfMeasureService.getById(
+          packaging.unitOfMeasureId());
+
+      product.addPackaging(
+          packaging.packagingCode(),
+          unitMeasure.getId(),
+          packaging.conversionFactor(),
+          packaging.price());
+    }
 
     try {
       return productRepositoryInterface.save(product);

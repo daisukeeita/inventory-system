@@ -25,11 +25,10 @@ public class ProductPackagingPersistenceMapper {
 
   public ProductPackagingJpaEntity toJpaEntity(ProductPackaging productPackaging) {
 
-    ProductJpaEntity productJpaEntity =
-        productPersistenceMapper.toJpaEntity(productPackaging.getProduct());
+    ProductJpaEntity productJpaEntity = productPersistenceMapper.toJpaEntity(productPackaging.getProductSku());
 
-    UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity =
-        unitsOfMeasurePersistenceMapper.toJpaEntity(productPackaging.getUnitsOfMeasure());
+    UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity = unitsOfMeasurePersistenceMapper
+        .toJpaEntity(productPackaging.getUnitsOfMeasureId());
 
     ProductPackagingJpaEntity productPackagingJpaEntity = new ProductPackagingJpaEntity();
 
@@ -45,12 +44,10 @@ public class ProductPackagingPersistenceMapper {
 
   public ProductPackaging toDomainEntity(ProductPackagingJpaEntity productPackagingJpaEntity) {
 
-    Product product =
-        productPersistenceMapper.toDomainEntity(productPackagingJpaEntity.getProduct());
+    Product product = productPersistenceMapper.toDomainEntity(productPackagingJpaEntity.getProduct());
 
-    UnitsOfMeasure unitsOfMeasure =
-        unitsOfMeasurePersistenceMapper.toDomainEntity(
-            productPackagingJpaEntity.getUnitsOfMeasure());
+    UnitsOfMeasure unitsOfMeasure = unitsOfMeasurePersistenceMapper.toDomainEntity(
+        productPackagingJpaEntity.getUnitsOfMeasure());
 
     ProductPackaging productPackaging = new ProductPackaging();
 

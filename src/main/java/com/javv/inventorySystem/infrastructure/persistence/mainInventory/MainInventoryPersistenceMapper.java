@@ -18,8 +18,7 @@ public class MainInventoryPersistenceMapper {
 
   public MainInventoryJpaEntity toJpaEntity(MainInventory mainInventory) {
 
-    ProductJpaEntity productJpaEntity =
-        productPersistenceMapper.toJpaEntity(mainInventory.getProduct());
+    ProductJpaEntity productJpaEntity = productPersistenceMapper.toJpaEntity(mainInventory.getProductSku());
 
     MainInventoryJpaEntity mainInventoryJpaEntity = new MainInventoryJpaEntity();
     mainInventoryJpaEntity.setId(mainInventory.getId());

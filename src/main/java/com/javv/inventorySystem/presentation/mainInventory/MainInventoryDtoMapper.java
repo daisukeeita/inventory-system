@@ -35,7 +35,7 @@ public class MainInventoryDtoMapper {
     return new MainInventoryResponseDto(
         mainInventory.getId(),
         mainInventory.getProductSku(),
-        mainInventory.getProductSku().getName(),
+        mainInventory.getProductSku(),
         mainInventory.getQuantityOnHand(),
         mainInventory.getReorderLevel(),
         mainInventory.getCreatedAt(),

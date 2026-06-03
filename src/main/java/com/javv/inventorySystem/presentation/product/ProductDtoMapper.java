@@ -13,6 +13,7 @@ import com.javv.inventorySystem.domain.model.product.Product;
 import com.javv.inventorySystem.presentation.product.dto.ProductRegisterDto;
 import com.javv.inventorySystem.presentation.product.dto.ProductResponseDto;
 import com.javv.inventorySystem.presentation.product.dto.ProductUpdateDto;
+import com.javv.inventorySystem.presentation.productPackaging.dto.ProductPackagingResponseDto;
 
 @Component
 public class ProductDtoMapper {
@@ -25,12 +26,11 @@ public class ProductDtoMapper {
     Objects.requireNonNull(productRegisterDto.listPackagingDto(),
         "Product DTO Mapper: Cannot map a null ProductPackagingRegisterDto to a Command Record.");
 
-    List<ProductPackagingRegisterCommand> listPackaging = new ArrayList<ProductPackagingRegisterCommand>();
+    List<ProductPackagingRegisterCommand> listPackagingCommand = new ArrayList<ProductPackagingRegisterCommand>();
 
     productRegisterDto.listPackagingDto().forEach(
-        packaging -> listPackaging.add(new ProductPackagingRegisterCommand(
-            packaging.packagingCode(),
-            packaging.productId(),
+        packaging -> listPackagingCommand.add(new ProductPackagingRegisterCommand(
+            packaging.packagingCode().trim(),
             packaging.unitsOfMeasureId(),
             packaging.conversionFactor(),
             packaging.price())));
@@ -40,7 +40,7 @@ public class ProductDtoMapper {
         productRegisterDto.name().trim(),
         productRegisterDto.supplierId(),
         productRegisterDto.baseUnitOfMeasureId(),
-        listPackaging);
+        listPackagingCommand);
   }
 
   public ProductUpdateCommand toUpdateCommand(ProductUpdateDto productUpdateDto) {
@@ -58,7 +58,8 @@ public class ProductDtoMapper {
   public ProductResponseDto toResponseDto(
       Product product,
       String supplierName,
-      String baseUnitOfMeasureName) {
+      String baseUnitOfMeasureName,
+      List<ProductPackagingResponseDto> listPackaging) {
 
     Objects.requireNonNull(product,
         "Product DTO Mapper: Cannot map a null Product to a Response DTO Record.");
@@ -70,7 +71,8 @@ public class ProductDtoMapper {
         product.getSupplierId(),
         supplierName,
         product.getBaseUnitsOfMeasureId(),
-        baseUnitOfMeasureName);
+        baseUnitOfMeasureName,
+        listPackaging);
   }
 
 }

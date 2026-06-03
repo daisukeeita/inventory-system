@@ -5,7 +5,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.javv.inventorySystem.domain.model.product.Product;
+import com.javv.inventorySystem.domain.model.product.ProductPackaging;
 import com.javv.inventorySystem.domain.repository.ProductRepositoryInterface;
+import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaRepository;
 import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasureJpaEntity;
@@ -39,12 +41,48 @@ public class ProductPersistenceAdapter implements ProductRepositoryInterface {
     UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity = unitsOfMeasureJpaRepository
         .getReferenceById(product.getBaseUnitsOfMeasureId());
 
-    ProductJpaEntity productJpaEntity = productPersistenceMapper
-        .toJpaEntity(product, supplierJpaEntity, unitsOfMeasureJpaEntity);
+    ProductJpaEntity jpaEntity = new ProductJpaEntity();
+    jpaEntity.setSku(product.getSku());
+    jpaEntity.setName(product.getName());
+    jpaEntity.setSupplier(supplierJpaEntity);
+    jpaEntity.setBaseUom(unitsOfMeasureJpaEntity);
 
-    ProductJpaEntity savedProduct = productJpaRepository.save(productJpaEntity);
+    for (ProductPackaging packaging : product.getListPackages()) {
 
-    return productPersistenceMapper.toDomainEntity(savedProduct);
+      UnitsOfMeasureJpaEntity unitMeasure = unitsOfMeasureJpaRepository
+          .getReferenceById(packaging.getUnitsOfMeasureId());
+
+      jpaEntity.addPackaging(
+          packaging.getPackagingCode(),
+          unitMeasure,
+          packaging.getConversionFactor(),
+          packaging.getPrice());
+    }
+    // ProductJpaEntity productJpaEntity = productPersistenceMapper
+    // .toJpaEntity(product, supplierJpaEntity, unitsOfMeasureJpaEntity);
+
+    ProductJpaEntity savedProduct = productJpaRepository.saveAndFlush(jpaEntity);
+
+    Product domainEntity = new Product();
+    domainEntity.setId(savedProduct.getId());
+    domainEntity.setSku(savedProduct.getSku());
+    domainEntity.setName(savedProduct.getName());
+    domainEntity.setSupplierId(savedProduct.getSupplier().getId());
+    domainEntity.setBaseUnitsOfMeasureId(savedProduct.getBaseUnitOfMeasure().getId());
+    domainEntity.setCreatedAt(savedProduct.getCreatedAt());
+    domainEntity.setUpdatedAt(savedProduct.getUpdatedAt());
+
+    for (ProductPackagingJpaEntity jpaPackaging : savedProduct.getProductPackages()) {
+      ProductPackaging domainPackaging = domainEntity.addPackaging(
+          jpaPackaging.getPackagingCode(),
+          jpaPackaging.getUnitsOfMeasure().getId(),
+          jpaPackaging.getConversionFactor(),
+          jpaPackaging.getPrice());
+
+      domainPackaging.setId(jpaPackaging.getId());
+    }
+
+    return domainEntity;
 
   }
 

@@ -26,7 +26,7 @@ public class InboundItemJpaEntity {
   private ProductJpaEntity productJpaEntity;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "packaging_id", referencedColumnName = "packaging_id", nullable = false)
+  @JoinColumn(name = "packaging_id", referencedColumnName = "id", nullable = false)
   private ProductPackagingJpaEntity productPackagingJpaEntity;
 
   @Column(name = "quantity_received", nullable = false)

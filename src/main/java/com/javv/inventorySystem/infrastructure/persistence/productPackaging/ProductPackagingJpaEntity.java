@@ -21,7 +21,7 @@ public class ProductPackagingJpaEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
 
   @Column(name = "packaging_code", nullable = false, length = 20)
   private String packagingCode;
@@ -55,7 +55,7 @@ public class ProductPackagingJpaEntity {
     this.conversionFactor = conversionFactor;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -79,7 +79,7 @@ public class ProductPackagingJpaEntity {
     this.price = price;
   }
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 

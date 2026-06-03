@@ -42,7 +42,7 @@ public class ProductPersistenceMapper {
     product.setSku(productJpaEntity.getSku());
     product.setName(productJpaEntity.getName());
     product.setSupplierId(productJpaEntity.getSupplier().getId());
-    product.setUnitsOfMeasureId(
+    product.setBaseUnitsOfMeasureId(
         productJpaEntity.getBaseUnitOfMeasure().getId());
     product.setCreatedAt(productJpaEntity.getCreatedAt());
     product.setUpdatedAt(productJpaEntity.getUpdatedAt());

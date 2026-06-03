@@ -5,7 +5,6 @@ import java.util.Objects;
 
 public record ProductPackagingRegisterCommand(
     String packagingCode,
-    Long productId,
     int unitOfMeasureId,
     int conversionFactor,
     BigDecimal price) {
@@ -13,8 +12,6 @@ public record ProductPackagingRegisterCommand(
   public ProductPackagingRegisterCommand {
     Objects.requireNonNull(
         packagingCode, "Product Packaging Register Command: Packaging Code cannot be null.");
-
-    Objects.requireNonNull(productId, "Product Packaging Register Command: Product ID cannot be null.");
 
     Objects.requireNonNull(
         unitOfMeasureId, "Product Packaging Register Command: Unit of Measure ID cannot be null.");

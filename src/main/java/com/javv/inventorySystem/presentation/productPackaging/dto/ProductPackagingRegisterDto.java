@@ -12,10 +12,6 @@ public record ProductPackagingRegisterDto(
     String packagingCode,
 
     @NotNull(
-      message = "Product Packaging Register DTO: Product ID is required for registration.")
-    Long productId,
-
-    @NotNull(
       message = "Product Packaging Register DTO: Unit of Measure ID is required for registration.")
     int unitsOfMeasureId,
 

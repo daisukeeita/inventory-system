@@ -31,7 +31,7 @@ public class Product {
     this.packages = packages;
   }
 
-  public void addPackaging(
+  public ProductPackaging addPackaging(
       String packagingCode,
       int unitsOfMeasureId,
       int conversionFactor,
@@ -41,9 +41,12 @@ public class Product {
     productPackaging.setPackagingCode(packagingCode);
     productPackaging.setUnitsOfMeasureId(unitsOfMeasureId);
     productPackaging.setConversionFactor(conversionFactor);
+    productPackaging.setPrice(price);
     productPackaging.setProductId(this.getId());
 
     this.packages.add(productPackaging);
+
+    return productPackaging;
   }
 
   public void setId(Long id) {
@@ -92,6 +95,10 @@ public class Product {
 
   public int getBaseUnitsOfMeasureId() {
     return baseUomId;
+  }
+
+  public List<ProductPackaging> getListPackages() {
+    return packages;
   }
 
   public Instant getCreatedAt() {

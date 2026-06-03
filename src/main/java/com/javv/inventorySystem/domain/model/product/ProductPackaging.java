@@ -3,7 +3,7 @@ package com.javv.inventorySystem.domain.model.product;
 import java.math.BigDecimal;
 
 public class ProductPackaging {
-  private Integer id;
+  private Long id;
   private String packagingCode;
   private Long productId;
   private int unitsOfMeasureId;
@@ -14,7 +14,7 @@ public class ProductPackaging {
   }
 
   public ProductPackaging(
-      Integer id,
+      Long id,
       String packagingCode,
       Long productId,
       int unitsOfMeasureId,
@@ -28,7 +28,7 @@ public class ProductPackaging {
     this.price = price;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -52,7 +52,7 @@ public class ProductPackaging {
     this.price = price;
   }
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 

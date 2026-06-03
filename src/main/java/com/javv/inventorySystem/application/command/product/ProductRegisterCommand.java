@@ -10,7 +10,7 @@ public record ProductRegisterCommand(
     String name,
     int supplierId,
     int baseUnitOfMeasureId,
-    List<ProductPackagingRegisterCommand> listPackaging) {
+    List<ProductPackagingRegisterCommand> listPackagingCommand) {
 
   public ProductRegisterCommand {
 
@@ -25,5 +25,8 @@ public record ProductRegisterCommand(
 
     Objects.requireNonNull(baseUnitOfMeasureId,
         "Product Register Command: Base Unit of Measure cannot be null.");
+
+    Objects.requireNonNull(listPackagingCommand,
+        "Product Register Command: List of Packages cannot be null.");
   }
 }

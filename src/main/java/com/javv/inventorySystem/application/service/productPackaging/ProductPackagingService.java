@@ -2,6 +2,7 @@ package com.javv.inventorySystem.application.service.productPackaging;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +15,8 @@ import jakarta.persistence.EntityNotFoundException;
 @Transactional(readOnly = true)
 public class ProductPackagingService {
 
-  private final ProductPackagingRepositoryInterface productPackagingRepositoryInterface;
-
-  public ProductPackagingService(
-      ProductPackagingRepositoryInterface productPackagingRepositoryInterface) {
-    this.productPackagingRepositoryInterface = productPackagingRepositoryInterface;
-  }
+  @Autowired
+  private ProductPackagingRepositoryInterface productPackagingRepositoryInterface;
 
   public List<ProductPackaging> getByProductId(Long productId) {
     return productPackagingRepositoryInterface.getByProductId(productId);

@@ -49,7 +49,7 @@ public class ProductService {
     product.setSupplierId(supplier.getId());
     product.setBaseUnitsOfMeasureId(unitsOfMeasure.getId());
 
-    for (ProductPackagingRegisterCommand packaging : productRegisterCommand.listPackaging()) {
+    for (ProductPackagingRegisterCommand packaging : productRegisterCommand.listPackagingCommand()) {
       UnitsOfMeasure unitMeasure = unitsOfMeasureService.getById(
           packaging.unitOfMeasureId());
 
@@ -81,7 +81,7 @@ public class ProductService {
     product.setSku(productUpdateCommand.sku());
     product.setName(productUpdateCommand.name());
     product.setSupplierId(supplier.getId());
-    product.setUnitsOfMeasureId(unitsOfMeasure.getId());
+    product.setBaseUnitsOfMeasureId(unitsOfMeasure.getId());
 
     try {
       return productRepositoryInterface.update(product);

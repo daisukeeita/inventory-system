@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.infrastructure.persistence.product;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,23 @@ public class ProductJpaEntity {
     this.listProductPackages = listProductPackages;
   }
 
+  public void addPackaging(
+      String packagingCode,
+      UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity,
+      int conversionFactor,
+      BigDecimal price) {
+
+    ProductPackagingJpaEntity productPackagingJpaEntity = new ProductPackagingJpaEntity();
+
+    productPackagingJpaEntity.setProduct(this);
+    productPackagingJpaEntity.setPackagingCode(packagingCode);
+    productPackagingJpaEntity.setUnitsOfMeasure(unitsOfMeasureJpaEntity);
+    productPackagingJpaEntity.setConversionFactor(conversionFactor);
+    productPackagingJpaEntity.setPrice(price);
+
+    this.listProductPackages.add(productPackagingJpaEntity);
+  }
+
   public void setId(Long id) {
     this.id = id;
   }
@@ -129,5 +147,9 @@ public class ProductJpaEntity {
 
   public Instant getUpdatedAt() {
     return updatedAt;
+  }
+
+  public List<ProductPackagingJpaEntity> getProductPackages() {
+    return listProductPackages;
   }
 }

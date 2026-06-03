@@ -26,7 +26,7 @@ public class ProductPackagingPersistenceAdapter implements ProductPackagingRepos
   public Optional<ProductPackaging> getById(Integer id) {
     Optional<ProductPackagingJpaEntity> optionalEntity = productPackagingJpaRepository.findById(id);
 
-    return optionalEntity.map(entity -> productPackagingPersistenceMapper.toDomainEntity(entity));
+    return null;
   }
 
   @Override
@@ -36,9 +36,9 @@ public class ProductPackagingPersistenceAdapter implements ProductPackagingRepos
 
     List<ProductPackaging> listDomain = new ArrayList<ProductPackaging>();
 
-    optionalListEntity.forEach(entity -> listDomain.add(
-        productPackagingPersistenceMapper.toDomainEntity(entity)));
+    // optionalListEntity.forEach(entity -> listDomain.add(
+    // productPackagingPersistenceMapper.toDomainEntity(entity)));
 
-    return listDomain;
+    return null;
   }
 }

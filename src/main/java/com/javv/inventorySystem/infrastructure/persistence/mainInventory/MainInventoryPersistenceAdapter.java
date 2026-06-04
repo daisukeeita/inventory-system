@@ -2,29 +2,39 @@ package com.javv.inventorySystem.infrastructure.persistence.mainInventory;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.model.mainInventory.MainInventory;
 import com.javv.inventorySystem.domain.repository.MainInventoryRepositoryInterface;
+import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaEntity;
+import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaRepository;
 
 @Repository
 public class MainInventoryPersistenceAdapter implements MainInventoryRepositoryInterface {
 
+  private ProductJpaRepository productJpaRepository;
   private MainInventoryJpaRepository mainInventoryJpaRepository;
   private MainInventoryPersistenceMapper mainInventoryPersistenceMapper;
 
   public MainInventoryPersistenceAdapter(
+      ProductJpaRepository productJpaRepository,
       MainInventoryJpaRepository mainInventoryJpaRepository,
       MainInventoryPersistenceMapper mainInventoryPersistenceMapper) {
+    this.productJpaRepository = productJpaRepository;
     this.mainInventoryJpaRepository = mainInventoryJpaRepository;
     this.mainInventoryPersistenceMapper = mainInventoryPersistenceMapper;
   }
 
   @Override
   public MainInventory save(MainInventory mainInventory) {
+    ProductJpaEntity productJpaEntity = productJpaRepository
+        .getReferenceById(mainInventory.getProductId());
 
-    MainInventoryJpaEntity jpaEntity = mainInventoryPersistenceMapper.toJpaEntity(mainInventory);
+    MainInventoryJpaEntity jpaEntity = mainInventoryPersistenceMapper
+        .toJpaEntity(mainInventory, productJpaEntity);
 
     MainInventoryJpaEntity savedEntity = mainInventoryJpaRepository.save(jpaEntity);
 
@@ -34,8 +44,8 @@ public class MainInventoryPersistenceAdapter implements MainInventoryRepositoryI
 
   @Override
   public MainInventory update(MainInventory mainInventory) {
-    MainInventoryJpaEntity fetchedEntity = mainInventoryJpaRepository.findByProductJpaEntitySku(
-        mainInventory.getProductSku()).orElseThrow(
+    MainInventoryJpaEntity fetchedEntity = mainInventoryJpaRepository.findById(
+        mainInventory.getId()).orElseThrow(
             () -> new ResourceNotFoundException(
                 "Main Inventory Persistence Adapter: Product Inventory not found."));
 
@@ -59,5 +69,16 @@ public class MainInventoryPersistenceAdapter implements MainInventoryRepositoryI
     Optional<MainInventoryJpaEntity> fetchedEntity = mainInventoryJpaRepository.findByProductJpaEntitySku(sku);
 
     return fetchedEntity.map(entity -> mainInventoryPersistenceMapper.toDomainEntity(entity));
+  }
+
+  @Override
+  public Page<MainInventory> getPageable(Pageable pageable) {
+
+    Page<MainInventoryJpaEntity> jpaPage = mainInventoryJpaRepository.findAll(pageable);
+
+    return jpaPage.map(
+        entity -> mainInventoryPersistenceMapper.toDomainEntity(
+            entity));
+
   }
 }

@@ -7,9 +7,9 @@ import java.util.Objects;
 import org.springframework.stereotype.Component;
 
 import com.javv.inventorySystem.application.command.product.ProductRegisterCommand;
+import com.javv.inventorySystem.application.command.product.ProductResponseRead;
 import com.javv.inventorySystem.application.command.product.ProductUpdateCommand;
 import com.javv.inventorySystem.application.command.productPackaging.ProductPackagingRegisterCommand;
-import com.javv.inventorySystem.domain.model.product.Product;
 import com.javv.inventorySystem.presentation.product.dto.ProductRegisterDto;
 import com.javv.inventorySystem.presentation.product.dto.ProductResponseDto;
 import com.javv.inventorySystem.presentation.product.dto.ProductUpdateDto;
@@ -55,24 +55,32 @@ public class ProductDtoMapper {
         productUpdateDto.baseUnitOfMeasureId());
   }
 
-  public ProductResponseDto toResponseDto(
-      Product product,
-      String supplierName,
-      String baseUnitOfMeasureName,
-      List<ProductPackagingResponseDto> listPackaging) {
+  public ProductResponseDto toResponseDto(ProductResponseRead responseRead) {
 
-    Objects.requireNonNull(product,
-        "Product DTO Mapper: Cannot map a null Product to a Response DTO Record.");
+    Objects.requireNonNull(responseRead,
+        "Product DTO Mapper: Cannot map a null ProductResponseRead to a Response DTO Record.");
+
+    List<ProductPackagingResponseDto> listProductPackagingResponseDto = new ArrayList<>();
+
+    responseRead.listProductPackaging().forEach(
+        packaging -> listProductPackagingResponseDto.add(
+            new ProductPackagingResponseDto(
+                packaging.id(),
+                packaging.packagingCode(),
+                packaging.sku(),
+                packaging.sku(),
+                packaging.conversionFactor(),
+                packaging.price())));
 
     return new ProductResponseDto(
-        product.getId(),
-        product.getSku(),
-        product.getName(),
-        product.getSupplierId(),
-        supplierName,
-        product.getBaseUnitsOfMeasureId(),
-        baseUnitOfMeasureName,
-        listPackaging);
+        responseRead.id(),
+        responseRead.sku(),
+        responseRead.name(),
+        responseRead.supplierId(),
+        responseRead.supplierName(),
+        responseRead.baseUnitOfMeasureId(),
+        responseRead.baseUnitsOfMeasure(),
+        listProductPackagingResponseDto);
   }
 
 }

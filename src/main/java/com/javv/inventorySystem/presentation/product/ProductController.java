@@ -1,8 +1,5 @@
 package com.javv.inventorySystem.presentation.product;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,14 +8,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javv.inventorySystem.application.command.product.ProductRegisterCommand;
+import com.javv.inventorySystem.application.command.product.ProductResponseRead;
 import com.javv.inventorySystem.application.service.product.ProductService;
 import com.javv.inventorySystem.application.service.product.UnitsOfMeasureService;
 import com.javv.inventorySystem.application.service.supplier.SupplierService;
-import com.javv.inventorySystem.domain.model.product.Product;
-import com.javv.inventorySystem.domain.model.product.ProductPackaging;
 import com.javv.inventorySystem.presentation.product.dto.ProductRegisterDto;
 import com.javv.inventorySystem.presentation.product.dto.ProductResponseDto;
-import com.javv.inventorySystem.presentation.productPackaging.dto.ProductPackagingResponseDto;
 import com.javv.inventorySystem.presentation.shared.payload.ApiResponse;
 
 import jakarta.validation.Valid;
@@ -51,41 +46,18 @@ public class ProductController {
     ProductRegisterCommand productRegisterCommand = productDtoMapper
         .toRegisterCommand(productRegisterDto);
 
-    Product product = productService.saveProduct(productRegisterCommand);
-
-    String supplierName = supplierService
-        .getById(product.getSupplierId()).getCompanyName();
-
-    String uomName = unitsOfMeasureService
-        .getById(product.getBaseUnitsOfMeasureId()).getName();
-
-    List<ProductPackagingResponseDto> listPackagingResponseDto = new ArrayList<ProductPackagingResponseDto>();
-
-    for (ProductPackaging packaging : product.getListPackages()) {
-      String uom = unitsOfMeasureService.getById(packaging.getUnitsOfMeasureId()).getName();
-      String sku = productService.getById(packaging.getProductId()).getSku();
-
-      listPackagingResponseDto.add(new ProductPackagingResponseDto(
-          packaging.getId(),
-          packaging.getPackagingCode(),
-          sku,
-          uom,
-          packaging.getConversionFactor(),
-          packaging.getPrice()));
-    }
+    ProductResponseRead productResponseRead = productService.saveProduct(productRegisterCommand);
 
     ProductResponseDto responseDto = productDtoMapper
-        .toResponseDto(
-            product,
-            supplierName,
-            uomName,
-            listPackagingResponseDto);
+        .toResponseDto(productResponseRead);
 
     return ApiResponse.success(
         responseDto,
         "Product registered successfully.",
         HttpStatus.CREATED.value());
   }
+
+  // TODO: Implement a pagination list of Products
 
   // @PutMapping("/update/{id}")
   // @ResponseStatus(HttpStatus.OK)

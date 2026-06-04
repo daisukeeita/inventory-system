@@ -28,7 +28,7 @@ public class MainInventoryJpaEntity {
   private Integer id;
 
   @OneToOne
-  @JoinColumn(name = "product_sku", referencedColumnName = "sku", nullable = false)
+  @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
   private ProductJpaEntity productJpaEntity;
 
   @Column(name = "quantity_on_hand", nullable = false)
@@ -45,7 +45,8 @@ public class MainInventoryJpaEntity {
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  public MainInventoryJpaEntity() {}
+  public MainInventoryJpaEntity() {
+  }
 
   public MainInventoryJpaEntity(
       ProductJpaEntity productJpaEntity, int quantityOnHand, int reorderLevel) {

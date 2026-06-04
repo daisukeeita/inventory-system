@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MainInventoryJpaRepository extends JpaRepository<MainInventoryJpaEntity, Integer> {
 
   Optional<MainInventoryJpaEntity> findByProductJpaEntitySku(String sku);
+
 }

@@ -19,7 +19,10 @@ public class ProductPackagingService {
   private ProductPackagingRepositoryInterface productPackagingRepositoryInterface;
 
   public List<ProductPackaging> getByProductId(Long productId) {
-    return productPackagingRepositoryInterface.getByProductId(productId);
+    List<ProductPackaging> listProductPackaging = productPackagingRepositoryInterface
+        .getByProductId(productId);
+
+    return listProductPackaging;
   }
 
   public ProductPackaging getById(int id) {

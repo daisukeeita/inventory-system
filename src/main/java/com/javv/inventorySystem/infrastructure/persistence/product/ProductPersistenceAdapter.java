@@ -2,6 +2,8 @@ package com.javv.inventorySystem.infrastructure.persistence.product;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.javv.inventorySystem.domain.model.product.Product;
@@ -34,7 +36,54 @@ public class ProductPersistenceAdapter implements ProductRepositoryInterface {
 
   @Override
   public Product save(Product product) {
+    ProductJpaEntity jpaEntity = toJpaEntity(product);
 
+    ProductJpaEntity savedProduct = productJpaRepository.saveAndFlush(jpaEntity);
+
+    Product domainEntity = toDomainEntity(savedProduct);
+
+    return domainEntity;
+  }
+
+  @Override
+  public Optional<Product> getBySku(String sku) {
+    Optional<ProductJpaEntity> jpaEntity = productJpaRepository.findBySku(sku);
+
+    return jpaEntity.map(entity -> toDomainEntity(entity));
+  }
+
+  @Override
+  public Optional<Product> getById(Long id) {
+    Optional<ProductJpaEntity> jpaEntity = productJpaRepository.findById(id);
+
+    return jpaEntity.map(entity -> toDomainEntity(entity));
+  }
+
+  @Override
+  public Page<Product> getPageableProduct(Pageable pageable) {
+    Page<ProductJpaEntity> jpaPage = productJpaRepository.findAll(pageable);
+
+    return jpaPage.map(
+        entity -> toDomainEntity(entity));
+  }
+
+  @Override
+  public Product update(Product product) {
+    SupplierJpaEntity supplierJpaEntity = supplierJpaRepository
+        .getReferenceById(product.getSupplierId());
+
+    UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity = unitsOfMeasureJpaRepository
+        .getReferenceById(product.getBaseUnitsOfMeasureId());
+
+    ProductJpaEntity productJpaEntity = productPersistenceMapper
+        .toJpaEntity(product, supplierJpaEntity, unitsOfMeasureJpaEntity);
+
+    ProductJpaEntity savedProduct = productJpaRepository.saveAndFlush(productJpaEntity);
+
+    return productPersistenceMapper.toDomainEntity(savedProduct);
+  }
+
+  private ProductJpaEntity toJpaEntity(Product product) {
     SupplierJpaEntity supplierJpaEntity = supplierJpaRepository
         .getReferenceById(product.getSupplierId());
 
@@ -58,21 +107,21 @@ public class ProductPersistenceAdapter implements ProductRepositoryInterface {
           packaging.getConversionFactor(),
           packaging.getPrice());
     }
-    // ProductJpaEntity productJpaEntity = productPersistenceMapper
-    // .toJpaEntity(product, supplierJpaEntity, unitsOfMeasureJpaEntity);
 
-    ProductJpaEntity savedProduct = productJpaRepository.saveAndFlush(jpaEntity);
+    return jpaEntity;
+  }
 
+  private Product toDomainEntity(ProductJpaEntity productJpaEntity) {
     Product domainEntity = new Product();
-    domainEntity.setId(savedProduct.getId());
-    domainEntity.setSku(savedProduct.getSku());
-    domainEntity.setName(savedProduct.getName());
-    domainEntity.setSupplierId(savedProduct.getSupplier().getId());
-    domainEntity.setBaseUnitsOfMeasureId(savedProduct.getBaseUnitOfMeasure().getId());
-    domainEntity.setCreatedAt(savedProduct.getCreatedAt());
-    domainEntity.setUpdatedAt(savedProduct.getUpdatedAt());
+    domainEntity.setId(productJpaEntity.getId());
+    domainEntity.setSku(productJpaEntity.getSku());
+    domainEntity.setName(productJpaEntity.getName());
+    domainEntity.setSupplierId(productJpaEntity.getSupplier().getId());
+    domainEntity.setBaseUnitsOfMeasureId(productJpaEntity.getBaseUnitOfMeasure().getId());
+    domainEntity.setCreatedAt(productJpaEntity.getCreatedAt());
+    domainEntity.setUpdatedAt(productJpaEntity.getUpdatedAt());
 
-    for (ProductPackagingJpaEntity jpaPackaging : savedProduct.getProductPackages()) {
+    for (ProductPackagingJpaEntity jpaPackaging : productJpaEntity.getProductPackages()) {
       ProductPackaging domainPackaging = domainEntity.addPackaging(
           jpaPackaging.getPackagingCode(),
           jpaPackaging.getUnitsOfMeasure().getId(),
@@ -83,38 +132,5 @@ public class ProductPersistenceAdapter implements ProductRepositoryInterface {
     }
 
     return domainEntity;
-
-  }
-
-  @Override
-  public Product update(Product product) {
-    SupplierJpaEntity supplierJpaEntity = supplierJpaRepository
-        .getReferenceById(product.getSupplierId());
-
-    UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity = unitsOfMeasureJpaRepository
-        .getReferenceById(product.getBaseUnitsOfMeasureId());
-
-    ProductJpaEntity productJpaEntity = productPersistenceMapper
-        .toJpaEntity(product, supplierJpaEntity, unitsOfMeasureJpaEntity);
-
-    ProductJpaEntity savedProduct = productJpaRepository.saveAndFlush(productJpaEntity);
-
-    return productPersistenceMapper.toDomainEntity(savedProduct);
-  }
-
-  @Override
-  public Optional<Product> getBySku(String sku) {
-
-    Optional<ProductJpaEntity> jpaEntity = productJpaRepository.findBySku(sku);
-
-    return jpaEntity.map(entity -> productPersistenceMapper.toDomainEntity(entity));
-  }
-
-  @Override
-  public Optional<Product> getById(Long id) {
-
-    Optional<ProductJpaEntity> jpaEntity = productJpaRepository.findById(id);
-
-    return jpaEntity.map(entity -> productPersistenceMapper.toDomainEntity(entity));
   }
 }

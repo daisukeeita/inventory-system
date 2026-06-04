@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaEntity;
+import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaEntity;
 
@@ -35,12 +37,12 @@ public class InboundJpaEntity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "supplier", referencedColumnName = "company_name", nullable = false)
-  private SupplierJpaEntity supplier;
+  @JoinColumn(name = "supplier_id", referencedColumnName = "id", nullable = false)
+  private SupplierJpaEntity supplierJpaEntity;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
-  private UserJpaEntity encoder;
+  @JoinColumn(name = "encoder_id", referencedColumnName = "id", nullable = false)
+  private UserJpaEntity userJpaEntity;
 
   @Column(name = "invoice_number", nullable = false)
   private String invoiceNumber;
@@ -70,17 +72,30 @@ public class InboundJpaEntity {
       LocalDateTime dateReceived,
       List<InboundItemJpaEntity> listInboundItem) {
     this.id = id;
-    this.encoder = encoder;
+    this.userJpaEntity = encoder;
     this.dateReceived = dateReceived;
     this.listInboundItem = listInboundItem;
+  }
+
+  public void addItem(
+      ProductJpaEntity productJpaEntity,
+      ProductPackagingJpaEntity productPackagingJpaEntity,
+      int quantityReceived,
+      int baseQuantityEquivalent) {
+
+    InboundItemJpaEntity inboundItemJpaEntity = new InboundItemJpaEntity();
+    inboundItemJpaEntity.setProduct(productJpaEntity);
+    inboundItemJpaEntity.setProductPackaging(productPackagingJpaEntity);
+    inboundItemJpaEntity.setQuantityReceived(quantityReceived);
+    inboundItemJpaEntity.setBaseQuantityEquivalent(baseQuantityEquivalent);
   }
 
   public void setId(Long id) {
     this.id = id;
   }
 
-  public void setEncoder(UserJpaEntity encoder) {
-    this.encoder = encoder;
+  public void setUserJpaEntity(UserJpaEntity encoder) {
+    this.userJpaEntity = encoder;
   }
 
   public void setInvoiceNumber(String invoiceNumber) {
@@ -107,8 +122,8 @@ public class InboundJpaEntity {
     return id;
   }
 
-  public UserJpaEntity getEncoder() {
-    return encoder;
+  public UserJpaEntity getUserJpaEntity() {
+    return userJpaEntity;
   }
 
   public String getInvoiceNumber() {

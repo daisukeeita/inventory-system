@@ -4,12 +4,13 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Inbound {
 
   private Long id;
-  private String supplierName;
-  private String encoderUsername;
+  private Integer supplierId;
+  private UUID encoderId;
   private String invoiceNumber;
   private LocalDateTime dateReceived;
   private List<InboundItem> listInboundItem = new ArrayList<>();
@@ -21,20 +22,20 @@ public class Inbound {
 
   public Inbound(
       Long id,
-      String supplierName,
-      String encoderUsername,
+      Integer supplierId,
+      UUID encoderId,
       String invoiceNumber,
       LocalDateTime dateReceived,
       List<InboundItem> listInboundItem) {
     this.id = id;
-    this.supplierName = supplierName;
-    this.encoderUsername = encoderUsername;
+    this.supplierId = supplierId;
+    this.encoderId = encoderId;
     this.invoiceNumber = invoiceNumber;
     this.dateReceived = dateReceived;
     this.listInboundItem = listInboundItem;
   }
 
-  public void addInboundItem(
+  public InboundItem addInboundItem(
       String productSku,
       int packagingId,
       int quantityReceived,
@@ -47,18 +48,20 @@ public class Inbound {
     item.setBasedQuantityEquivalent(baseQuantityEquivalent);
 
     this.listInboundItem.add(item);
+
+    return item;
   }
 
   public void setId(Long id) {
     this.id = id;
   }
 
-  public void setSupplierName(String supplierName) {
-    this.supplierName = supplierName;
+  public void setSupplierName(Integer supplierId) {
+    this.supplierId = supplierId;
   }
 
-  public void setEncoderUsername(String encoderUsername) {
-    this.encoderUsername = encoderUsername;
+  public void setEncoderUsername(UUID encoderId) {
+    this.encoderId = encoderId;
   }
 
   public void setInvoiceNumber(String invoiceNumber) {
@@ -85,12 +88,12 @@ public class Inbound {
     return id;
   }
 
-  public String getSupplierName() {
-    return supplierName;
+  public Integer getSupplierId() {
+    return supplierId;
   }
 
-  public String getEncoderUsername() {
-    return encoderUsername;
+  public UUID getEncoderId() {
+    return encoderId;
   }
 
   public String getInvoiceNumber() {

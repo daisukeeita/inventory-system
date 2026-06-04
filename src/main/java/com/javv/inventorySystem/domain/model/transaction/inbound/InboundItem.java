@@ -3,7 +3,7 @@ package com.javv.inventorySystem.domain.model.transaction.inbound;
 public class InboundItem {
 
   private Long id;
-  private String productSku;
+  private Long productId;
   private int packagingId;
   private int quantityReceived;
   private int baseQuantityEquivalent;
@@ -12,11 +12,11 @@ public class InboundItem {
   }
 
   public InboundItem(
-      String productSku,
+      Long productId,
       int packagingId,
       int quantityReceived,
       int baseQuantityEquivalent) {
-    this.productSku = productSku;
+    this.productId = productId;
     this.packagingId = packagingId;
     this.quantityReceived = quantityReceived;
     this.baseQuantityEquivalent = baseQuantityEquivalent;
@@ -26,8 +26,8 @@ public class InboundItem {
     this.id = id;
   }
 
-  public void setProductSku(String productSku) {
-    this.productSku = productSku;
+  public void setProductId(Long productId) {
+    this.productId = productId;
   }
 
   public void setPackagingCode(int packagingId) {
@@ -46,8 +46,8 @@ public class InboundItem {
     return id;
   }
 
-  public String getProductSku() {
-    return productSku;
+  public Long getProductId() {
+    return productId;
   }
 
   public int getPackagingId() {

@@ -1,12 +1,14 @@
 package com.javv.inventorySystem.application.service.mainInventory;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.javv.inventorySystem.application.command.mainInventory.MainInventoryRegisterCommand;
 import com.javv.inventorySystem.application.command.mainInventory.MainInventoryUpdateCommand;
-import com.javv.inventorySystem.application.service.product.ProductService;
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
 import com.javv.inventorySystem.domain.model.mainInventory.MainInventory;
 import com.javv.inventorySystem.domain.repository.MainInventoryRepositoryInterface;
@@ -15,13 +17,10 @@ import com.javv.inventorySystem.domain.repository.MainInventoryRepositoryInterfa
 @Transactional(readOnly = true)
 public class MainInventoryService {
 
-  private ProductService productService;
   private MainInventoryRepositoryInterface mainInventoryRepositoryInterface;
 
   public MainInventoryService(
-      ProductService productService,
       MainInventoryRepositoryInterface mainInventoryRepositoryInterface) {
-    this.productService = productService;
     this.mainInventoryRepositoryInterface = mainInventoryRepositoryInterface;
   }
 
@@ -51,6 +50,11 @@ public class MainInventoryService {
 
     mainInventoryRepositoryInterface.update(mainInventory);
 
+  }
+
+  public Page<MainInventory> getPageableInventory(int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    return mainInventoryRepositoryInterface.getPageable(pageable);
   }
 
   private MainInventory toDomainEntity(

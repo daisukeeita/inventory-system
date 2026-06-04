@@ -5,7 +5,7 @@ import java.time.Instant;
 public class MainInventory {
 
   private Integer id;
-  private String productSku;
+  private Long productId;
   private int quantityOnHand;
   private int reorderLevel;
   private Instant createdAt;
@@ -14,8 +14,8 @@ public class MainInventory {
   public MainInventory() {
   }
 
-  public MainInventory(Integer id, String productSku, int quantityOnHand, int reorderLevel) {
-    if (productSku == null) {
+  public MainInventory(Integer id, Long productId, int quantityOnHand, int reorderLevel) {
+    if (productId == null) {
       throw new IllegalArgumentException("Main Inventory Domain: Product is required.");
     }
 
@@ -24,7 +24,7 @@ public class MainInventory {
           "Main Inventory Domain: Inventory counts cannot be negative.");
     }
     this.id = id;
-    this.productSku = productSku;
+    this.productId = productId;
     this.quantityOnHand = quantityOnHand;
     this.reorderLevel = reorderLevel;
   }
@@ -48,8 +48,8 @@ public class MainInventory {
     this.id = id;
   }
 
-  public void setProductSku(String productSku) {
-    this.productSku = productSku;
+  public void setProductId(Long productId) {
+    this.productId = productId;
   }
 
   public void setQuantityOnHand(int quantityOnHand) {
@@ -72,8 +72,8 @@ public class MainInventory {
     return id;
   }
 
-  public String getProductSku() {
-    return productSku;
+  public Long getProductId() {
+    return productId;
   }
 
   public int getQuantityOnHand() {

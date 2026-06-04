@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.javv.inventorySystem.application.command.mainInventory.MainInventoryRegisterCommand;
+import com.javv.inventorySystem.application.command.mainInventory.MainInventoryUpdateCommand;
 import com.javv.inventorySystem.application.service.product.ProductService;
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
 import com.javv.inventorySystem.domain.model.mainInventory.MainInventory;
-import com.javv.inventorySystem.domain.model.product.Product;
 import com.javv.inventorySystem.domain.repository.MainInventoryRepositoryInterface;
 
 @Service
@@ -27,9 +27,8 @@ public class MainInventoryService {
 
   @Transactional
   public MainInventory saveInventory(MainInventoryRegisterCommand mainInventoryRegisterCommand) {
-    Product product = productService.getBySku(mainInventoryRegisterCommand.sku());
 
-    MainInventory mainInventory = toDomainEntity(mainInventoryRegisterCommand, product);
+    MainInventory mainInventory = toDomainEntity(mainInventoryRegisterCommand);
 
     try {
       return mainInventoryRepositoryInterface.save(mainInventory);
@@ -39,13 +38,27 @@ public class MainInventoryService {
     }
   }
 
+  @Transactional
+  public void updateInventory(MainInventoryUpdateCommand mainInventoryUpdateCommand) {
+
+    MainInventory mainInventory = new MainInventory();
+    mainInventory.setId(mainInventoryUpdateCommand.id());
+    mainInventory.setProductId(mainInventoryUpdateCommand.productId());
+    mainInventory.setQuantityOnHand(
+        mainInventoryUpdateCommand.quantityOnHand());
+    mainInventory.setReorderLevel(
+        mainInventoryUpdateCommand.reorderLevel());
+
+    mainInventoryRepositoryInterface.update(mainInventory);
+
+  }
+
   private MainInventory toDomainEntity(
-      MainInventoryRegisterCommand mainInventoryRegisterCommand,
-      Product product) {
+      MainInventoryRegisterCommand mainInventoryRegisterCommand) {
 
     MainInventory mainInventory = new MainInventory();
 
-    mainInventory.setProductSku(product.getSku());
+    mainInventory.setProductId(mainInventoryRegisterCommand.productId());
     mainInventory.setQuantityOnHand(mainInventoryRegisterCommand.quantityOnHand());
     mainInventory.setReorderLevel(mainInventoryRegisterCommand.reorderLevel());
 

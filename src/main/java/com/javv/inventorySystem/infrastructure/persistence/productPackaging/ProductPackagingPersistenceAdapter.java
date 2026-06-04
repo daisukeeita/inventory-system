@@ -26,7 +26,8 @@ public class ProductPackagingPersistenceAdapter implements ProductPackagingRepos
   public Optional<ProductPackaging> getById(Integer id) {
     Optional<ProductPackagingJpaEntity> optionalEntity = productPackagingJpaRepository.findById(id);
 
-    return null;
+    return optionalEntity.map(
+        entity -> toDomainEntity(entity));
   }
 
   @Override
@@ -35,10 +36,26 @@ public class ProductPackagingPersistenceAdapter implements ProductPackagingRepos
         .findByProductId(productId);
 
     List<ProductPackaging> listDomain = new ArrayList<ProductPackaging>();
+    optionalListEntity.forEach(
+        entity -> listDomain.add(
+            toDomainEntity(entity)));
 
-    // optionalListEntity.forEach(entity -> listDomain.add(
-    // productPackagingPersistenceMapper.toDomainEntity(entity)));
+    return listDomain;
+  }
 
-    return null;
+  private ProductPackaging toDomainEntity(ProductPackagingJpaEntity productPackagingJpaEntity) {
+    ProductPackaging domainEntity = new ProductPackaging();
+
+    domainEntity.setId(productPackagingJpaEntity.getId());
+    domainEntity.setPackagingCode(productPackagingJpaEntity.getPackagingCode());
+    domainEntity.setProductId(
+        productPackagingJpaEntity.getProduct().getId());
+    domainEntity.setUnitsOfMeasureId(
+        productPackagingJpaEntity.getUnitsOfMeasure().getId());
+    domainEntity.setConversionFactor(
+        productPackagingJpaEntity.getConversionFactor());
+    domainEntity.setPrice(productPackagingJpaEntity.getPrice());
+
+    return domainEntity;
   }
 }

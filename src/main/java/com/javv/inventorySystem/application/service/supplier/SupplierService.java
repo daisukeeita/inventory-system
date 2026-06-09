@@ -83,6 +83,10 @@ public class SupplierService {
     return supplier;
   }
 
+  public boolean checkExistsById(int id) {
+    return supplierRepositoryInterface.existsById(id);
+  }
+
   private Supplier toDomainEntity(SupplierRegisterCommand supplierRegisterCommand) {
     SupplierAddress supplierAddress = new SupplierAddress();
     supplierAddress.setStreet(supplierRegisterCommand.street());

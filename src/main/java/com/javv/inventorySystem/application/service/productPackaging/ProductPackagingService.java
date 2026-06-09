@@ -25,7 +25,7 @@ public class ProductPackagingService {
     return listProductPackaging;
   }
 
-  public ProductPackaging getById(int id) {
+  public ProductPackaging getById(Long id) {
     ProductPackaging productPackaging = productPackagingRepositoryInterface
         .getById(id)
         .orElseThrow(() -> new EntityNotFoundException("Product Packaging Service: Packaging not found."));

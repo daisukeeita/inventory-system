@@ -3,40 +3,41 @@ package com.javv.inventorySystem.application.command.transaction.inbound;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public record InboundRegisterCommand(
-    String supplierName,
-    String username,
+    int supplierId,
+    UUID encoderId,
     String invoiceNumber,
     LocalDateTime dateReceived,
     List<InboundItemRegisterCommand> listInboundItem) {
 
   public InboundRegisterCommand {
-    Objects.requireNonNull(supplierName,
-        "Inbound Register Commmand: Supplier Name cannot be null.");
+    if (supplierId <= 0) {
+      throw new IllegalArgumentException(
+          "Inbound Register Command: Supplier ID must be greater that zero.");
+    }
 
-    Objects.requireNonNull(username,
+    Objects.requireNonNull(encoderId,
         "Inbound Register Command: Username cannot be null.");
 
     Objects.requireNonNull(invoiceNumber,
         "Inbound Register Command: Invoice Number cannot be null.");
-
-    Objects.requireNonNull(dateReceived,
-        "Inbound Register Command: Date Received cannot be null.");
-
-    if (supplierName.isBlank()) {
-      throw new IllegalArgumentException(
-          "Inbound Register Command: Supplier Name cannot be empty.");
-    }
-
-    if (username.isBlank()) {
-      throw new IllegalArgumentException(
-          "Inbound Register Command: Username cannot be empty.");
-    }
-
     if (invoiceNumber.isBlank()) {
       throw new IllegalArgumentException(
           "Inbound Register Command: Invoice Number cannot be empty.");
     }
+
+    Objects.requireNonNull(dateReceived,
+        "Inbound Register Command: Date Received cannot be null.");
+
+    Objects.requireNonNull(listInboundItem,
+        "Inbound Register Command: List Items cannot be null.");
+    if (listInboundItem.isEmpty()) {
+      throw new IllegalArgumentException(
+          "Inbound Register Command: List Items cannot be empty.");
+    }
+
+    listInboundItem = List.copyOf(listInboundItem);
   }
 }

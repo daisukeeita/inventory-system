@@ -17,4 +17,6 @@ public interface ProductRepositoryInterface {
   Optional<Product> getById(Long id);
 
   Page<Product> getPageableProduct(Pageable pageable);
+
+  boolean existsById(Long id);
 }

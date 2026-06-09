@@ -65,8 +65,8 @@ public class MainInventoryPersistenceAdapter implements MainInventoryRepositoryI
   }
 
   @Override
-  public Optional<MainInventory> getBySku(String sku) {
-    Optional<MainInventoryJpaEntity> fetchedEntity = mainInventoryJpaRepository.findByProductJpaEntitySku(sku);
+  public Optional<MainInventory> getByProductId(Long productId) {
+    Optional<MainInventoryJpaEntity> fetchedEntity = mainInventoryJpaRepository.findByProductJpaEntityId(productId);
 
     return fetchedEntity.map(entity -> mainInventoryPersistenceMapper.toDomainEntity(entity));
   }

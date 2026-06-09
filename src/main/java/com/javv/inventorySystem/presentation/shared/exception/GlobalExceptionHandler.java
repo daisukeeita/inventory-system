@@ -21,8 +21,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ApiResponse<Void>> handleResourceNotFoundException(
       ResourceNotFoundException exception) {
 
-    ApiResponse<Void> response =
-        ApiResponse.error(null, exception.getMessage(), HttpStatus.NOT_FOUND.value());
+    ApiResponse<Void> response = ApiResponse.error(null, exception.getMessage(), HttpStatus.NOT_FOUND.value());
 
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
   }
@@ -31,20 +30,34 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ApiResponse<Void>> handleEntityAlreadyExistsException(
       EntityAlreadyExistsException exception) {
 
-    ApiResponse<Void> response =
-        ApiResponse.error(null, exception.getMessage(), HttpStatus.CONFLICT.value());
+    ApiResponse<Void> response = ApiResponse.error(null, exception.getMessage(), HttpStatus.CONFLICT.value());
 
     return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(
+      IllegalArgumentException exception) {
+
+    ApiResponse<Void> response = ApiResponse.error(
+        null,
+        exception.getMessage(),
+        HttpStatus.UNPROCESSABLE_CONTENT.value());
+
+    return ResponseEntity
+        .status(HttpStatus.UNPROCESSABLE_CONTENT)
+        .body(response);
+  }
+
   // @ExceptionHandler(DataIntegrityViolationException.class)
   // public ResponseEntity<ApiResponse<Void>> handleDataConflict(
-  //     DataIntegrityViolationException exception) {
+  // DataIntegrityViolationException exception) {
   //
-  //   ApiResponse<Void> response = ApiResponse.error(
-  //       null, "This Record was recently created by someone else.", HttpStatus.CONFLICT.value());
+  // ApiResponse<Void> response = ApiResponse.error(
+  // null, "This Record was recently created by someone else.",
+  // HttpStatus.CONFLICT.value());
   //
-  //   return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+  // return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
   // }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -57,8 +70,8 @@ public class GlobalExceptionHandler {
         .getFieldErrors()
         .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 
-    ApiResponse<Map<String, String>> response =
-        ApiResponse.error(errors, "Values are not valid.", HttpStatus.BAD_REQUEST.value());
+    ApiResponse<Map<String, String>> response = ApiResponse.error(errors, "Values are not valid.",
+        HttpStatus.BAD_REQUEST.value());
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
   }
@@ -67,8 +80,8 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ApiResponse<Void>> handleSystemUnavailableException(
       SystemUnavailableException exception) {
 
-    ApiResponse<Void> response =
-        ApiResponse.error(null, exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+    ApiResponse<Void> response = ApiResponse.error(null, exception.getMessage(),
+        HttpStatus.INTERNAL_SERVER_ERROR.value());
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
   }
@@ -76,8 +89,8 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ApiResponse<Void>> handleGeneralException(Exception exception) {
 
-    ApiResponse<Void> response =
-        ApiResponse.error(null, "Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR.value());
+    ApiResponse<Void> response = ApiResponse.error(null, "Internal Server Error",
+        HttpStatus.INTERNAL_SERVER_ERROR.value());
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(response);
   }

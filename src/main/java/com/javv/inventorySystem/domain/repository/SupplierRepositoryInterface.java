@@ -12,4 +12,6 @@ public interface SupplierRepositoryInterface {
   Optional<Supplier> findByName(String companyName);
 
   Optional<Supplier> findById(Integer id);
+
+  boolean existsById(Integer id);
 }

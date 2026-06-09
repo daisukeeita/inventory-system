@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javv.inventorySystem.application.command.mainInventory.MainInventoryRegisterCommand;
+import com.javv.inventorySystem.application.command.mainInventory.MainInventoryResponseRead;
 import com.javv.inventorySystem.application.service.mainInventory.MainInventoryService;
-import com.javv.inventorySystem.domain.model.mainInventory.MainInventory;
 import com.javv.inventorySystem.presentation.mainInventory.dto.MainInventoryRegisterDto;
 import com.javv.inventorySystem.presentation.mainInventory.dto.MainInventoryResponseDto;
 import com.javv.inventorySystem.presentation.shared.payload.ApiResponse;
@@ -36,9 +36,11 @@ public class MainInventoryController {
       @Valid @RequestBody MainInventoryRegisterDto mainInventoryRegisterDto) {
     MainInventoryRegisterCommand registerCommand = mainInventoryDtoMapper.toRegisterCommand(mainInventoryRegisterDto);
 
-    MainInventory mainInventory = mainInventoryService.saveInventory(registerCommand);
+    MainInventoryResponseRead mainInventoryResponseRead = mainInventoryService
+        .saveInventory(registerCommand);
 
-    MainInventoryResponseDto responseDto = mainInventoryDtoMapper.toResponseDto(mainInventory);
+    MainInventoryResponseDto responseDto = mainInventoryDtoMapper
+        .toResponseDto(mainInventoryResponseRead);
 
     return ApiResponse.success(
         responseDto,

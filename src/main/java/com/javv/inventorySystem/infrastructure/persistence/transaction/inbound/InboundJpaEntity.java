@@ -50,8 +50,7 @@ public class InboundJpaEntity {
   @Column(name = "date_received", nullable = false)
   private LocalDateTime dateReceived;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "inbound_item_id", nullable = false)
+  @OneToMany(mappedBy = "inboudJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<InboundItemJpaEntity> listInboundItem = new ArrayList<>();
 
   @CreatedDate
@@ -67,11 +66,13 @@ public class InboundJpaEntity {
 
   public InboundJpaEntity(
       Long id,
+      SupplierJpaEntity supplierJpaEntity,
       UserJpaEntity encoder,
       String invoiceNumber,
       LocalDateTime dateReceived,
       List<InboundItemJpaEntity> listInboundItem) {
     this.id = id;
+    this.supplierJpaEntity = supplierJpaEntity;
     this.userJpaEntity = encoder;
     this.dateReceived = dateReceived;
     this.listInboundItem = listInboundItem;
@@ -84,14 +85,22 @@ public class InboundJpaEntity {
       int baseQuantityEquivalent) {
 
     InboundItemJpaEntity inboundItemJpaEntity = new InboundItemJpaEntity();
+
+    inboundItemJpaEntity.setInbound(this);
     inboundItemJpaEntity.setProduct(productJpaEntity);
     inboundItemJpaEntity.setProductPackaging(productPackagingJpaEntity);
     inboundItemJpaEntity.setQuantityReceived(quantityReceived);
     inboundItemJpaEntity.setBaseQuantityEquivalent(baseQuantityEquivalent);
+
+    this.listInboundItem.add(inboundItemJpaEntity);
   }
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public void setSupplierJpaEntity(SupplierJpaEntity supplierJpaEntity) {
+    this.supplierJpaEntity = supplierJpaEntity;
   }
 
   public void setUserJpaEntity(UserJpaEntity encoder) {

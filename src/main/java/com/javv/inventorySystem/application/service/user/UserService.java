@@ -1,6 +1,7 @@
 package com.javv.inventorySystem.application.service.user;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +46,10 @@ public class UserService {
             "User not found in database by the username: '" + username + "'"));
 
     return user;
+  }
+
+  public boolean checkIfExistsById(UUID id) {
+    return userRepositoryInterface.existsById(id);
   }
 
   private User toDomainEntity(UserRegisterCommand userRegisterCommand, Role role) {

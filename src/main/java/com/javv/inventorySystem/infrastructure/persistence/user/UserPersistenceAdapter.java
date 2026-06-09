@@ -1,6 +1,7 @@
 package com.javv.inventorySystem.infrastructure.persistence.user;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Repository;
@@ -10,10 +11,13 @@ import com.javv.inventorySystem.domain.model.user.User;
 import com.javv.inventorySystem.domain.repository.UserRepositoryInterface;
 
 /**
- * This is where the system "translates" the JPA Entity (User) to Domain Entity (User) after getting
+ * This is where the system "translates" the JPA Entity (User) to Domain Entity
+ * (User) after getting
  * the data from the database.
  *
- * <p>This is where the system "translates" the Domain Entity (User) to JPA Entity (User) before
+ * <p>
+ * This is where the system "translates" the Domain Entity (User) to JPA Entity
+ * (User) before
  * inserting the object to the database.
  */
 @Repository
@@ -47,5 +51,14 @@ public class UserPersistenceAdapter implements UserRepositoryInterface {
     Optional<User> user = jpaEntity.map(entity -> userPersistenceMapper.toDomainEntity(entity));
 
     return user;
+  }
+
+  @Override
+  public boolean existsById(UUID id) {
+    return userJpaRepository.existsById(id);
+  }
+
+  public UserJpaEntity getReferenceById(UUID id) {
+    return userJpaRepository.getReferenceById(id);
   }
 }

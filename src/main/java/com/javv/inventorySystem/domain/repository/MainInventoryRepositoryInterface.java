@@ -15,7 +15,7 @@ public interface MainInventoryRepositoryInterface {
 
   Optional<MainInventory> getById(Integer id);
 
-  Optional<MainInventory> getBySku(String sku);
+  Optional<MainInventory> getByProductId(Long productId);
 
   Page<MainInventory> getPageable(Pageable pageable);
 }

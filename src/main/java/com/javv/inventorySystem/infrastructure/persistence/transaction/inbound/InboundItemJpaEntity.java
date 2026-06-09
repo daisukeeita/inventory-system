@@ -22,7 +22,11 @@ public class InboundItemJpaEntity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "product_sku", referencedColumnName = "sku", nullable = false)
+  @JoinColumn(name = "inbound_id", referencedColumnName = "id", nullable = false)
+  private InboundJpaEntity inboundJpaEntity;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
   private ProductJpaEntity productJpaEntity;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -47,6 +51,14 @@ public class InboundItemJpaEntity {
     this.quantityReceived = quantityReceived;
     this.baseQuantityEquivalent = baseQuantityEquivalent;
     this.productPackagingJpaEntity = productPackagingJpaEntity;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setInbound(InboundJpaEntity inboundJpaEntity) {
+    this.inboundJpaEntity = inboundJpaEntity;
   }
 
   public void setProduct(ProductJpaEntity productJpaEntity) {

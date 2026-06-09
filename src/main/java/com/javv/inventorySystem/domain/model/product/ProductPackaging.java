@@ -75,4 +75,8 @@ public class ProductPackaging {
   public BigDecimal getPrice() {
     return price;
   }
+
+  public int calculateBaseQuantity(int receivedPackages) {
+    return receivedPackages * this.conversionFactor;
+  }
 }

@@ -9,5 +9,5 @@ public interface ProductPackagingRepositoryInterface {
 
   List<ProductPackaging> getByProductId(Long productId);
 
-  Optional<ProductPackaging> getById(Integer id);
+  Optional<ProductPackaging> getById(Long id);
 }

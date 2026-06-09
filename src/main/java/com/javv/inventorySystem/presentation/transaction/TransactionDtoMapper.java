@@ -1,6 +1,5 @@
 package com.javv.inventorySystem.presentation.transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -14,17 +13,17 @@ public class TransactionDtoMapper {
 
   public InboundRegisterCommand toInboundCommand(InboundRegisterDto inboundRegisterDto) {
 
-    List<InboundItemRegisterCommand> listItem = new ArrayList<InboundItemRegisterCommand>();
-
-    inboundRegisterDto.listInboundItem().forEach(
-        item -> listItem.add(new InboundItemRegisterCommand(
-            item.productSku(),
+    List<InboundItemRegisterCommand> listItem = inboundRegisterDto.listInboundItem()
+        .stream()
+        .map(item -> new InboundItemRegisterCommand(
+            item.productId(),
             item.packagingId(),
-            item.quantityReceived())));
+            item.quantityReceived()))
+        .toList();
 
     return new InboundRegisterCommand(
-        inboundRegisterDto.supplierName(),
-        inboundRegisterDto.username(),
+        inboundRegisterDto.supplierId(),
+        inboundRegisterDto.encoderId(),
         inboundRegisterDto.invoiceNumber(),
         inboundRegisterDto.dateReceived(),
         listItem);

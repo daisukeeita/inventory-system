@@ -10,4 +10,6 @@ public interface UserJpaRepository extends JpaRepository<UserJpaEntity, UUID> {
   UserJpaEntity save(UserJpaEntity userJpaEntity);
 
   Optional<UserJpaEntity> findByUsername(String username);
+
+  boolean existsById(UUID id);
 }

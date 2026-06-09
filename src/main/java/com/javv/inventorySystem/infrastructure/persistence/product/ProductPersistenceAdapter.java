@@ -83,6 +83,15 @@ public class ProductPersistenceAdapter implements ProductRepositoryInterface {
     return productPersistenceMapper.toDomainEntity(savedProduct);
   }
 
+  @Override
+  public boolean existsById(Long id) {
+    return productJpaRepository.existsById(id);
+  }
+
+  public ProductJpaEntity getReferenceById(Long id) {
+    return productJpaRepository.getReferenceById(id);
+  }
+
   private ProductJpaEntity toJpaEntity(Product product) {
     SupplierJpaEntity supplierJpaEntity = supplierJpaRepository
         .getReferenceById(product.getSupplierId());

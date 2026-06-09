@@ -36,14 +36,14 @@ public class Inbound {
   }
 
   public InboundItem addInboundItem(
-      String productSku,
-      int packagingId,
+      Long productId,
+      Long packagingId,
       int quantityReceived,
       int baseQuantityEquivalent) {
 
     InboundItem item = new InboundItem();
-    item.setProductSku(productSku);
-    item.setPackagingCode(packagingId);
+    item.setProductId(productId);
+    item.setPackagingId(packagingId);
     item.setQuantityReceived(quantityReceived);
     item.setBasedQuantityEquivalent(baseQuantityEquivalent);
 
@@ -56,11 +56,11 @@ public class Inbound {
     this.id = id;
   }
 
-  public void setSupplierName(Integer supplierId) {
+  public void setSupplierId(Integer supplierId) {
     this.supplierId = supplierId;
   }
 
-  public void setEncoderUsername(UUID encoderId) {
+  public void setEncoderId(UUID encoderId) {
     this.encoderId = encoderId;
   }
 

@@ -43,6 +43,10 @@ public class ProductPackagingPersistenceAdapter implements ProductPackagingRepos
     return listDomain;
   }
 
+  public ProductPackagingJpaEntity getReferenceById(Long id) {
+    return productPackagingJpaRepository.getReferenceById(id);
+  }
+
   private ProductPackaging toDomainEntity(ProductPackagingJpaEntity productPackagingJpaEntity) {
     ProductPackaging domainEntity = new ProductPackaging();
 

@@ -6,20 +6,76 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.javv.inventorySystem.domain.model.transaction.inbound.Inbound;
+import com.javv.inventorySystem.domain.model.transaction.inbound.InboundItem;
 import com.javv.inventorySystem.domain.repository.InboundRepositoryInterface;
+import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaEntity;
+import com.javv.inventorySystem.infrastructure.persistence.product.ProductPersistenceAdapter;
+import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaEntity;
+import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingPersistenceAdapter;
+import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
+import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierPersistenceAdapter;
+import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaEntity;
+import com.javv.inventorySystem.infrastructure.persistence.user.UserPersistenceAdapter;
 
 @Repository
 public class InboundPersistenceAdapter implements InboundRepositoryInterface {
 
   private InboundJpaRepository inboundJpaRepository;
+  private UserPersistenceAdapter userPersistenceAdapter;
+  private ProductPersistenceAdapter productPersistenceAdapter;
+  private SupplierPersistenceAdapter supplierPersistenceAdapter;
+  private ProductPackagingPersistenceAdapter productPackagingPersistenceAdapter;
 
-  public InboundPersistenceAdapter(InboundJpaRepository inboundJpaRepository) {
+  public InboundPersistenceAdapter(
+      InboundJpaRepository inboundJpaRepository,
+      UserPersistenceAdapter userPersistenceAdapter,
+      ProductPersistenceAdapter productPersistenceAdapter,
+      SupplierPersistenceAdapter supplierPersistenceAdapter,
+      ProductPackagingPersistenceAdapter productPackagingPersistenceAdapter) {
     this.inboundJpaRepository = inboundJpaRepository;
+    this.userPersistenceAdapter = userPersistenceAdapter;
+    this.productPersistenceAdapter = productPersistenceAdapter;
+    this.supplierPersistenceAdapter = supplierPersistenceAdapter;
+    this.productPackagingPersistenceAdapter = productPackagingPersistenceAdapter;
   }
 
   @Override
   public Inbound save(Inbound inbound) {
-    return null;
+
+    UserJpaEntity userJpaEntity = userPersistenceAdapter.getReferenceById(
+        inbound.getEncoderId());
+
+    SupplierJpaEntity supplierJpaEntity = supplierPersistenceAdapter.getReferenceById(
+        inbound.getSupplierId());
+
+    InboundJpaEntity inboundJpaEntity = new InboundJpaEntity();
+    inboundJpaEntity.setSupplierJpaEntity(supplierJpaEntity);
+    inboundJpaEntity.setUserJpaEntity(userJpaEntity);
+    inboundJpaEntity.setInvoiceNumber(
+        inbound.getInvoiceNumber());
+    inboundJpaEntity.setDateReceived(
+        inbound.getDateReceived());
+
+    for (InboundItem item : inbound.getListInboundItem()) {
+
+      ProductJpaEntity productJpaEntity = productPersistenceAdapter
+          .getReferenceById(item.getProductId());
+
+      ProductPackagingJpaEntity productPackagingJpaEntity = productPackagingPersistenceAdapter
+          .getReferenceById(item.getPackagingId());
+
+      inboundJpaEntity.addItem(
+          productJpaEntity,
+          productPackagingJpaEntity,
+          item.getQuantityReceived(),
+          item.getBaseQuantityEquivalent());
+    }
+
+    InboundJpaEntity savedEntity = inboundJpaRepository.save(inboundJpaEntity);
+
+    inbound.setId(savedEntity.getId());
+
+    return inbound;
   }
 
   @Override

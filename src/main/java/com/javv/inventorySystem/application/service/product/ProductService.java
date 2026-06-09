@@ -102,6 +102,10 @@ public class ProductService {
     return productRepositoryInterface.getPageableProduct(pageable);
   }
 
+  public boolean checkIfExistsById(Long id) {
+    return productRepositoryInterface.existsById(id);
+  }
+
   private ProductResponseRead toProductResponseRead(Product product) {
     String supplierName = supplierService.getById(
         product.getSupplierId()).getCompanyName();

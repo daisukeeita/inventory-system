@@ -10,4 +10,6 @@ public interface ProductPackagingRepositoryInterface {
   List<ProductPackaging> getByProductId(Long productId);
 
   Optional<ProductPackaging> getById(Long id);
+
+  List<ProductPackaging> getAllById(List<Long> id);
 }

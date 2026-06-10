@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
@@ -14,12 +15,24 @@ import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.exception.SystemUnavailableException;
 import com.javv.inventorySystem.presentation.shared.payload.ApiResponse;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<ApiResponse<Void>> handleResourceNotFoundException(
       ResourceNotFoundException exception) {
+
+    ApiResponse<Void> response = ApiResponse.error(null, exception.getMessage(), HttpStatus.NOT_FOUND.value());
+
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+  }
+
+  @ExceptionHandler(EntityNotFoundException.class)
+  @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Entity Not Found.")
+  public ResponseEntity<ApiResponse<Void>> handEntityNotFoundException(
+      EntityNotFoundException exception) {
 
     ApiResponse<Void> response = ApiResponse.error(null, exception.getMessage(), HttpStatus.NOT_FOUND.value());
 

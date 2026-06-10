@@ -135,6 +135,10 @@ public class InboundJpaEntity {
     return userJpaEntity;
   }
 
+  public SupplierJpaEntity getSupplierJpaEntity() {
+    return supplierJpaEntity;
+  }
+
   public String getInvoiceNumber() {
     return invoiceNumber;
   }

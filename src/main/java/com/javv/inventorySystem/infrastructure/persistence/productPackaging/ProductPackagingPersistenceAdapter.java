@@ -23,7 +23,7 @@ public class ProductPackagingPersistenceAdapter implements ProductPackagingRepos
   }
 
   @Override
-  public Optional<ProductPackaging> getById(Integer id) {
+  public Optional<ProductPackaging> getById(Long id) {
     Optional<ProductPackagingJpaEntity> optionalEntity = productPackagingJpaRepository.findById(id);
 
     return optionalEntity.map(
@@ -41,6 +41,21 @@ public class ProductPackagingPersistenceAdapter implements ProductPackagingRepos
             toDomainEntity(entity)));
 
     return listDomain;
+  }
+
+  @Override
+  public List<ProductPackaging> getAllById(List<Long> id) {
+    List<ProductPackagingJpaEntity> listJpa = productPackagingJpaRepository.findAllById(id);
+
+    return listJpa.stream()
+        .map(jpaEntity -> new ProductPackaging(
+            jpaEntity.getId(),
+            jpaEntity.getPackagingCode(),
+            jpaEntity.getProduct().getId(),
+            jpaEntity.getUnitsOfMeasure().getId(),
+            jpaEntity.getConversionFactor(),
+            jpaEntity.getPrice()))
+        .toList();
   }
 
   public ProductPackagingJpaEntity getReferenceById(Long id) {

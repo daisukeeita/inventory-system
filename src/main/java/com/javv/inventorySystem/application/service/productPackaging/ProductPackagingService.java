@@ -32,4 +32,8 @@ public class ProductPackagingService {
 
     return productPackaging;
   }
+
+  public List<ProductPackaging> getAllById(List<Long> listId) {
+    return productPackagingRepositoryInterface.getAllById(listId);
+  }
 }

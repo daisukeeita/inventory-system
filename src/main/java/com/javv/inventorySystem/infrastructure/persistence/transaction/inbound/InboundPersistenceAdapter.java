@@ -73,9 +73,24 @@ public class InboundPersistenceAdapter implements InboundRepositoryInterface {
 
     InboundJpaEntity savedEntity = inboundJpaRepository.save(inboundJpaEntity);
 
-    inbound.setId(savedEntity.getId());
+    Inbound inboundDomain = new Inbound();
+    inboundDomain.setId(savedEntity.getId());
+    inboundDomain.setEncoderId(savedEntity.getUserJpaEntity().getUserId());
+    inboundDomain.setSupplierId(savedEntity.getSupplierJpaEntity().getId());
+    inboundDomain.setInvoiceNumber(savedEntity.getInvoiceNumber());
+    inboundDomain.setDateReceived(savedEntity.getDateReceived());
+    inboundDomain.setCreatedAt(savedEntity.getCreatedAt());
+    inboundDomain.setUpdatedAt(savedEntity.getUpdatedAt());
 
-    return inbound;
+    for (InboundItemJpaEntity itemJpa : savedEntity.getListInboundItem()) {
+      inboundDomain.addInboundItem(
+          itemJpa.getProduct().getId(),
+          itemJpa.getProductPackagingJpaEntity().getId(),
+          itemJpa.getQuantityReceived(),
+          itemJpa.getBaseQuantityEquivalent());
+    }
+
+    return inboundDomain;
   }
 
   @Override

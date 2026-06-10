@@ -96,6 +96,10 @@ public class ProductService {
     return product;
   }
 
+  public List<Product> getAllById(List<Long> id) {
+    return productRepositoryInterface.getAllById(id);
+  }
+
   public Page<Product> getPageableProduct(int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
 

@@ -19,11 +19,13 @@ public class Product {
   }
 
   public Product(
+      Long id,
       String sku,
       String name,
       int supplierId,
       int baseUomId,
       List<ProductPackaging> packages) {
+    this.id = id;
     this.sku = sku;
     this.name = name;
     this.supplierId = supplierId;

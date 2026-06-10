@@ -61,4 +61,11 @@ public class UserPersistenceAdapter implements UserRepositoryInterface {
   public UserJpaEntity getReferenceById(UUID id) {
     return userJpaRepository.getReferenceById(id);
   }
+
+  @Override
+  public Optional<User> findById(UUID id) {
+    Optional<UserJpaEntity> jpaEntity = userJpaRepository.findById(id);
+
+    return jpaEntity.map(entity -> userPersistenceMapper.toDomainEntity(entity));
+  }
 }

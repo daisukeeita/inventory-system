@@ -1,52 +1,74 @@
 package com.javv.inventorySystem.infrastructure.persistence.product;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.javv.inventorySystem.domain.model.product.Product;
+import com.javv.inventorySystem.domain.model.product.ProductPackaging;
+import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
-import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierPersistenceMapper;
+import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaRepository;
 import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasureJpaEntity;
-import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasurePersistenceMapper;
+import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasureJpaRepository;
 
 @Component
 public class ProductPersistenceMapper {
 
-  private final SupplierPersistenceMapper supplierPersistenceMapper;
-  private final UnitsOfMeasurePersistenceMapper unitsOfMeasurePersistenceMapper;
+  @Autowired
+  private SupplierJpaRepository supplierJpaRepository;
 
-  public ProductPersistenceMapper(
-      SupplierPersistenceMapper supplierPersistenceMapper,
-      UnitsOfMeasurePersistenceMapper unitsOfMeasurePersistenceMapper) {
-    this.supplierPersistenceMapper = supplierPersistenceMapper;
-    this.unitsOfMeasurePersistenceMapper = unitsOfMeasurePersistenceMapper;
-  }
+  @Autowired
+  private UnitsOfMeasureJpaRepository unitsOfMeasureJpaRepository;
 
-  public ProductJpaEntity toJpaEntity(Product product, SupplierJpaEntity supplierJpaEntity,
-      UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity) {
-    ProductJpaEntity productJpaEntity = new ProductJpaEntity();
+  public ProductJpaEntity toJpaEntity(Product product) {
+    SupplierJpaEntity supplierJpaEntity = supplierJpaRepository
+        .getReferenceById(product.getSupplierId());
 
-    productJpaEntity.setId(product.getId());
-    productJpaEntity.setSku(product.getSku());
-    productJpaEntity.setName(product.getName());
-    productJpaEntity.setSupplier(supplierJpaEntity);
-    productJpaEntity.setBaseUom(unitsOfMeasureJpaEntity);
+    UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity = unitsOfMeasureJpaRepository
+        .getReferenceById(product.getBaseUnitsOfMeasureId());
 
-    return productJpaEntity;
+    ProductJpaEntity jpaEntity = new ProductJpaEntity();
+    jpaEntity.setSku(product.getSku());
+    jpaEntity.setName(product.getName());
+    jpaEntity.setSupplier(supplierJpaEntity);
+    jpaEntity.setBaseUom(unitsOfMeasureJpaEntity);
+
+    for (ProductPackaging packaging : product.getListPackages()) {
+
+      UnitsOfMeasureJpaEntity unitMeasure = unitsOfMeasureJpaRepository
+          .getReferenceById(packaging.getUnitsOfMeasureId());
+
+      jpaEntity.addPackaging(
+          packaging.getPackagingCode(),
+          unitMeasure,
+          packaging.getConversionFactor(),
+          packaging.getPrice());
+    }
+
+    return jpaEntity;
   }
 
   public Product toDomainEntity(ProductJpaEntity productJpaEntity) {
 
-    Product product = new Product();
+    Product domainEntity = new Product();
+    domainEntity.setId(productJpaEntity.getId());
+    domainEntity.setSku(productJpaEntity.getSku());
+    domainEntity.setName(productJpaEntity.getName());
+    domainEntity.setSupplierId(productJpaEntity.getSupplier().getId());
+    domainEntity.setBaseUnitsOfMeasureId(productJpaEntity.getBaseUnitOfMeasure().getId());
+    domainEntity.setCreatedAt(productJpaEntity.getCreatedAt());
+    domainEntity.setUpdatedAt(productJpaEntity.getUpdatedAt());
 
-    product.setId(productJpaEntity.getId());
-    product.setSku(productJpaEntity.getSku());
-    product.setName(productJpaEntity.getName());
-    product.setSupplierId(productJpaEntity.getSupplier().getId());
-    product.setBaseUnitsOfMeasureId(
-        productJpaEntity.getBaseUnitOfMeasure().getId());
-    product.setCreatedAt(productJpaEntity.getCreatedAt());
-    product.setUpdatedAt(productJpaEntity.getUpdatedAt());
+    for (ProductPackagingJpaEntity jpaPackaging : productJpaEntity.getProductPackages()) {
+      ProductPackaging domainPackaging = domainEntity.addPackaging(
+          jpaPackaging.getPackagingCode(),
+          jpaPackaging.getUnitsOfMeasure().getId(),
+          jpaPackaging.getConversionFactor(),
+          jpaPackaging.getPrice());
 
-    return product;
+      domainPackaging.setId(jpaPackaging.getId());
+    }
+
+    return domainEntity;
   }
 }

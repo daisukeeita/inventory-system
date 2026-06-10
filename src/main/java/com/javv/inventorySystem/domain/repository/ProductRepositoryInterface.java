@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.domain.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -15,6 +16,8 @@ public interface ProductRepositoryInterface {
   Optional<Product> getBySku(String sku);
 
   Optional<Product> getById(Long id);
+
+  List<Product> getAllById(List<Long> id);
 
   Page<Product> getPageableProduct(Pageable pageable);
 

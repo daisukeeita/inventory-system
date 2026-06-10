@@ -71,7 +71,7 @@ public class InboundPersistenceAdapter implements InboundRepositoryInterface {
           item.getBaseQuantityEquivalent());
     }
 
-    InboundJpaEntity savedEntity = inboundJpaRepository.save(inboundJpaEntity);
+    InboundJpaEntity savedEntity = inboundJpaRepository.saveAndFlush(inboundJpaEntity);
 
     Inbound inboundDomain = new Inbound();
     inboundDomain.setId(savedEntity.getId());

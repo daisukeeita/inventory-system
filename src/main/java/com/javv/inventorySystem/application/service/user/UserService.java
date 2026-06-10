@@ -48,6 +48,14 @@ public class UserService {
     return user;
   }
 
+  public User getUserById(UUID id) {
+    User user = userRepositoryInterface.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "User Service: User not found for ID: " + id));
+
+    return user;
+  }
+
   public boolean checkIfExistsById(UUID id) {
     return userRepositoryInterface.existsById(id);
   }

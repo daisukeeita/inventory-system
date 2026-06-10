@@ -23,9 +23,7 @@ public class SupplierPersistenceAdapter implements SupplierRepositoryInterface {
   @Override
   public Supplier save(Supplier supplier) {
     SupplierJpaEntity supplierJpaEntity = supplierPersistenceMapper.toJpaEntity(supplier);
-
-    SupplierJpaEntity savedEntity = supplierJpaRepository.save(supplierJpaEntity);
-
+    SupplierJpaEntity savedEntity = supplierJpaRepository.saveAndFlush(supplierJpaEntity);
     return supplierPersistenceMapper.toDomainEntity(savedEntity);
   }
 

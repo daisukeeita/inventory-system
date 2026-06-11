@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.javv.inventorySystem.application.command.supplier.SupplierRegisterCommand;
 import com.javv.inventorySystem.application.command.supplier.SupplierUpdateCommand;
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
+import com.javv.inventorySystem.domain.exception.ResourceConflictException;
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
 import com.javv.inventorySystem.domain.model.supplier.SupplierAddress;
@@ -32,7 +33,7 @@ public class SupplierService {
       Supplier savedEntity = supplierRepositoryInterface.save(supplier);
       return savedEntity;
     } catch (DataIntegrityViolationException exception) {
-      throw new EntityAlreadyExistsException("Supplier already exists.");
+      throw new EntityAlreadyExistsException("Supplier Creation Failed: Supplier already exists.");
     }
   }
 
@@ -43,7 +44,8 @@ public class SupplierService {
     Supplier supplier = supplierRepositoryInterface
         .findById(id)
         .orElseThrow(
-            () -> new ResourceNotFoundException("Supplier was not found using id: '" + id + "'"));
+            () -> new ResourceNotFoundException(
+                "Supplier Update Failed: Supplier was not found using id: '" + id + "'"));
 
     supplier.setCompanyName(supplierUpdateCommand.companyName());
     supplier.setContactName(supplierUpdateCommand.contactName());
@@ -60,12 +62,14 @@ public class SupplierService {
     try {
       return supplierRepositoryInterface.update(supplier);
     } catch (DataIntegrityViolationException exception) {
-      throw new EntityAlreadyExistsException("Supplier already exists.", exception.getCause());
+      throw new ResourceConflictException(
+          "Supplier Update Failed: The provided details conflict with an existing supplier.",
+          exception);
     }
   }
 
   public Supplier getByName(String companyName) {
-    Optional<Supplier> optionalSupplier = supplierRepositoryInterface.findByName(companyName);
+    Optional<Supplier> optionalSupplier = supplierRepositoryInterface.findByCompanyName(companyName);
 
     Supplier supplier = optionalSupplier.orElseThrow(
         () -> new ResourceNotFoundException(

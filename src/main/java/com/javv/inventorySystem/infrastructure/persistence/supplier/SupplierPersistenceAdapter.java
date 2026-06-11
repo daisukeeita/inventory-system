@@ -41,13 +41,6 @@ public class SupplierPersistenceAdapter implements SupplierRepositoryInterface {
   }
 
   @Override
-  public Optional<Supplier> findByCompanyName(String companyName) {
-    Optional<SupplierJpaEntity> jpaEntity = supplierJpaRepository.findByCompanyName(companyName);
-
-    return jpaEntity.map(entity -> supplierPersistenceMapper.toDomainEntity(entity));
-  }
-
-  @Override
   public Optional<Supplier> findById(int id) {
     Optional<SupplierJpaEntity> jpaEntity = supplierJpaRepository.findById(id);
 
@@ -55,8 +48,27 @@ public class SupplierPersistenceAdapter implements SupplierRepositoryInterface {
   }
 
   @Override
+  public Optional<Supplier> findByCompanyName(String companyName) {
+    Optional<SupplierJpaEntity> jpaEntity = supplierJpaRepository.findByCompanyName(companyName);
+
+    return jpaEntity.map(entity -> supplierPersistenceMapper.toDomainEntity(entity));
+  }
+
+  @Override
+  public Optional<Supplier> findByEmail(String email) {
+    Optional<SupplierJpaEntity> jpaEntity = supplierJpaRepository.findByEmail(email);
+
+    return jpaEntity.map(entity -> supplierPersistenceMapper.toDomainEntity(entity));
+  }
+
+  @Override
   public boolean existsById(int id) {
     return supplierJpaRepository.existsById(id);
+  }
+
+  @Override
+  public boolean existsByEmail(String email) {
+    return supplierJpaRepository.existsByEmail(email);
   }
 
   public SupplierJpaEntity getReferenceById(Integer id) {

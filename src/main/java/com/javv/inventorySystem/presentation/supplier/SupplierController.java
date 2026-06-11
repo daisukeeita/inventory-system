@@ -39,7 +39,7 @@ public class SupplierController {
 
     SupplierRegisterCommand supplierRegisterCommand = supplierDtoMapper.toRegisterCommandRecord(supplierRegisterDto);
 
-    Supplier supplier = supplierService.saveSupplier(supplierRegisterCommand);
+    Supplier supplier = supplierService.create(supplierRegisterCommand);
 
     SupplierResponseDto supplierResponseDto = supplierDtoMapper.toResponseDto(supplier);
 
@@ -56,7 +56,7 @@ public class SupplierController {
     SupplierUpdateCommand supplierUpdateCommand = supplierDtoMapper
         .toUpdateCommandRecord(supplierUpdateDto);
 
-    Supplier supplier = supplierService.updateSupplier(id, supplierUpdateCommand);
+    Supplier supplier = supplierService.update(id, supplierUpdateCommand);
 
     SupplierResponseDto supplierResponseDto = supplierDtoMapper.toResponseDto(supplier);
 

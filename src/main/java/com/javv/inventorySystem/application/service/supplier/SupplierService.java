@@ -43,9 +43,8 @@ public class SupplierService {
 
     Supplier supplier = supplierRepositoryInterface
         .findById(id)
-        .orElseThrow(
-            () -> new ResourceNotFoundException(
-                "Supplier Update Failed: Supplier was not found using id: '" + id + "'"));
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "Supplier Update Failed: Supplier was not found using id: '" + id + "'"));
 
     supplier.setCompanyName(supplierUpdateCommand.companyName());
     supplier.setContactName(supplierUpdateCommand.contactName());

@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.application.service.supplier;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.javv.inventorySystem.application.command.supplier.SupplierRegisterCommand;
 import com.javv.inventorySystem.application.command.supplier.SupplierUpdateCommand;
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
-import com.javv.inventorySystem.domain.exception.ResourceConflictException;
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
+import com.javv.inventorySystem.domain.exception.ServiceOperationException;
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
 import com.javv.inventorySystem.domain.model.supplier.SupplierAddress;
 import com.javv.inventorySystem.domain.repository.SupplierRepositoryInterface;
@@ -27,42 +28,48 @@ public class SupplierService {
 
   @Transactional
   public Supplier create(SupplierRegisterCommand supplierRegisterCommand) {
-    Supplier supplier = toDomainEntity(supplierRegisterCommand);
 
     try {
+      Supplier supplier = toDomainEntity(supplierRegisterCommand);
+
       Supplier savedEntity = supplierRepositoryInterface.save(supplier);
+
       return savedEntity;
     } catch (DataIntegrityViolationException exception) {
-      throw new EntityAlreadyExistsException("Supplier Creation Failed: Supplier already exists.");
+      throw new EntityAlreadyExistsException(
+          "Supplier Creation Failed: Supplier already exists.");
+    } catch (NullPointerException exception) {
+      throw new ServiceOperationException(
+          "Supplier Creation Failed: " + exception.getMessage());
     }
   }
 
   @Transactional
   public Supplier update(
       Integer id, SupplierUpdateCommand supplierUpdateCommand) {
-
-    Supplier supplier = supplierRepositoryInterface
-        .findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException(
-            "Supplier Update Failed: Supplier was not found using id: '" + id + "'"));
-
-    supplier.setCompanyName(supplierUpdateCommand.companyName());
-    supplier.setContactName(supplierUpdateCommand.contactName());
-    supplier.setPhoneNumber(supplierUpdateCommand.phoneNumber());
-    supplier.setEmail(supplierUpdateCommand.email());
-
-    supplier.updateAddress(
-        supplierUpdateCommand.street(),
-        supplierUpdateCommand.city(),
-        supplierUpdateCommand.state(),
-        supplierUpdateCommand.postalCode(),
-        supplierUpdateCommand.country());
-
     try {
+      Supplier supplier = getById(id);
+
+      supplier.setCompanyName(supplierUpdateCommand.companyName());
+      supplier.setContactName(supplierUpdateCommand.contactName());
+      supplier.setPhoneNumber(supplierUpdateCommand.phoneNumber());
+      supplier.setEmail(supplierUpdateCommand.email());
+
+      supplier.updateAddress(
+          supplierUpdateCommand.street(),
+          supplierUpdateCommand.city(),
+          supplierUpdateCommand.state(),
+          supplierUpdateCommand.postalCode(),
+          supplierUpdateCommand.country());
+
       return supplierRepositoryInterface.update(supplier);
     } catch (DataIntegrityViolationException exception) {
-      throw new ResourceConflictException(
+      throw new ServiceOperationException(
           "Supplier Update Failed: The provided details conflict with an existing supplier.",
+          exception);
+    } catch (ResourceNotFoundException exception) {
+      throw new ServiceOperationException(
+          "Supplier Update Failed: " + exception.getMessage(),
           exception);
     }
   }
@@ -106,6 +113,11 @@ public class SupplierService {
   }
 
   private Supplier toDomainEntity(SupplierRegisterCommand supplierRegisterCommand) {
+
+    Objects.requireNonNull(
+        supplierRegisterCommand,
+        "Cannot map a null SupplierRegisterCommand to a Domain Entity.");
+
     SupplierAddress supplierAddress = new SupplierAddress();
     supplierAddress.setStreet(supplierRegisterCommand.street());
     supplierAddress.setCity(supplierRegisterCommand.city());

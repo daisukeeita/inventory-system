@@ -1,8 +1,15 @@
 package com.javv.inventorySystem.infrastructure.persistence.supplier;
 
+import java.time.Instant;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,6 +18,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "supplier")
+@EntityListeners(AuditingEntityListener.class)
 public class SupplierJpaEntity {
 
   @Id
@@ -27,11 +35,19 @@ public class SupplierJpaEntity {
   @Column(name = "phone_number", nullable = false, length = 15)
   private String phoneNumber;
 
-  @Column(name = "email", nullable = false, length = 155)
+  @Column(name = "email", nullable = false, length = 155, unique = true)
   private String email;
 
   @OneToOne(mappedBy = "supplierJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
   private SupplierAddressJpaEntity supplierAddressJpaEntity;
+
+  @CreatedDate
+  @Column(name = "created_at", nullable = false, updatable = false)
+  private Instant createdAt;
+
+  @LastModifiedDate
+  @Column(name = "updated_at", nullable = false)
+  private Instant updatedAt;
 
   public SupplierJpaEntity() {
   }

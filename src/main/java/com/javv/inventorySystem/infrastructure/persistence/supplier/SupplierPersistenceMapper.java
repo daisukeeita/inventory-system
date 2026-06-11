@@ -10,6 +10,11 @@ public class SupplierPersistenceMapper {
 
   public SupplierJpaEntity toJpaEntity(Supplier supplier) {
     SupplierJpaEntity supplierJpaEntity = new SupplierJpaEntity();
+    supplierJpaEntity.setId(supplier.getId());
+    supplierJpaEntity.setCompanyName(supplier.getCompanyName());
+    supplierJpaEntity.setContactName(supplier.getContactName());
+    supplierJpaEntity.setPhoneNumber(supplier.getPhoneNumber());
+    supplierJpaEntity.setEmail(supplier.getEmail());
 
     SupplierAddressJpaEntity supplierAddressJpaEntity = new SupplierAddressJpaEntity();
     supplierAddressJpaEntity.setCity(supplier.getSupplierAddress().getCity());
@@ -17,13 +22,8 @@ public class SupplierPersistenceMapper {
     supplierAddressJpaEntity.setPostalCode(supplier.getSupplierAddress().getPostalCode());
     supplierAddressJpaEntity.setState(supplier.getSupplierAddress().getState());
     supplierAddressJpaEntity.setStreet(supplier.getSupplierAddress().getStreet());
-    supplierAddressJpaEntity.setSupplier(supplierJpaEntity);
 
-    supplierJpaEntity.setId(supplier.getId());
-    supplierJpaEntity.setCompanyName(supplier.getCompanyName());
-    supplierJpaEntity.setContactName(supplier.getContactName());
-    supplierJpaEntity.setPhoneNumber(supplier.getPhoneNumber());
-    supplierJpaEntity.setEmail(supplier.getEmail());
+    supplierAddressJpaEntity.setSupplier(supplierJpaEntity);
     supplierJpaEntity.setSupplierAddress(supplierAddressJpaEntity);
 
     return supplierJpaEntity;

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
 import com.javv.inventorySystem.domain.exception.InboundPersistenceException;
+import com.javv.inventorySystem.domain.exception.ResourceConflictException;
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.exception.SystemUnavailableException;
 import com.javv.inventorySystem.presentation.shared.payload.ApiResponse;
@@ -47,6 +48,16 @@ public class GlobalExceptionHandler {
     ApiResponse<Void> response = ApiResponse.error(null, exception.getMessage(), HttpStatus.CONFLICT.value());
 
     return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+  }
+
+  @ExceptionHandler(ResourceConflictException.class)
+  public ResponseEntity<ApiResponse<Void>> handlResourceConflictException(
+      ResourceConflictException exception) {
+
+    ApiResponse<Void> response = ApiResponse.error(null, exception.getMessage(), HttpStatus.CONFLICT.value());
+
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+
   }
 
   @ExceptionHandler(InboundPersistenceException.class)

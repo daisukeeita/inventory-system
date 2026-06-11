@@ -9,6 +9,7 @@ import com.javv.inventorySystem.domain.model.supplier.SupplierAddress;
 public class SupplierPersistenceMapper {
 
   public SupplierJpaEntity toJpaEntity(Supplier supplier) {
+
     SupplierJpaEntity supplierJpaEntity = new SupplierJpaEntity();
     supplierJpaEntity.setId(supplier.getId());
     supplierJpaEntity.setCompanyName(supplier.getCompanyName());

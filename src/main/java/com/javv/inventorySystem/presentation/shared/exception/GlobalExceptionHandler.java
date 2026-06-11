@@ -14,6 +14,7 @@ import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
 import com.javv.inventorySystem.domain.exception.InboundPersistenceException;
 import com.javv.inventorySystem.domain.exception.ResourceConflictException;
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
+import com.javv.inventorySystem.domain.exception.ServiceOperationException;
 import com.javv.inventorySystem.domain.exception.SystemUnavailableException;
 import com.javv.inventorySystem.presentation.shared.payload.ApiResponse;
 
@@ -61,6 +62,18 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(NullPointerException.class)
   public ResponseEntity<ApiResponse<Void>> handleNullPointerException(
       NullPointerException exception) {
+
+    ApiResponse<Void> response = ApiResponse.error(
+        null,
+        exception.getMessage(),
+        HttpStatus.UNPROCESSABLE_CONTENT.value());
+
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(response);
+  }
+
+  @ExceptionHandler(ServiceOperationException.class)
+  public ResponseEntity<ApiResponse<Void>> handleServiceOperationException(
+      ServiceOperationException exception) {
 
     ApiResponse<Void> response = ApiResponse.error(
         null,

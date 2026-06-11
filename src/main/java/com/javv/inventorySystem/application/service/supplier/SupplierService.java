@@ -26,7 +26,7 @@ public class SupplierService {
   }
 
   @Transactional
-  public Supplier saveSupplier(SupplierRegisterCommand supplierRegisterCommand) {
+  public Supplier create(SupplierRegisterCommand supplierRegisterCommand) {
     Supplier supplier = toDomainEntity(supplierRegisterCommand);
 
     try {
@@ -38,7 +38,7 @@ public class SupplierService {
   }
 
   @Transactional
-  public Supplier updateSupplier(
+  public Supplier update(
       Integer id, SupplierUpdateCommand supplierUpdateCommand) {
 
     Supplier supplier = supplierRepositoryInterface

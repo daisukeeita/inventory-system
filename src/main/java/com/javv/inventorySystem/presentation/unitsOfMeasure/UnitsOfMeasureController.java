@@ -33,7 +33,7 @@ public class UnitsOfMeasureController {
 
   @PostMapping("/save")
   @ResponseStatus(HttpStatus.CREATED)
-  public ApiResponse<UnitsOfMeasureResponseDto> saveUom(
+  public ApiResponse<UnitsOfMeasureResponseDto> create(
       @Valid @RequestBody UnitsOfMeasureRegisterDto unitsOfMeasureRegisterDto) {
 
     UnitsOfMeasureRegisterCommand unitsOfMeasureRegisterCommand = unitsOfMeasureDtoMapper
@@ -49,7 +49,7 @@ public class UnitsOfMeasureController {
 
   @PutMapping("/update/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public ApiResponse<UnitsOfMeasureResponseDto> updateUom(
+  public ApiResponse<UnitsOfMeasureResponseDto> update(
       @PathVariable int id,
       @Valid @RequestBody UnitsOfMeasureUpdateDto unitsOfMeasureUpdateDto) {
 

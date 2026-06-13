@@ -1,6 +1,5 @@
 package com.javv.inventorySystem.application.service.supplier;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -10,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.javv.inventorySystem.application.command.supplier.SupplierRegisterCommand;
 import com.javv.inventorySystem.application.command.supplier.SupplierUpdateCommand;
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
+import com.javv.inventorySystem.domain.exception.ObjectMappingException;
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.exception.ServiceOperationException;
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
@@ -37,7 +37,7 @@ public class SupplierService {
       return savedEntity;
     } catch (DataIntegrityViolationException exception) {
       throw new EntityAlreadyExistsException(
-          "Supplier Creation Failed: Supplier already exists.");
+          "Supplier Creation Failed: The provided details conflict with an existing supplier.");
     } catch (NullPointerException exception) {
       throw new ServiceOperationException(
           "Supplier Creation Failed: " + exception.getMessage());
@@ -78,7 +78,7 @@ public class SupplierService {
     Optional<Supplier> optionalSupplier = supplierRepositoryInterface.findById(id);
 
     Supplier supplier = optionalSupplier.orElseThrow(
-        () -> new ResourceNotFoundException("Supplier was not found using ID: ''" + id + "'"));
+        () -> new ResourceNotFoundException("Supplier was not found using ID: " + id + "."));
 
     return supplier;
   }
@@ -88,7 +88,7 @@ public class SupplierService {
 
     Supplier supplier = optionalSupplier.orElseThrow(
         () -> new ResourceNotFoundException(
-            "Supplier was not found using companyName: ''" + companyName + "'"));
+            "Supplier was not found using companyName: " + companyName + "."));
 
     return supplier;
   }
@@ -98,7 +98,7 @@ public class SupplierService {
 
     Supplier supplier = optionalSupplier.orElseThrow(
         () -> new ResourceNotFoundException(
-            "Supplier was not found using email: ''" + email + "'"));
+            "Supplier was not found using email: " + email + "."));
 
     return supplier;
 
@@ -114,9 +114,10 @@ public class SupplierService {
 
   private Supplier toDomainEntity(SupplierRegisterCommand supplierRegisterCommand) {
 
-    Objects.requireNonNull(
-        supplierRegisterCommand,
-        "Cannot map a null SupplierRegisterCommand to a Domain Entity.");
+    if (supplierRegisterCommand == null) {
+      throw new ObjectMappingException(
+          "Supplier Service: Cannot map a null SupplierRegisterCommand to a Domain Entity.");
+    }
 
     SupplierAddress supplierAddress = new SupplierAddress();
     supplierAddress.setStreet(supplierRegisterCommand.street());

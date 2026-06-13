@@ -1,9 +1,8 @@
 package com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure;
 
-import java.util.Objects;
-
 import org.springframework.stereotype.Component;
 
+import com.javv.inventorySystem.domain.exception.ObjectMappingException;
 import com.javv.inventorySystem.domain.model.product.UnitsOfMeasure;
 
 @Component
@@ -11,9 +10,10 @@ public class UnitsOfMeasurePersistenceMapper {
 
   public UnitsOfMeasureJpaEntity toJpaEntity(UnitsOfMeasure unitsOfMeasure) {
 
-    Objects.requireNonNull(
-        unitsOfMeasure,
-        "Measure Persistence Mapper: Cannot map a null UnitsOfMeasure to JPA Entity.");
+    if (unitsOfMeasure == null) {
+      throw new ObjectMappingException(
+          "Measure Persistence Mapper: Cannot map a null UnitsOfMeasure to JPA Entity.");
+    }
 
     UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity = new UnitsOfMeasureJpaEntity();
     unitsOfMeasureJpaEntity.setId(unitsOfMeasure.getId());
@@ -27,9 +27,10 @@ public class UnitsOfMeasurePersistenceMapper {
 
   public UnitsOfMeasure toDomainEntity(UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity) {
 
-    Objects.requireNonNull(
-        unitsOfMeasureJpaEntity,
-        "Measure Persistence Mapper: Cannot map a null UnitsOfMeasureJpaEntity to Domain Entity.");
+    if (unitsOfMeasureJpaEntity == null) {
+      throw new ObjectMappingException(
+          "Meeasure Persistence Mapper: Cannot map a null UnitsOfMeasureJpaEntity to Domain Entity.");
+    }
 
     UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure();
     unitsOfMeasure.setId(unitsOfMeasureJpaEntity.getId());
@@ -39,5 +40,15 @@ public class UnitsOfMeasurePersistenceMapper {
     unitsOfMeasure.setUpdatedAt(unitsOfMeasureJpaEntity.getUpdatedAt());
 
     return unitsOfMeasure;
+  }
+
+  public UnitsOfMeasureJpaEntity updateJpaEntity(
+      UnitsOfMeasure unitsOfMeasure,
+      UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity) {
+
+    unitsOfMeasureJpaEntity.setName(unitsOfMeasure.getName());
+    unitsOfMeasureJpaEntity.setAbbreviation(unitsOfMeasure.getAbbreviation());
+
+    return unitsOfMeasureJpaEntity;
   }
 }

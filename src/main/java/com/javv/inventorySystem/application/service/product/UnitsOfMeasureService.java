@@ -58,7 +58,7 @@ public class UnitsOfMeasureService {
           "Units of Measure Update Failed: The provided details conflict with an existing units of measure.");
     } catch (ResourceNotFoundException exception) {
       throw new ServiceOperationException(
-          "Units of Measure Update Failed: " + exception.getMessage() + ".");
+          "Units of Measure Update Failed: " + exception.getMessage());
     }
   }
 

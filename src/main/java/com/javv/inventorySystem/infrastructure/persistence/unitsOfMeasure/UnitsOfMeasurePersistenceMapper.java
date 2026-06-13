@@ -29,7 +29,7 @@ public class UnitsOfMeasurePersistenceMapper {
 
     if (unitsOfMeasureJpaEntity == null) {
       throw new ObjectMappingException(
-          "Meeasure Persistence Mapper: Cannot map a null UnitsOfMeasureJpaEntity to Domain Entity.");
+          "Measure Persistence Mapper: Cannot map a null UnitsOfMeasureJpaEntity to Domain Entity.");
     }
 
     UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure();
@@ -45,6 +45,16 @@ public class UnitsOfMeasurePersistenceMapper {
   public UnitsOfMeasureJpaEntity updateJpaEntity(
       UnitsOfMeasure unitsOfMeasure,
       UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity) {
+
+    if (unitsOfMeasure == null) {
+      throw new ObjectMappingException(
+          "Measure Persistence Mapper: Cannot use a null UnitsOfMeasure to update JPA Entity.");
+    }
+
+    if (unitsOfMeasureJpaEntity == null) {
+      throw new ObjectMappingException(
+          "Measure Persistence Mapper: Cannot update a null UnitsOfMeasureJpa entity.");
+    }
 
     unitsOfMeasureJpaEntity.setName(unitsOfMeasure.getName());
     unitsOfMeasureJpaEntity.setAbbreviation(unitsOfMeasure.getAbbreviation());

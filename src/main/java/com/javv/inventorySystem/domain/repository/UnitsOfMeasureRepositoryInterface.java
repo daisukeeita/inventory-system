@@ -2,6 +2,9 @@ package com.javv.inventorySystem.domain.repository;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.javv.inventorySystem.domain.model.product.UnitsOfMeasure;
 
 public interface UnitsOfMeasureRepositoryInterface {
@@ -9,7 +12,9 @@ public interface UnitsOfMeasureRepositoryInterface {
 
   UnitsOfMeasure update(UnitsOfMeasure unitsOfMeasure);
 
-  Optional<UnitsOfMeasure> getById(Integer id);
+  Optional<UnitsOfMeasure> findById(int id);
 
-  Optional<UnitsOfMeasure> getByName(String name);
+  Optional<UnitsOfMeasure> findByName(String name);
+
+  Page<UnitsOfMeasure> findAll(Pageable pageable);
 }

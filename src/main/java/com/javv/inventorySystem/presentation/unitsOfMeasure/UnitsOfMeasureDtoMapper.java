@@ -1,11 +1,10 @@
 package com.javv.inventorySystem.presentation.unitsOfMeasure;
 
-import java.util.Objects;
-
 import org.springframework.stereotype.Component;
 
 import com.javv.inventorySystem.application.command.unitsOfMeasure.UnitsOfMeasureRegisterCommand;
 import com.javv.inventorySystem.application.command.unitsOfMeasure.UnitsOfMeasureUpdateCommand;
+import com.javv.inventorySystem.domain.exception.ObjectMappingException;
 import com.javv.inventorySystem.domain.model.product.UnitsOfMeasure;
 import com.javv.inventorySystem.presentation.unitsOfMeasure.dto.UnitsOfMeasureRegisterDto;
 import com.javv.inventorySystem.presentation.unitsOfMeasure.dto.UnitsOfMeasureResponseDto;
@@ -17,9 +16,10 @@ public class UnitsOfMeasureDtoMapper {
   public UnitsOfMeasureRegisterCommand toRegisterCommandRecord(
       UnitsOfMeasureRegisterDto unitsOfMeasureRegisterDto) {
 
-    Objects.requireNonNull(
-        unitsOfMeasureRegisterDto,
-        "Measure DTO Mapper: Cannot map a null UnitsOfMeasureRegisterDto to a Command Record.");
+    if (unitsOfMeasureRegisterDto == null) {
+      throw new ObjectMappingException(
+          "Units of Measure DTO Mapper: Cannot map a null UnitsOfRegisterDto to a Command Record.");
+    }
 
     return new UnitsOfMeasureRegisterCommand(
         unitsOfMeasureRegisterDto.name(), unitsOfMeasureRegisterDto.abbreviation());
@@ -28,9 +28,10 @@ public class UnitsOfMeasureDtoMapper {
   public UnitsOfMeasureUpdateCommand toUpdateCommandRecord(
       UnitsOfMeasureUpdateDto unitsOfMeasureUpdateDto) {
 
-    Objects.requireNonNull(
-        unitsOfMeasureUpdateDto,
-        "Measure DTO Mapper: Cannot map a null UnitsOfMeasureUpdateDto to a Command Record.");
+    if (unitsOfMeasureUpdateDto == null) {
+      throw new ObjectMappingException(
+          "Units of Measure DTO Mapper: Cannot map a null UnitsOfMeasureUpdateDto to a Command Record.");
+    }
 
     return new UnitsOfMeasureUpdateCommand(
         unitsOfMeasureUpdateDto.name(), unitsOfMeasureUpdateDto.abbreviation());
@@ -38,9 +39,10 @@ public class UnitsOfMeasureDtoMapper {
 
   public UnitsOfMeasureResponseDto toResponseDto(UnitsOfMeasure unitsOfMeasure) {
 
-    Objects.requireNonNull(
-        unitsOfMeasure,
-        "Measure DTO Mapper: Cannot map a null UnitsOfMeasure to a Response Record.");
+    if (unitsOfMeasure == null) {
+      throw new ObjectMappingException(
+          "Unts of Measure DTO Mapper: Cannot map a null UnitsOfMeasure to a Response DTO.");
+    }
 
     return new UnitsOfMeasureResponseDto(
         unitsOfMeasure.getId(),

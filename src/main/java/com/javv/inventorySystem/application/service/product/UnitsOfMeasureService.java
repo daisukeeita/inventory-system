@@ -31,8 +31,8 @@ public class UnitsOfMeasureService {
 
     try {
       UnitsOfMeasure savedUnitsOfMeasure = unitsOfMeasureRepositoryInterface.save(unitsOfMeasure);
-      return savedUnitsOfMeasure;
 
+      return savedUnitsOfMeasure;
     } catch (DataIntegrityViolationException exception) {
       throw new ServiceOperationException(
           "Units of Measure Creation Failed: The provided details conflict with an existing units of measure.");
@@ -41,7 +41,7 @@ public class UnitsOfMeasureService {
 
   @Transactional
   public UnitsOfMeasure updateMeasure(
-      Integer id, UnitsOfMeasureUpdateCommand unitsOfMeasureUpdateCommand) {
+      int id, UnitsOfMeasureUpdateCommand unitsOfMeasureUpdateCommand) {
 
     try {
       UnitsOfMeasure unitsOfMeasure = getById(id);

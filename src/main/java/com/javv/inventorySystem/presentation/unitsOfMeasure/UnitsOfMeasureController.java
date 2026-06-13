@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.presentation.unitsOfMeasure;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,15 +24,12 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("api/v1/uom")
 public class UnitsOfMeasureController {
-  private UnitsOfMeasureService unitsOfMeasureService;
-  private UnitsOfMeasureDtoMapper unitsOfMeasureDtoMapper;
 
-  public UnitsOfMeasureController(
-      UnitsOfMeasureService unitsOfMeasureService,
-      UnitsOfMeasureDtoMapper unitsOfMeasureDtoMapper) {
-    this.unitsOfMeasureService = unitsOfMeasureService;
-    this.unitsOfMeasureDtoMapper = unitsOfMeasureDtoMapper;
-  }
+  @Autowired
+  private UnitsOfMeasureService unitsOfMeasureService;
+
+  @Autowired
+  private UnitsOfMeasureDtoMapper unitsOfMeasureDtoMapper;
 
   @PostMapping("/save")
   @ResponseStatus(HttpStatus.CREATED)
@@ -41,7 +39,7 @@ public class UnitsOfMeasureController {
     UnitsOfMeasureRegisterCommand unitsOfMeasureRegisterCommand = unitsOfMeasureDtoMapper
         .toRegisterCommandRecord(unitsOfMeasureRegisterDto);
 
-    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.saveMeasure(unitsOfMeasureRegisterCommand);
+    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.create(unitsOfMeasureRegisterCommand);
 
     UnitsOfMeasureResponseDto responseDto = unitsOfMeasureDtoMapper.toResponseDto(unitsOfMeasure);
 
@@ -58,7 +56,7 @@ public class UnitsOfMeasureController {
     UnitsOfMeasureUpdateCommand unitsOfMeasureUpdateCommand = unitsOfMeasureDtoMapper
         .toUpdateCommandRecord(unitsOfMeasureUpdateDto);
 
-    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.updateMeasure(id, unitsOfMeasureUpdateCommand);
+    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.update(id, unitsOfMeasureUpdateCommand);
 
     UnitsOfMeasureResponseDto responseDto = unitsOfMeasureDtoMapper.toResponseDto(unitsOfMeasure);
 

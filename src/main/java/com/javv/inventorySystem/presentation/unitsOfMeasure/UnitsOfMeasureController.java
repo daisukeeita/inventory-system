@@ -38,11 +38,10 @@ public class UnitsOfMeasureController {
   public ApiResponse<UnitsOfMeasureResponseDto> saveUom(
       @Valid @RequestBody UnitsOfMeasureRegisterDto unitsOfMeasureRegisterDto) {
 
-    UnitsOfMeasureRegisterCommand unitsOfMeasureRegisterCommand =
-        unitsOfMeasureDtoMapper.toRegisterCommandRecord(unitsOfMeasureRegisterDto);
+    UnitsOfMeasureRegisterCommand unitsOfMeasureRegisterCommand = unitsOfMeasureDtoMapper
+        .toRegisterCommandRecord(unitsOfMeasureRegisterDto);
 
-    UnitsOfMeasure unitsOfMeasure =
-        unitsOfMeasureService.saveMeasure(unitsOfMeasureRegisterCommand);
+    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.saveMeasure(unitsOfMeasureRegisterCommand);
 
     UnitsOfMeasureResponseDto responseDto = unitsOfMeasureDtoMapper.toResponseDto(unitsOfMeasure);
 
@@ -53,14 +52,13 @@ public class UnitsOfMeasureController {
   @PutMapping("/update/{id}")
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<UnitsOfMeasureResponseDto> updateUom(
-      @PathVariable Integer id,
+      @PathVariable int id,
       @Valid @RequestBody UnitsOfMeasureUpdateDto unitsOfMeasureUpdateDto) {
 
-    UnitsOfMeasureUpdateCommand unitsOfMeasureUpdateCommand =
-        unitsOfMeasureDtoMapper.toUpdateCommandRecord(unitsOfMeasureUpdateDto);
+    UnitsOfMeasureUpdateCommand unitsOfMeasureUpdateCommand = unitsOfMeasureDtoMapper
+        .toUpdateCommandRecord(unitsOfMeasureUpdateDto);
 
-    UnitsOfMeasure unitsOfMeasure =
-        unitsOfMeasureService.updateMeasure(id, unitsOfMeasureUpdateCommand);
+    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.updateMeasure(id, unitsOfMeasureUpdateCommand);
 
     UnitsOfMeasureResponseDto responseDto = unitsOfMeasureDtoMapper.toResponseDto(unitsOfMeasure);
 

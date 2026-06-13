@@ -2,6 +2,7 @@ package com.javv.inventorySystem.application.service.supplier;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +21,8 @@ import com.javv.inventorySystem.domain.repository.SupplierRepositoryInterface;
 @Transactional(readOnly = true)
 public class SupplierService {
 
+  @Autowired
   private SupplierRepositoryInterface supplierRepositoryInterface;
-
-  public SupplierService(SupplierRepositoryInterface supplierRepositoryInterface) {
-    this.supplierRepositoryInterface = supplierRepositoryInterface;
-  }
 
   @Transactional
   public Supplier create(SupplierRegisterCommand supplierRegisterCommand) {

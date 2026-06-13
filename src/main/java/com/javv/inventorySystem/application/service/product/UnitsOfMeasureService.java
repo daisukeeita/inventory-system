@@ -4,6 +4,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +74,12 @@ public class UnitsOfMeasureService {
 
     return optionalUnitsOfMeasure.orElseThrow(
         () -> new ResourceNotFoundException("Units of Measure not found by name: " + name + "."));
+  }
+
+  public Page<UnitsOfMeasure> getAll(int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+
+    return unitsOfMeasureRepositoryInterface.findAll(pageable);
   }
 
   private UnitsOfMeasure toDomainEntity(

@@ -64,7 +64,8 @@ public class UnitsOfMeasurePersistenceAdapter implements UnitsOfMeasureRepositor
 
   @Override
   public Page<UnitsOfMeasure> findAll(Pageable pageable) {
-    // TODO Auto-generated method stub
-    return null;
+    Page<UnitsOfMeasureJpaEntity> pageableMeasure = unitsOfMeasureJpaRepository.findAll(pageable);
+
+    return pageableMeasure.map(entity -> unitsOfMeasurePersistenceMapper.toDomainEntity(entity));
   }
 }

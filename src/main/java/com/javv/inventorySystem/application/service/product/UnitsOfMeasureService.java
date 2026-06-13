@@ -2,6 +2,7 @@ package com.javv.inventorySystem.application.service.product;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +19,11 @@ import com.javv.inventorySystem.domain.repository.UnitsOfMeasureRepositoryInterf
 @Transactional(readOnly = true)
 public class UnitsOfMeasureService {
 
+  @Autowired
   private UnitsOfMeasureRepositoryInterface unitsOfMeasureRepositoryInterface;
 
-  public UnitsOfMeasureService(
-      UnitsOfMeasureRepositoryInterface unitsOfMeasureRepositoryInterface) {
-    this.unitsOfMeasureRepositoryInterface = unitsOfMeasureRepositoryInterface;
-  }
-
   @Transactional
-  public UnitsOfMeasure saveMeasure(UnitsOfMeasureRegisterCommand unitsOfMeasureRegisterCommand) {
+  public UnitsOfMeasure create(UnitsOfMeasureRegisterCommand unitsOfMeasureRegisterCommand) {
     UnitsOfMeasure unitsOfMeasure = toDomainEntity(unitsOfMeasureRegisterCommand);
 
     try {
@@ -40,7 +37,7 @@ public class UnitsOfMeasureService {
   }
 
   @Transactional
-  public UnitsOfMeasure updateMeasure(
+  public UnitsOfMeasure update(
       int id, UnitsOfMeasureUpdateCommand unitsOfMeasureUpdateCommand) {
 
     try {

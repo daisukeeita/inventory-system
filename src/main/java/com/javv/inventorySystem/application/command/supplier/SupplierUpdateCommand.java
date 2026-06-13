@@ -1,6 +1,6 @@
 package com.javv.inventorySystem.application.command.supplier;
 
-import java.util.Objects;
+import com.javv.inventorySystem.domain.exception.RecordInitializationException;
 
 public record SupplierUpdateCommand(
     String companyName,
@@ -15,45 +15,70 @@ public record SupplierUpdateCommand(
 
   public SupplierUpdateCommand {
 
-    Objects.requireNonNull(
-        companyName,
-        "Supplier Update Command Record: Company Name cannot be null.");
-
-    Objects.requireNonNull(
-        contactName,
-        "Supplier Update Command Record: Contact Name cannot be null.");
-
-    Objects.requireNonNull(
-        phoneNumber,
-        "Supplier Update Command Record: Phone Number cannot be null.");
-
-    Objects.requireNonNull(
-        email,
-        "Supplier Update Command Record: Email cannot be null.");
-
-    Objects.requireNonNull(
-        street,
-        "Supplier Update Command Record: Street cannot be null.");
-
-    Objects.requireNonNull(
-        city,
-        "Supplier Update Command Record: City cannot be null.");
-
-    Objects.requireNonNull(
-        state,
-        "Supplier Update Command Record: State cannot be null.");
-
-    Objects.requireNonNull(
-        postalCode,
-        "Supplier Update Command Record: Postal Code cannot be null.");
-
-    Objects.requireNonNull(
-        country,
-        "Supplier Update Command Record: Country cannot be null.");
-
-    if (email.isBlank() || !email.contains("@")) {
-      throw new IllegalArgumentException(
-          "Supplier Update Command Record: Invalid email format for command processing.");
+    if (companyName == null || companyName.isBlank()) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: Company Name cannot be null or empty.");
     }
+
+    if (contactName == null || contactName.isBlank()) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: Contact Name cannot be null or empty.");
+    }
+
+    if (phoneNumber == null || phoneNumber.isBlank()) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: Phone number cannot be null or empty.");
+    }
+
+    if (!phoneNumber.matches("^(0[2-9]\\d{0,2}|\\(0[2-9]\\d{0,2}\\))?[0-9\\-\\s]+$")) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: Invalid PH phone number format. Use digits, dashes, and/or parenthesis.");
+    }
+
+    if (!phoneNumber.matches("^\\d{10,15}$")) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: Phone Number must be between 10 and 15 digits.");
+    }
+
+    if (email == null || email.isBlank()) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: Email cannot be null or empty.");
+    }
+
+    if (!email.contains("@")) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: Invalid email format for command processing.");
+    }
+
+    if (street == null || street.isBlank()) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: Street cannot be null or empty.");
+    }
+
+    if (city == null || city.isBlank()) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: City cannot be null or empty.");
+    }
+
+    if (state == null || state.isBlank()) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: State cannot be null or empty.");
+    }
+
+    if (postalCode == null || postalCode.isBlank()) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: Postal Code cannot be null or empty.");
+    }
+
+    if (!postalCode.matches("^\\d{4}$")) {
+      throw new IllegalArgumentException(
+          "Supplier Register Command: Invalid PH Postal Code. It must be exactly 4 digits.");
+    }
+
+    if (country == null || country.isBlank()) {
+      throw new RecordInitializationException(
+          "Supplier Register Command: Country cannot be null or empty.");
+    }
+
   }
 }

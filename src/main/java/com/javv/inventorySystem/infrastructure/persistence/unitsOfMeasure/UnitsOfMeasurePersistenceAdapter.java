@@ -2,6 +2,7 @@ package com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -13,15 +14,11 @@ import com.javv.inventorySystem.domain.repository.UnitsOfMeasureRepositoryInterf
 @Repository
 public class UnitsOfMeasurePersistenceAdapter implements UnitsOfMeasureRepositoryInterface {
 
+  @Autowired
   private UnitsOfMeasureJpaRepository unitsOfMeasureJpaRepository;
-  private UnitsOfMeasurePersistenceMapper unitsOfMeasurePersistenceMapper;
 
-  public UnitsOfMeasurePersistenceAdapter(
-      UnitsOfMeasureJpaRepository unitsOfMeasureJpaRepository,
-      UnitsOfMeasurePersistenceMapper unitsOfMeasurePersistenceMapper) {
-    this.unitsOfMeasureJpaRepository = unitsOfMeasureJpaRepository;
-    this.unitsOfMeasurePersistenceMapper = unitsOfMeasurePersistenceMapper;
-  }
+  @Autowired
+  private UnitsOfMeasurePersistenceMapper unitsOfMeasurePersistenceMapper;
 
   @Override
   public UnitsOfMeasure save(UnitsOfMeasure unitsOfMeasure) {

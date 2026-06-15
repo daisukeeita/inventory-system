@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.application.service.product;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,23 @@ public class UnitsOfMeasureService {
 
     return optionalUnitsOfMeasure.orElseThrow(
         () -> new ResourceNotFoundException("Units of Measure not found by name: " + name + "."));
+  }
+
+  public boolean checkIfExistsById(int id) {
+    return unitsOfMeasureRepositoryInterface.existsById(id);
+  }
+
+  public boolean allIdExists(List<Integer> listId) {
+    if (listId == null || listId.isEmpty()) {
+      return false;
+    }
+
+    Long existCount = unitsOfMeasureRepositoryInterface.countByIdIn(listId);
+    return existCount == listId.size();
+  }
+
+  public List<UnitsOfMeasure> getAllById(List<Integer> listId) {
+    return unitsOfMeasureRepositoryInterface.findAllById(listId);
   }
 
   public Page<UnitsOfMeasure> getAll(int page, int size) {

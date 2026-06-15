@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.domain.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -15,6 +16,12 @@ public interface UnitsOfMeasureRepositoryInterface {
   Optional<UnitsOfMeasure> findById(int id);
 
   Optional<UnitsOfMeasure> findByName(String name);
+
+  boolean existsById(int id);
+
+  Long countByIdIn(List<Integer> listId);
+
+  List<UnitsOfMeasure> findAllById(List<Integer> listId);
 
   Page<UnitsOfMeasure> findAll(Pageable pageable);
 }

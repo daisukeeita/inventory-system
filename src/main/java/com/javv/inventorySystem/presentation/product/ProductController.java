@@ -46,7 +46,7 @@ public class ProductController {
     ProductRegisterCommand productRegisterCommand = productDtoMapper
         .toRegisterCommand(productRegisterDto);
 
-    ProductResponseRead productResponseRead = productService.saveProduct(productRegisterCommand);
+    ProductResponseRead productResponseRead = productService.create(productRegisterCommand);
 
     ProductResponseDto responseDto = productDtoMapper
         .toResponseDto(productResponseRead);

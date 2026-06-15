@@ -11,7 +11,7 @@ public class Product {
   private String name;
   private int supplierId;
   private int baseUomId;
-  private List<ProductPackaging> packages = new ArrayList<ProductPackaging>();
+  private List<ProductPackaging> listPackages = new ArrayList<ProductPackaging>();
   private Instant createdAt;
   private Instant updatedAt;
 
@@ -24,13 +24,13 @@ public class Product {
       String name,
       int supplierId,
       int baseUomId,
-      List<ProductPackaging> packages) {
+      List<ProductPackaging> listPackages) {
     this.id = id;
     this.sku = sku;
     this.name = name;
     this.supplierId = supplierId;
     this.baseUomId = baseUomId;
-    this.packages = packages;
+    this.listPackages = listPackages;
   }
 
   public ProductPackaging addPackaging(
@@ -46,7 +46,7 @@ public class Product {
     productPackaging.setPrice(price);
     productPackaging.setProductId(this.getId());
 
-    this.packages.add(productPackaging);
+    this.listPackages.add(productPackaging);
 
     return productPackaging;
   }
@@ -69,6 +69,10 @@ public class Product {
 
   public void setBaseUnitsOfMeasureId(int baseUomId) {
     this.baseUomId = baseUomId;
+  }
+
+  public void setListPackages(List<ProductPackaging> listPackages) {
+    this.listPackages = listPackages;
   }
 
   public void setCreatedAt(Instant createdAt) {
@@ -100,7 +104,7 @@ public class Product {
   }
 
   public List<ProductPackaging> getListPackages() {
-    return packages;
+    return listPackages;
   }
 
   public Instant getCreatedAt() {

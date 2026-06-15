@@ -79,6 +79,11 @@ public class ProductPersistenceAdapter implements ProductRepositoryInterface {
     return productJpaRepository.existsById(id);
   }
 
+  @Override
+  public Long countByIdIn(List<Long> listId) {
+    return productJpaRepository.countByIdIn(listId);
+  }
+
   public ProductJpaEntity getReferenceById(Long id) {
     return productJpaRepository.getReferenceById(id);
   }

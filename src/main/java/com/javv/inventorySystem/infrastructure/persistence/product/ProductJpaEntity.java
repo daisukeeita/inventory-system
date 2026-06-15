@@ -50,7 +50,7 @@ public class ProductJpaEntity {
   private UnitsOfMeasureJpaEntity baseUnitsOfMeasure;
 
   @OneToMany(mappedBy = "productJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<ProductPackagingJpaEntity> listProductPackages = new ArrayList<ProductPackagingJpaEntity>();
+  private List<ProductPackagingJpaEntity> listPackages = new ArrayList<ProductPackagingJpaEntity>();
 
   @CreatedDate
   @Column(name = "created_at", nullable = false, updatable = false)
@@ -68,12 +68,12 @@ public class ProductJpaEntity {
       String name,
       SupplierJpaEntity supplierJpaEntity,
       UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity,
-      List<ProductPackagingJpaEntity> listProductPackages) {
+      List<ProductPackagingJpaEntity> listPackages) {
     this.sku = sku;
     this.name = name;
     this.supplierJpaEntity = supplierJpaEntity;
     this.baseUnitsOfMeasure = unitsOfMeasureJpaEntity;
-    this.listProductPackages = listProductPackages;
+    this.listPackages = listPackages;
   }
 
   public void addPackaging(
@@ -90,7 +90,7 @@ public class ProductJpaEntity {
     productPackagingJpaEntity.setConversionFactor(conversionFactor);
     productPackagingJpaEntity.setPrice(price);
 
-    this.listProductPackages.add(productPackagingJpaEntity);
+    this.listPackages.add(productPackagingJpaEntity);
   }
 
   public void setId(Long id) {
@@ -111,6 +111,10 @@ public class ProductJpaEntity {
 
   public void setBaseUom(UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity) {
     this.baseUnitsOfMeasure = unitsOfMeasureJpaEntity;
+  }
+
+  public void setListPackages(List<ProductPackagingJpaEntity> listPackages) {
+    this.listPackages = listPackages;
   }
 
   protected void setCreatedAt(Instant createdAt) {
@@ -149,7 +153,7 @@ public class ProductJpaEntity {
     return updatedAt;
   }
 
-  public List<ProductPackagingJpaEntity> getProductPackages() {
-    return listProductPackages;
+  public List<ProductPackagingJpaEntity> getListPackages() {
+    return listPackages;
   }
 }

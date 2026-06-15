@@ -17,9 +17,11 @@ public interface ProductRepositoryInterface {
 
   Optional<Product> findById(Long id);
 
-  List<Product> findAllById(List<Long> id);
+  List<Product> findAllById(List<Long> listId);
 
   Page<Product> findAll(Pageable pageable);
 
   boolean existsById(Long id);
+
+  Long countByIdIn(List<Long> listId);
 }

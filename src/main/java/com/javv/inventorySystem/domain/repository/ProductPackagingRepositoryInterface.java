@@ -7,9 +7,9 @@ import com.javv.inventorySystem.domain.model.product.ProductPackaging;
 
 public interface ProductPackagingRepositoryInterface {
 
-  List<ProductPackaging> getByProductId(Long productId);
+  List<ProductPackaging> findByProductId(Long productId);
 
-  Optional<ProductPackaging> getById(Long id);
+  Optional<ProductPackaging> findById(Long id);
 
-  List<ProductPackaging> getAllById(List<Long> id);
+  List<ProductPackaging> findAllById(List<Long> listId);
 }

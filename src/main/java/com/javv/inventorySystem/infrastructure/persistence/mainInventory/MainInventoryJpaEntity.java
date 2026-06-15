@@ -28,7 +28,7 @@ public class MainInventoryJpaEntity {
   private Integer id;
 
   @OneToOne
-  @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
+  @JoinColumn(name = "product_sku", referencedColumnName = "sku", nullable = false)
   private ProductJpaEntity productJpaEntity;
 
   @Column(name = "quantity_on_hand", nullable = false)

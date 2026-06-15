@@ -37,7 +37,7 @@ public class MainInventoryController {
     MainInventoryRegisterCommand registerCommand = mainInventoryDtoMapper.toRegisterCommand(mainInventoryRegisterDto);
 
     MainInventoryResponseRead mainInventoryResponseRead = mainInventoryService
-        .saveInventory(registerCommand);
+        .create(registerCommand);
 
     MainInventoryResponseDto responseDto = mainInventoryDtoMapper
         .toResponseDto(mainInventoryResponseRead);

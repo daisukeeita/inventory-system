@@ -13,9 +13,9 @@ public interface MainInventoryRepositoryInterface {
 
   MainInventory update(MainInventory mainInventory);
 
-  Optional<MainInventory> getById(Integer id);
+  Optional<MainInventory> findById(Integer id);
 
-  Optional<MainInventory> getByProductId(Long productId);
+  Optional<MainInventory> findByProductId(Long productId);
 
-  Page<MainInventory> getPageable(Pageable pageable);
+  Page<MainInventory> findAll(Pageable pageable);
 }

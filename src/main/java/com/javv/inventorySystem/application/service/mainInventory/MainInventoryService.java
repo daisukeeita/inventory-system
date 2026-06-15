@@ -13,12 +13,11 @@ import com.javv.inventorySystem.application.command.mainInventory.MainInventoryR
 import com.javv.inventorySystem.application.command.mainInventory.MainInventoryResponseRead;
 import com.javv.inventorySystem.application.command.mainInventory.MainInventoryUpdateCommand;
 import com.javv.inventorySystem.application.service.product.ProductService;
-import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
+import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
+import com.javv.inventorySystem.domain.exception.ServiceOperationException;
 import com.javv.inventorySystem.domain.model.mainInventory.MainInventory;
 import com.javv.inventorySystem.domain.model.product.Product;
 import com.javv.inventorySystem.domain.repository.MainInventoryRepositoryInterface;
-
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,7 +34,7 @@ public class MainInventoryService {
   }
 
   @Transactional
-  public MainInventoryResponseRead saveInventory(MainInventoryRegisterCommand mainInventoryRegisterCommand) {
+  public MainInventoryResponseRead create(MainInventoryRegisterCommand mainInventoryRegisterCommand) {
 
     MainInventory mainInventory = toDomainEntity(mainInventoryRegisterCommand);
 
@@ -43,17 +42,17 @@ public class MainInventoryService {
       return toResponseRead(
           mainInventoryRepositoryInterface.save(mainInventory));
     } catch (DataIntegrityViolationException exception) {
-      throw new EntityAlreadyExistsException(
-          "Main Inventory Persistence Adapter: Inventory for this product already exists.");
+      throw new ServiceOperationException(
+          "Main Inventory Creation Failed: Inventory for this product already exists.");
     }
   }
 
   @Transactional
-  public void updateInventory(MainInventoryUpdateCommand mainInventoryUpdateCommand) {
+  public void update(MainInventoryUpdateCommand mainInventoryUpdateCommand) {
 
     MainInventory mainInventory = new MainInventory();
     mainInventory.setId(mainInventoryUpdateCommand.id());
-    mainInventory.setProductId(mainInventoryUpdateCommand.productId());
+    mainInventory.setProductSku(mainInventoryUpdateCommand.productId());
     mainInventory.setQuantityOnHand(
         mainInventoryUpdateCommand.quantityOnHand());
     mainInventory.setReorderLevel(
@@ -65,20 +64,47 @@ public class MainInventoryService {
 
   @Transactional
   public void addStockInventory(Long productId, int quantityReceived) {
+    try {
+      MainInventory mainInventory = getByProductId(productId);
 
-    MainInventory mainInventory = mainInventoryRepositoryInterface
-        .getByProductId(productId)
-        .orElseThrow(() -> new EntityNotFoundException(
-            "Main Inventory Service: Inventory not found using the Product ID '" + productId + "'"));
+      mainInventory.increaseStock(quantityReceived);
 
-    mainInventory.increaseStock(quantityReceived);
-
-    mainInventoryRepositoryInterface.update(mainInventory);
+      mainInventoryRepositoryInterface.update(mainInventory);
+    } catch (DataIntegrityViolationException exception) {
+      throw new ServiceOperationException(
+          "Inventory Increase Stock Failed: The provided details conflict with an existing product.");
+    } catch (ResourceNotFoundException exception) {
+      throw new ServiceOperationException(
+          "Inventory Increase Stock Failed: " + exception.getMessage());
+    }
   }
 
-  public Page<MainInventory> getPageableInventory(int page, int size) {
+  public MainInventory getById(int id) {
+    MainInventory mainInventory = mainInventoryRepositoryInterface
+        .findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "Inventory not found using ID: " + id + "."));
+
+    return mainInventory;
+
+  }
+
+  public MainInventory getByProductId(Long productId) {
+    MainInventory mainInventory = mainInventoryRepositoryInterface
+        .findByProductId(productId)
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "Inventory not found using Product ID: " + productId + "."));
+
+    return mainInventory;
+  }
+
+  public MainInventory getOrInitializeInventory(Long productId) {
+    return null;
+  }
+
+  public Page<MainInventory> getAllInventory(int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
-    return mainInventoryRepositoryInterface.getPageable(pageable);
+    return mainInventoryRepositoryInterface.findAll(pageable);
   }
 
   private MainInventory toDomainEntity(
@@ -86,7 +112,7 @@ public class MainInventoryService {
 
     MainInventory mainInventory = new MainInventory();
 
-    mainInventory.setProductId(mainInventoryRegisterCommand.productId());
+    mainInventory.setProductSku(mainInventoryRegisterCommand.productId());
     mainInventory.setQuantityOnHand(mainInventoryRegisterCommand.quantityOnHand());
     mainInventory.setReorderLevel(mainInventoryRegisterCommand.reorderLevel());
 
@@ -99,7 +125,7 @@ public class MainInventoryService {
         mainInventory,
         "Main Inventory Service: Cannot map a null MainInventory to a Response Read Record.");
 
-    Product product = productService.getById(mainInventory.getProductId());
+    Product product = productService.getById(mainInventory.getProductSku());
 
     return new MainInventoryResponseRead(
         mainInventory.getId(),

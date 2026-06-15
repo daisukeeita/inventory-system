@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.model.mainInventory.MainInventory;
 import com.javv.inventorySystem.domain.repository.MainInventoryRepositoryInterface;
-import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaRepository;
 
 @Repository
@@ -30,9 +29,6 @@ public class MainInventoryPersistenceAdapter implements MainInventoryRepositoryI
 
   @Override
   public MainInventory save(MainInventory mainInventory) {
-    ProductJpaEntity productJpaEntity = productJpaRepository
-        .getReferenceById(mainInventory.getProductId());
-
     MainInventoryJpaEntity jpaEntity = mainInventoryPersistenceMapper
         .toJpaEntity(mainInventory, productJpaEntity);
 
@@ -58,21 +54,21 @@ public class MainInventoryPersistenceAdapter implements MainInventoryRepositoryI
   }
 
   @Override
-  public Optional<MainInventory> getById(Integer id) {
+  public Optional<MainInventory> findById(Integer id) {
     Optional<MainInventoryJpaEntity> fetchedEntity = mainInventoryJpaRepository.findById(id);
 
     return fetchedEntity.map(entity -> mainInventoryPersistenceMapper.toDomainEntity(entity));
   }
 
   @Override
-  public Optional<MainInventory> getByProductId(Long productId) {
+  public Optional<MainInventory> findByProductId(Long productId) {
     Optional<MainInventoryJpaEntity> fetchedEntity = mainInventoryJpaRepository.findByProductJpaEntityId(productId);
 
     return fetchedEntity.map(entity -> mainInventoryPersistenceMapper.toDomainEntity(entity));
   }
 
   @Override
-  public Page<MainInventory> getPageable(Pageable pageable) {
+  public Page<MainInventory> findAll(Pageable pageable) {
 
     Page<MainInventoryJpaEntity> jpaPage = mainInventoryJpaRepository.findAll(pageable);
 

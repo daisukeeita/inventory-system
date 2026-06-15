@@ -34,7 +34,7 @@ public class MainInventoryPersistenceMapper {
 
     MainInventory mainInventory = new MainInventory();
     mainInventory.setId(mainInventoryJpaEntity.getId());
-    mainInventory.setProductId(product.getId());
+    mainInventory.setProductSku(product.getId());
     mainInventory.setQuantityOnHand(mainInventoryJpaEntity.getQuantityOnHand());
     mainInventory.setReorderLevel(mainInventoryJpaEntity.getReorderLevel());
     mainInventory.setCreatedAt(mainInventoryJpaEntity.getCreatedAt());

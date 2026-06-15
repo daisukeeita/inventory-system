@@ -3,6 +3,7 @@ package com.javv.inventorySystem.infrastructure.persistence.product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.javv.inventorySystem.domain.exception.ObjectMappingException;
 import com.javv.inventorySystem.domain.model.product.Product;
 import com.javv.inventorySystem.domain.model.product.ProductPackaging;
 import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaEntity;
@@ -21,6 +22,12 @@ public class ProductPersistenceMapper {
   private UnitsOfMeasureJpaRepository unitsOfMeasureJpaRepository;
 
   public ProductJpaEntity toJpaEntity(Product product) {
+
+    if (product == null) {
+      throw new ObjectMappingException(
+          "Product Persistence Mapper: Cannot map a null Product to a JPA Entity.");
+    }
+
     SupplierJpaEntity supplierJpaEntity = supplierJpaRepository
         .getReferenceById(product.getSupplierId());
 
@@ -50,6 +57,11 @@ public class ProductPersistenceMapper {
 
   public Product toDomainEntity(ProductJpaEntity productJpaEntity) {
 
+    if (productJpaEntity == null) {
+      throw new ObjectMappingException(
+          "Product Persistence Mapper: Cannot map a null ProductJpaEntity to a Domain Entity.");
+    }
+
     Product domainEntity = new Product();
     domainEntity.setId(productJpaEntity.getId());
     domainEntity.setSku(productJpaEntity.getSku());
@@ -59,7 +71,7 @@ public class ProductPersistenceMapper {
     domainEntity.setCreatedAt(productJpaEntity.getCreatedAt());
     domainEntity.setUpdatedAt(productJpaEntity.getUpdatedAt());
 
-    for (ProductPackagingJpaEntity jpaPackaging : productJpaEntity.getProductPackages()) {
+    for (ProductPackagingJpaEntity jpaPackaging : productJpaEntity.getListPackages()) {
       ProductPackaging domainPackaging = domainEntity.addPackaging(
           jpaPackaging.getPackagingCode(),
           jpaPackaging.getUnitsOfMeasure().getId(),

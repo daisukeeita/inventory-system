@@ -13,7 +13,7 @@ public record ProductPackagingRegisterDto(
     @NotBlank(
       message = "Product Packaging Register DTO: Packaging Code is required for registration.")
     @Size(
-      max = 50,
+      max = 20,
       message = "Product Packaging Register DTO: Packaging Code must not exceed 50 characters.")
     String packagingCode,
 

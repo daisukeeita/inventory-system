@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,25 @@ public class UnitsOfMeasurePersistenceAdapter implements UnitsOfMeasureRepositor
     Optional<UnitsOfMeasureJpaEntity> optionalEntity = unitsOfMeasureJpaRepository.findByName(name);
 
     return optionalEntity.map(entity -> unitsOfMeasurePersistenceMapper.toDomainEntity(entity));
+  }
+
+  @Override
+  public boolean existsById(int id) {
+    return unitsOfMeasureJpaRepository.existsById(id);
+  }
+
+  @Override
+  public Long countByIdIn(List<Integer> listId) {
+    return unitsOfMeasureJpaRepository.countByIdIn(listId);
+  }
+
+  @Override
+  public List<UnitsOfMeasure> findAllById(List<Integer> listId) {
+    List<UnitsOfMeasureJpaEntity> listJpaEntity = unitsOfMeasureJpaRepository.findAllById(listId);
+
+    return listJpaEntity.stream()
+        .map(entity -> unitsOfMeasurePersistenceMapper.toDomainEntity(entity))
+        .toList();
   }
 
   @Override

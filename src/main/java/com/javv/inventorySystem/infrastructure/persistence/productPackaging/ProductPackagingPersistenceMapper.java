@@ -2,64 +2,40 @@ package com.javv.inventorySystem.infrastructure.persistence.productPackaging;
 
 import org.springframework.stereotype.Component;
 
-import com.javv.inventorySystem.infrastructure.persistence.product.ProductPersistenceMapper;
-import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasurePersistenceMapper;
+import com.javv.inventorySystem.domain.model.product.ProductPackaging;
+import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaEntity;
+import com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure.UnitsOfMeasureJpaEntity;
 
 @Component
 public class ProductPackagingPersistenceMapper {
 
-  private UnitsOfMeasurePersistenceMapper unitsOfMeasurePersistenceMapper;
-  private ProductPersistenceMapper productPersistenceMapper;
+  public ProductPackaging toDomainEntity(ProductPackagingJpaEntity productPackagingJpaEntity) {
 
-  public ProductPackagingPersistenceMapper(
-      ProductPersistenceMapper productPersistenceMapper,
-      UnitsOfMeasurePersistenceMapper unitsOfMeasurePersistenceMapper) {
-    this.productPersistenceMapper = productPersistenceMapper;
-    this.unitsOfMeasurePersistenceMapper = unitsOfMeasurePersistenceMapper;
+    ProductPackaging productPackaging = new ProductPackaging();
+    productPackaging.setId(productPackagingJpaEntity.getId());
+    productPackaging.setPackagingCode(productPackagingJpaEntity.getPackagingCode());
+    productPackaging.setProductId(productPackagingJpaEntity.getProduct().getId());
+    productPackaging.setUnitsOfMeasureId(productPackagingJpaEntity.getUnitsOfMeasure().getId());
+    productPackaging.setConversionFactor(productPackagingJpaEntity.getConversionFactor());
+    productPackaging.setPrice(productPackagingJpaEntity.getPrice());
+
+    return productPackaging;
+
   }
 
-  // public ProductPackagingJpaEntity toJpaEntity(ProductPackaging
-  // productPackaging) {
-  //
-  // ProductJpaEntity productJpaEntity =
-  // productPersistenceMapper.toJpaEntity(productPackaging.getProductId());
-  //
-  // UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity =
-  // unitsOfMeasurePersistenceMapper
-  // .toJpaEntity(productPackaging.getUnitsOfMeasureId());
-  //
-  // ProductPackagingJpaEntity productPackagingJpaEntity = new
-  // ProductPackagingJpaEntity();
-  //
-  // // productPackagingJpaEntity.setId(productPackaging.getId());
-  // productPackagingJpaEntity.setPackagingCode(productPackaging.getPackagingCode());
-  // productPackagingJpaEntity.setProduct(productJpaEntity);
-  // productPackagingJpaEntity.setUnitsOfMeasure(unitsOfMeasureJpaEntity);
-  // productPackagingJpaEntity.setConversionFactor(productPackaging.getConversionFactor());
-  // productPackagingJpaEntity.setPrice(productPackaging.getPrice());
-  //
-  // return productPackagingJpaEntity;
-  // }
+  public ProductPackagingJpaEntity toJpaEntity(
+      ProductPackaging productPackaging,
+      ProductJpaEntity productJpaEntity,
+      UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity) {
 
-  // public ProductPackaging toDomainEntity(ProductPackagingJpaEntity
-  // productPackagingJpaEntity) {
-  //
-  // Product product =
-  // productPersistenceMapper.toDomainEntity(productPackagingJpaEntity.getProduct());
-  //
-  // UnitsOfMeasure unitsOfMeasure =
-  // unitsOfMeasurePersistenceMapper.toDomainEntity(
-  // productPackagingJpaEntity.getUnitsOfMeasure());
-  //
-  // ProductPackaging productPackaging = new ProductPackaging();
-  //
-  // productPackaging.setId(productPackagingJpaEntity.getId());
-  // productPackaging.setPackagingCode(productPackagingJpaEntity.getPackagingCode());
-  // productPackaging.setProduct(product);
-  // productPackaging.setUnitsOfMeasure(unitsOfMeasure);
-  // productPackaging.setConversionFactor(productPackagingJpaEntity.getConversionFactor());
-  // productPackaging.setPrice(productPackagingJpaEntity.getPrice());
-  //
-  // return productPackaging;
-  // }
+    ProductPackagingJpaEntity productPackagingJpaEntity = new ProductPackagingJpaEntity();
+    productPackagingJpaEntity.setId(productPackaging.getId());
+    productPackagingJpaEntity.setPackagingCode(productPackaging.getPackagingCode());
+    productPackagingJpaEntity.setProduct(productJpaEntity);
+    productPackagingJpaEntity.setUnitsOfMeasure(unitsOfMeasureJpaEntity);
+    productPackagingJpaEntity.setConversionFactor(productPackaging.getConversionFactor());
+    productPackagingJpaEntity.setPrice(productPackaging.getPrice());
+
+    return productPackagingJpaEntity;
+  }
 }

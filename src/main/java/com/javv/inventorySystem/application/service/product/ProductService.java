@@ -19,6 +19,7 @@ import com.javv.inventorySystem.application.command.productPackaging.ProductPack
 import com.javv.inventorySystem.application.service.supplier.SupplierService;
 import com.javv.inventorySystem.domain.exception.EntityAlreadyExistsException;
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
+import com.javv.inventorySystem.domain.exception.ServiceOperationException;
 import com.javv.inventorySystem.domain.model.product.Product;
 import com.javv.inventorySystem.domain.model.product.ProductPackaging;
 import com.javv.inventorySystem.domain.model.product.UnitsOfMeasure;
@@ -45,13 +46,36 @@ public class ProductService {
   @Transactional
   public ProductResponseRead saveProduct(ProductRegisterCommand productRegisterCommand) {
 
-    Product product = toDomainEntity(productRegisterCommand);
-
     try {
+      if (!supplierService.checkIfExistsById(productRegisterCommand.supplierId())) {
+        throw new ResourceNotFoundException(
+            "Supplier does not exist using id: " + productRegisterCommand.supplierId() + ".");
+      }
+
+      if (!unitsOfMeasureService.checkIfExistsById(productRegisterCommand.baseUnitOfMeasureId())) {
+        throw new ResourceNotFoundException(
+            "Unit of Measure does not exists using id: " + productRegisterCommand.baseUnitOfMeasureId() + ".");
+      }
+
+      List<Integer> listUomId = productRegisterCommand.listPackagingCommand()
+          .stream()
+          .map(packaging -> packaging.unitOfMeasureId())
+          .toList();
+
+      if (!unitsOfMeasureService.allIdExists(listUomId)) {
+        throw new ResourceNotFoundException(
+            "One or more unit of measure IDs do not exists.");
+      }
+
+      Product product = toDomainEntity(productRegisterCommand);
+
       return toProductResponseRead(productRepositoryInterface.save(product));
     } catch (DataIntegrityViolationException exception) {
-      throw new EntityAlreadyExistsException(
-          "Product Service: " + exception.getMessage());
+      throw new ServiceOperationException(
+          "Product Creation Failed: The provided details conflict with an existing product.");
+    } catch (ResourceNotFoundException exception) {
+      throw new ServiceOperationException(
+          "Product Creation Failed: " + exception.getMessage());
     }
   }
 
@@ -62,7 +86,7 @@ public class ProductService {
     UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.getById(productUpdateCommand.baseUnitOfMeasureId());
 
     Product product = productRepositoryInterface
-        .getById(id)
+        .findById(id)
         .orElseThrow(
             () -> new ResourceNotFoundException("Product was not found using id: '" + id + "'"));
 
@@ -79,7 +103,7 @@ public class ProductService {
   }
 
   public Product getBySku(String sku) {
-    Optional<Product> optionalProduct = productRepositoryInterface.getBySku(sku);
+    Optional<Product> optionalProduct = productRepositoryInterface.findBySku(sku);
     Product product = optionalProduct.orElseThrow(
         () -> new ResourceNotFoundException(
             "Product Service: Product was not found using SKU: '" + sku + "'"));
@@ -88,7 +112,7 @@ public class ProductService {
   }
 
   public Product getById(Long id) {
-    Optional<Product> optionalProduct = productRepositoryInterface.getById(id);
+    Optional<Product> optionalProduct = productRepositoryInterface.findById(id);
     Product product = optionalProduct.orElseThrow(
         () -> new ResourceNotFoundException(
             "Product Service: Product was not found using ID: '" + id + "'"));
@@ -97,13 +121,13 @@ public class ProductService {
   }
 
   public List<Product> getAllById(List<Long> id) {
-    return productRepositoryInterface.getAllById(id);
+    return productRepositoryInterface.findAllById(id);
   }
 
   public Page<Product> getPageableProduct(int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
 
-    return productRepositoryInterface.getPageableProduct(pageable);
+    return productRepositoryInterface.findAll(pageable);
   }
 
   public boolean checkIfExistsById(Long id) {
@@ -147,25 +171,17 @@ public class ProductService {
   }
 
   private Product toDomainEntity(ProductRegisterCommand productRegisterCommand) {
-    Supplier supplier = supplierService
-        .getById(productRegisterCommand.supplierId());
-
-    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService
-        .getById(productRegisterCommand.baseUnitOfMeasureId());
 
     Product product = new Product();
     product.setSku(productRegisterCommand.sku());
     product.setName(productRegisterCommand.name());
-    product.setSupplierId(supplier.getId());
-    product.setBaseUnitsOfMeasureId(unitsOfMeasure.getId());
+    product.setSupplierId(productRegisterCommand.supplierId());
+    product.setBaseUnitsOfMeasureId(productRegisterCommand.baseUnitOfMeasureId());
 
     for (ProductPackagingRegisterCommand packaging : productRegisterCommand.listPackagingCommand()) {
-      UnitsOfMeasure unitMeasure = unitsOfMeasureService.getById(
-          packaging.unitOfMeasureId());
-
       product.addPackaging(
           packaging.packagingCode(),
-          unitMeasure.getId(),
+          packaging.unitOfMeasureId(),
           packaging.conversionFactor(),
           packaging.price());
     }

@@ -1,5 +1,10 @@
 package com.javv.inventorySystem.presentation.product.dto;
 
+import java.util.List;
+
+import com.javv.inventorySystem.presentation.productPackaging.dto.ProductPackagingUpdateDto;
+
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,8 +17,13 @@ public record ProductUpdateDto(
     String name,
 
     @NotNull(message = "Product Update DTO: Supplier ID is required for update.") 
-    int supplierId,
+    Integer supplierId,
 
     @NotNull(message = "Product Update DTO: Base Units of Measure ID is required for update.") 
-    int baseUnitOfMeasureId) {
+    Integer baseUnitOfMeasureId,
+
+    @NotNull(message = "Product Update DTO: List of Packages is required for update.")
+    @Valid
+    List<ProductPackagingUpdateDto> listPackages
+    ) {
 }

@@ -20,20 +20,20 @@ public class ProductPackagingService {
 
   public List<ProductPackaging> getByProductId(Long productId) {
     List<ProductPackaging> listProductPackaging = productPackagingRepositoryInterface
-        .getByProductId(productId);
+        .findByProductId(productId);
 
     return listProductPackaging;
   }
 
   public ProductPackaging getById(Long id) {
     ProductPackaging productPackaging = productPackagingRepositoryInterface
-        .getById(id)
+        .findById(id)
         .orElseThrow(() -> new EntityNotFoundException("Product Packaging Service: Packaging not found."));
 
     return productPackaging;
   }
 
   public List<ProductPackaging> getAllById(List<Long> listId) {
-    return productPackagingRepositoryInterface.getAllById(listId);
+    return productPackagingRepositoryInterface.findAllById(listId);
   }
 }

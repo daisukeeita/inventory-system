@@ -44,7 +44,7 @@ public class ProductService {
   }
 
   @Transactional
-  public ProductResponseRead saveProduct(ProductRegisterCommand productRegisterCommand) {
+  public ProductResponseRead create(ProductRegisterCommand productRegisterCommand) {
 
     try {
       if (!supplierService.checkIfExistsById(productRegisterCommand.supplierId())) {
@@ -81,7 +81,7 @@ public class ProductService {
 
   // TODO: Modify the updateProduct method
   @Transactional
-  public Product updateProduct(Long id, ProductUpdateCommand productUpdateCommand) {
+  public Product update(Long id, ProductUpdateCommand productUpdateCommand) {
     Supplier supplier = supplierService.getById(productUpdateCommand.supplierId());
     UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.getById(productUpdateCommand.baseUnitOfMeasureId());
 
@@ -124,7 +124,7 @@ public class ProductService {
     return productRepositoryInterface.findAllById(id);
   }
 
-  public Page<Product> getPageableProduct(int page, int size) {
+  public Page<Product> getAll(int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
 
     return productRepositoryInterface.findAll(pageable);
@@ -132,6 +132,15 @@ public class ProductService {
 
   public boolean checkIfExistsById(Long id) {
     return productRepositoryInterface.existsById(id);
+  }
+
+  public boolean allIdsExists(List<Long> listId) {
+    if (listId == null || listId.isEmpty()) {
+      return false;
+    }
+
+    Long existCount = productRepositoryInterface.countByIdIn(listId);
+    return existCount == listId.size();
   }
 
   private ProductResponseRead toProductResponseRead(Product product) {

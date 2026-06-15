@@ -8,4 +8,6 @@ public interface ProductPackagingJpaRepository
     extends JpaRepository<ProductPackagingJpaEntity, Long> {
 
   List<ProductPackagingJpaEntity> findByProductId(Long id);
+
+  List<ProductPackagingJpaEntity> findAllById(List<Long> listId);
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,18 +31,14 @@ import com.javv.inventorySystem.domain.repository.ProductRepositoryInterface;
 @Transactional(readOnly = true)
 public class ProductService {
 
-  private final ProductRepositoryInterface productRepositoryInterface;
-  private final SupplierService supplierService;
-  private final UnitsOfMeasureService unitsOfMeasureService;
+  @Autowired
+  private ProductRepositoryInterface productRepositoryInterface;
 
-  public ProductService(
-      ProductRepositoryInterface productRepositoryInterface,
-      SupplierService supplierService,
-      UnitsOfMeasureService unitsOfMeasureService) {
-    this.productRepositoryInterface = productRepositoryInterface;
-    this.supplierService = supplierService;
-    this.unitsOfMeasureService = unitsOfMeasureService;
-  }
+  @Autowired
+  private SupplierService supplierService;
+
+  @Autowired
+  private UnitsOfMeasureService unitsOfMeasureService;
 
   @Transactional
   public ProductResponseRead create(ProductRegisterCommand productRegisterCommand) {
@@ -106,7 +103,7 @@ public class ProductService {
     Optional<Product> optionalProduct = productRepositoryInterface.findBySku(sku);
     Product product = optionalProduct.orElseThrow(
         () -> new ResourceNotFoundException(
-            "Product Service: Product was not found using SKU: '" + sku + "'"));
+            "Product was not found using SKU: '" + sku + "'"));
 
     return product;
   }
@@ -115,7 +112,7 @@ public class ProductService {
     Optional<Product> optionalProduct = productRepositoryInterface.findById(id);
     Product product = optionalProduct.orElseThrow(
         () -> new ResourceNotFoundException(
-            "Product Service: Product was not found using ID: '" + id + "'"));
+            "Product was not found using ID: '" + id + "'"));
 
     return product;
   }

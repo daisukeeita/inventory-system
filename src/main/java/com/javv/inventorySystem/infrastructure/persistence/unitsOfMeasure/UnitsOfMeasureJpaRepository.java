@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.infrastructure.persistence.unitsOfMeasure;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,4 +15,7 @@ public interface UnitsOfMeasureJpaRepository
   Optional<UnitsOfMeasureJpaEntity> findByName(String name);
 
   Page<UnitsOfMeasureJpaEntity> findAll(Pageable pageable);
+
+  Long countByIdIn(List<Integer> listId);
+
 }

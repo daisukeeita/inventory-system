@@ -13,13 +13,13 @@ public interface ProductRepositoryInterface {
 
   Product update(Product product);
 
-  Optional<Product> getBySku(String sku);
+  Optional<Product> findBySku(String sku);
 
-  Optional<Product> getById(Long id);
+  Optional<Product> findById(Long id);
 
-  List<Product> getAllById(List<Long> id);
+  List<Product> findAllById(List<Long> id);
 
-  Page<Product> getPageableProduct(Pageable pageable);
+  Page<Product> findAll(Pageable pageable);
 
   boolean existsById(Long id);
 }

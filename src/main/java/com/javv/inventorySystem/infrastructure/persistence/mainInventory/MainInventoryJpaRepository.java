@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MainInventoryJpaRepository extends JpaRepository<MainInventoryJpaEntity, Integer> {
 
-  Optional<MainInventoryJpaEntity> findByProductJpaEntityId(Long id);
+  Optional<MainInventoryJpaEntity> findByProductSku(String productSku);
 }

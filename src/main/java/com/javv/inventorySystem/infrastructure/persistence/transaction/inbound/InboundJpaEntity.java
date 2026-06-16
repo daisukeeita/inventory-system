@@ -78,7 +78,7 @@ public class InboundJpaEntity {
     this.listInboundItem = listInboundItem;
   }
 
-  public void addItem(
+  public InboundItemJpaEntity addItem(
       ProductJpaEntity productJpaEntity,
       ProductPackagingJpaEntity productPackagingJpaEntity,
       int quantityReceived,
@@ -93,6 +93,8 @@ public class InboundJpaEntity {
     inboundItemJpaEntity.setBaseQuantityEquivalent(baseQuantityEquivalent);
 
     this.listInboundItem.add(inboundItemJpaEntity);
+
+    return inboundItemJpaEntity;
   }
 
   public void setId(Long id) {

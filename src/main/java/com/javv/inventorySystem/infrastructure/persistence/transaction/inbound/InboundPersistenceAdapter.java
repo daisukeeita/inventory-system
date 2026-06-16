@@ -55,13 +55,15 @@ public class InboundPersistenceAdapter implements InboundRepositoryInterface {
   @Override
   public Optional<Inbound> findById(Long id) {
     Optional<InboundJpaEntity> optionalEntity = inboundJpaRepository.findById(id);
-    return null;
+    return optionalEntity.map(
+        entity -> inboundPersistenceMapper.toDomainEntity(entity));
   }
 
   @Override
   public Page<Inbound> findAll(Pageable pageable) {
-    // TODO Auto-generated method stub
-    return null;
+    Page<InboundJpaEntity> pageableInbound = inboundJpaRepository.findAll(pageable);
+    return pageableInbound.map(
+        entity -> inboundPersistenceMapper.toDomainEntity(entity));
   }
 
   @Override

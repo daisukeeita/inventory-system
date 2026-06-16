@@ -11,13 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.javv.inventorySystem.application.command.mainInventory.MainInventoryRegisterCommand;
 import com.javv.inventorySystem.application.command.mainInventory.MainInventoryResponseRead;
-import com.javv.inventorySystem.application.command.mainInventory.MainInventoryUpdateCommand;
 import com.javv.inventorySystem.application.service.product.ProductService;
 import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.exception.ServiceOperationException;
 import com.javv.inventorySystem.domain.model.mainInventory.MainInventory;
 import com.javv.inventorySystem.domain.model.product.Product;
 import com.javv.inventorySystem.domain.repository.MainInventoryRepositoryInterface;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,40 +44,54 @@ public class MainInventoryService {
           mainInventoryRepositoryInterface.save(mainInventory));
     } catch (DataIntegrityViolationException exception) {
       throw new ServiceOperationException(
-          "Main Inventory Creation Failed: Inventory for this product already exists.");
+          "Main Inventory Creation Failed: The provided details conflict with an existing inventory.");
+    } catch (EntityNotFoundException exception) {
+      throw new ServiceOperationException(
+          "Main Inventory Creation Failed: " + exception.getMessage() + ".");
     }
   }
 
   @Transactional
-  public void update(MainInventoryUpdateCommand mainInventoryUpdateCommand) {
+  public MainInventory getOrInitializeInventory(String productSku) {
 
-    MainInventory mainInventory = new MainInventory();
-    mainInventory.setId(mainInventoryUpdateCommand.id());
-    mainInventory.setProductSku(mainInventoryUpdateCommand.productId());
-    mainInventory.setQuantityOnHand(
-        mainInventoryUpdateCommand.quantityOnHand());
-    mainInventory.setReorderLevel(
-        mainInventoryUpdateCommand.reorderLevel());
+    try {
 
-    mainInventoryRepositoryInterface.update(mainInventory);
+      return mainInventoryRepositoryInterface.findByProductSku(productSku)
+          .orElseGet(() -> {
+            MainInventory mainInventory = new MainInventory();
+            mainInventory.setProductSku(productSku);
+            mainInventory.setQuantityOnHand(0);
+            mainInventory.setReorderLevel(100);
+
+            return mainInventoryRepositoryInterface.save(mainInventory);
+          });
+    } catch (DataIntegrityViolationException exception) {
+      throw new ServiceOperationException(
+          "Main Inventory Initialization Failed: The provided details conflict with an existing inventory.");
+    }
 
   }
 
   @Transactional
-  public void addStockInventory(Long productId, int quantityReceived) {
+  public void incrementStock(String productSku, int quantityReceived) {
     try {
-      MainInventory mainInventory = getByProductId(productId);
+      MainInventory mainInventory = getByProductSku(productSku);
 
       mainInventory.increaseStock(quantityReceived);
 
       mainInventoryRepositoryInterface.update(mainInventory);
     } catch (DataIntegrityViolationException exception) {
       throw new ServiceOperationException(
-          "Inventory Increase Stock Failed: The provided details conflict with an existing product.");
+          "Inventory Increase Stock Failed: The provided details conflict with an existing inventory.");
     } catch (ResourceNotFoundException exception) {
       throw new ServiceOperationException(
-          "Inventory Increase Stock Failed: " + exception.getMessage());
+          "Inventory Increase Stock Failed: Inventory must exist before incrementing stock. " + exception.getMessage());
     }
+  }
+
+  @Transactional
+  public void decrementStock(String productSku, int quantityRetrieve) {
+    // TODO: update this
   }
 
   public MainInventory getById(int id) {
@@ -89,17 +104,13 @@ public class MainInventoryService {
 
   }
 
-  public MainInventory getByProductId(Long productId) {
+  public MainInventory getByProductSku(String productSku) {
     MainInventory mainInventory = mainInventoryRepositoryInterface
-        .findByProductId(productId)
+        .findByProductSku(productSku)
         .orElseThrow(() -> new ResourceNotFoundException(
-            "Inventory not found using Product ID: " + productId + "."));
+            "Inventory not found with Product SKU: " + productSku + "."));
 
     return mainInventory;
-  }
-
-  public MainInventory getOrInitializeInventory(Long productId) {
-    return null;
   }
 
   public Page<MainInventory> getAllInventory(int page, int size) {
@@ -112,7 +123,7 @@ public class MainInventoryService {
 
     MainInventory mainInventory = new MainInventory();
 
-    mainInventory.setProductSku(mainInventoryRegisterCommand.productId());
+    mainInventory.setProductSku(mainInventoryRegisterCommand.productSku());
     mainInventory.setQuantityOnHand(mainInventoryRegisterCommand.quantityOnHand());
     mainInventory.setReorderLevel(mainInventoryRegisterCommand.reorderLevel());
 
@@ -125,7 +136,7 @@ public class MainInventoryService {
         mainInventory,
         "Main Inventory Service: Cannot map a null MainInventory to a Response Read Record.");
 
-    Product product = productService.getById(mainInventory.getProductSku());
+    Product product = productService.getBySku(mainInventory.getProductSku());
 
     return new MainInventoryResponseRead(
         mainInventory.getId(),

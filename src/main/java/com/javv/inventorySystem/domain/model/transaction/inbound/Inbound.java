@@ -9,7 +9,7 @@ import java.util.UUID;
 public class Inbound {
 
   private Long id;
-  private Integer supplierId;
+  private int supplierId;
   private UUID encoderId;
   private String invoiceNumber;
   private LocalDateTime dateReceived;
@@ -36,13 +36,13 @@ public class Inbound {
   }
 
   public InboundItem addInboundItem(
-      Long productId,
+      String productSku,
       Long packagingId,
       int quantityReceived,
       int baseQuantityEquivalent) {
 
     InboundItem item = new InboundItem();
-    item.setProductId(productId);
+    item.setProductSku(productSku);
     item.setPackagingId(packagingId);
     item.setQuantityReceived(quantityReceived);
     item.setBasedQuantityEquivalent(baseQuantityEquivalent);

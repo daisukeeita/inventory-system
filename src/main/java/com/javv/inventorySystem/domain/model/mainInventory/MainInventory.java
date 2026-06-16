@@ -7,7 +7,7 @@ public class MainInventory {
   private Integer id;
   private String productSku;
   private int quantityOnHand;
-  private int reorderLevel = 100;
+  private int reorderLevel;
   private Instant createdAt;
   private Instant updatedAt;
 

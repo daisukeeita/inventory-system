@@ -9,5 +9,7 @@ public interface ProductJpaRepository extends JpaRepository<ProductJpaEntity, Lo
 
   Optional<ProductJpaEntity> findBySku(String sku);
 
+  ProductJpaEntity getReferenceBySku(String sku);
+
   Long countByIdIn(List<Long> listId);
 }

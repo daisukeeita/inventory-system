@@ -1,51 +1,51 @@
 package com.javv.inventorySystem.infrastructure.persistence.transaction.inbound;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.javv.inventorySystem.domain.model.transaction.inbound.Inbound;
 import com.javv.inventorySystem.domain.model.transaction.inbound.InboundItem;
 import com.javv.inventorySystem.domain.repository.InboundRepositoryInterface;
 import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaEntity;
-import com.javv.inventorySystem.infrastructure.persistence.product.ProductPersistenceAdapter;
+import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaRepository;
 import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaEntity;
-import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingPersistenceAdapter;
+import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaRepository;
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
-import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierPersistenceAdapter;
+import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaRepository;
 import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaEntity;
-import com.javv.inventorySystem.infrastructure.persistence.user.UserPersistenceAdapter;
+import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaRepository;
 
 @Repository
 public class InboundPersistenceAdapter implements InboundRepositoryInterface {
 
+  @Autowired
   private InboundJpaRepository inboundJpaRepository;
-  private UserPersistenceAdapter userPersistenceAdapter;
-  private ProductPersistenceAdapter productPersistenceAdapter;
-  private SupplierPersistenceAdapter supplierPersistenceAdapter;
-  private ProductPackagingPersistenceAdapter productPackagingPersistenceAdapter;
 
-  public InboundPersistenceAdapter(
-      InboundJpaRepository inboundJpaRepository,
-      UserPersistenceAdapter userPersistenceAdapter,
-      ProductPersistenceAdapter productPersistenceAdapter,
-      SupplierPersistenceAdapter supplierPersistenceAdapter,
-      ProductPackagingPersistenceAdapter productPackagingPersistenceAdapter) {
-    this.inboundJpaRepository = inboundJpaRepository;
-    this.userPersistenceAdapter = userPersistenceAdapter;
-    this.productPersistenceAdapter = productPersistenceAdapter;
-    this.supplierPersistenceAdapter = supplierPersistenceAdapter;
-    this.productPackagingPersistenceAdapter = productPackagingPersistenceAdapter;
-  }
+  @Autowired
+  private UserJpaRepository userJpaRepository;
+
+  @Autowired
+  private ProductJpaRepository productJpaRepository;
+
+  @Autowired
+  private SupplierJpaRepository supplierJpaRepository;
+
+  @Autowired
+  private ProductPackagingJpaRepository productPackagingJpaRepository;
 
   @Override
   public Inbound save(Inbound inbound) {
 
-    UserJpaEntity userJpaEntity = userPersistenceAdapter.getReferenceById(
+    UserJpaEntity userJpaEntity = userJpaRepository.getReferenceById(
         inbound.getEncoderId());
 
-    SupplierJpaEntity supplierJpaEntity = supplierPersistenceAdapter.getReferenceById(
+    SupplierJpaEntity supplierJpaEntity = supplierJpaRepository.getReferenceById(
         inbound.getSupplierId());
 
     InboundJpaEntity inboundJpaEntity = new InboundJpaEntity();
@@ -58,10 +58,10 @@ public class InboundPersistenceAdapter implements InboundRepositoryInterface {
 
     for (InboundItem item : inbound.getListInboundItem()) {
 
-      ProductJpaEntity productJpaEntity = productPersistenceAdapter
-          .getReferenceById(item.getProductId());
+      ProductJpaEntity productJpaEntity = productJpaRepository
+          .getReferenceBySku(item.getProductSku());
 
-      ProductPackagingJpaEntity productPackagingJpaEntity = productPackagingPersistenceAdapter
+      ProductPackagingJpaEntity productPackagingJpaEntity = productPackagingJpaRepository
           .getReferenceById(item.getPackagingId());
 
       inboundJpaEntity.addItem(
@@ -84,7 +84,7 @@ public class InboundPersistenceAdapter implements InboundRepositoryInterface {
 
     for (InboundItemJpaEntity itemJpa : savedEntity.getListInboundItem()) {
       inboundDomain.addInboundItem(
-          itemJpa.getProduct().getId(),
+          itemJpa.getProduct().getSku(),
           itemJpa.getProductPackagingJpaEntity().getId(),
           itemJpa.getQuantityReceived(),
           itemJpa.getBaseQuantityEquivalent());
@@ -99,19 +99,19 @@ public class InboundPersistenceAdapter implements InboundRepositoryInterface {
   }
 
   @Override
-  public Optional<Inbound> getById(Long id) {
+  public Optional<Inbound> findById(Long id) {
     Optional<InboundJpaEntity> optionalEntity = inboundJpaRepository.findById(id);
     return null;
   }
 
   @Override
-  public List<Inbound> getAll() {
+  public Page<Inbound> findAll(Pageable pageable) {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public List<Inbound> getListByDate() {
+  public List<Inbound> findByDateReceived(LocalDateTime dateReceived) {
     // TODO Auto-generated method stub
     return null;
   }

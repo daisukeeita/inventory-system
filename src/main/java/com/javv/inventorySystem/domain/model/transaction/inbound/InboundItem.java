@@ -4,7 +4,7 @@ public class InboundItem {
 
   private Long id;
   private Long inboundId;
-  private Long productId;
+  private String productSku;
   private Long packagingId;
   private int quantityReceived;
   private int baseQuantityEquivalent;
@@ -14,12 +14,12 @@ public class InboundItem {
 
   public InboundItem(
       Long inboundId,
-      Long productId,
+      String productSku,
       Long packagingId,
       int quantityReceived,
       int baseQuantityEquivalent) {
     this.inboundId = inboundId;
-    this.productId = productId;
+    this.productSku = productSku;
     this.packagingId = packagingId;
     this.quantityReceived = quantityReceived;
     this.baseQuantityEquivalent = baseQuantityEquivalent;
@@ -33,8 +33,8 @@ public class InboundItem {
     this.inboundId = inboundId;
   }
 
-  public void setProductId(Long productId) {
-    this.productId = productId;
+  public void setProductSku(String productSku) {
+    this.productSku = productSku;
   }
 
   public void setPackagingId(Long packagingId) {
@@ -57,8 +57,8 @@ public class InboundItem {
     return inboundId;
   }
 
-  public Long getProductId() {
-    return productId;
+  public String getProductSku() {
+    return productSku;
   }
 
   public Long getPackagingId() {

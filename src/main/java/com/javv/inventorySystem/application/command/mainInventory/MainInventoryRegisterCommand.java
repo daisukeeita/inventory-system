@@ -1,27 +1,31 @@
 package com.javv.inventorySystem.application.command.mainInventory;
 
-import java.util.Objects;
+import com.javv.inventorySystem.domain.exception.RecordInitializationException;
 
-public record MainInventoryRegisterCommand(Long productId, int quantityOnHand, int reorderLevel) {
+public record MainInventoryRegisterCommand(String productSku, Integer quantityOnHand, Integer reorderLevel) {
   public MainInventoryRegisterCommand {
-    Objects.requireNonNull(
-        productId,
-        "Main Inventory Register Command: Product ID cannot be null.");
+    if (productSku == null || productSku.isBlank()) {
+      throw new RecordInitializationException(
+          "Main Inventory Register Command: Product SKU cannot be null or empty.");
+    }
 
-    Objects.requireNonNull(
-        quantityOnHand,
-        "Main Inventory Register Command: Quantity on Hand cannot be null.");
-    Objects.requireNonNull(
-        reorderLevel,
-        "Main Inventory Register Command: Reorder Level cannot be null.");
+    if (quantityOnHand == null) {
+      throw new RecordInitializationException(
+          "Main Inventory Register Command: Quantity on Hand cannot be null.");
+    }
+
+    if (reorderLevel == null) {
+      throw new RecordInitializationException(
+          "Main Inventory Register Command: Reorder Level cannot be null.");
+    }
 
     if (quantityOnHand < 0) {
-      throw new IllegalArgumentException(
+      throw new RecordInitializationException(
           "Main Inventory Register Command: Quantity on Hand cannot be less than zero.");
     }
 
     if (reorderLevel < 0) {
-      throw new IllegalArgumentException(
+      throw new RecordInitializationException(
           "Main Inventory Register Command: Reorder Level cannot be less than zero.");
     }
   }

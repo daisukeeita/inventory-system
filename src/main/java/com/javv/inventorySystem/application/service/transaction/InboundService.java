@@ -77,7 +77,7 @@ public class InboundService {
 
     Inbound inbound = new Inbound();
 
-    inbound.setSupplierSku(supplierId);
+    inbound.setSupplierId(supplierId);
     inbound.setEncoderId(encoderId);
     inbound.setInvoiceNumber(inboundRegisterCommand.invoiceNumber());
     inbound.setDateReceived(inboundRegisterCommand.dateReceived());
@@ -100,18 +100,16 @@ public class InboundService {
       int baseQuantityEquivalent = packaging.calculateBaseQuantity(item.quantityReceived());
 
       inbound.addInboundItem(
-          product.getId(),
+          product.getSku(),
           packaging.getId(),
           item.quantityReceived(),
           baseQuantityEquivalent);
-
     }
 
     Inbound savedInbound = inboundRepositoryInterface.save(inbound);
 
     for (InboundItem item : savedInbound.getListInboundItem()) {
-      // mainInventoryService.incrementStock(item.getProductId(),
-      // item.getBaseQuantityEquivalent());
+      mainInventoryService.incrementStock(item.getProductSku(), item.getBaseQuantityEquivalent());
     }
   }
 }

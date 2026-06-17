@@ -9,5 +9,5 @@ public interface ProductPackagingJpaRepository
 
   List<ProductPackagingJpaEntity> findByProductId(Long id);
 
-  List<ProductPackagingJpaEntity> findAllById(List<Long> listId);
+  List<ProductPackagingJpaEntity> findAllByIdIn(List<Long> listId);
 }

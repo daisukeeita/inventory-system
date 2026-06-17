@@ -50,7 +50,7 @@ public class InboundJpaEntity {
   @Column(name = "date_received", nullable = false)
   private LocalDateTime dateReceived;
 
-  @OneToMany(mappedBy = "inboudJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "inboundJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<InboundItemJpaEntity> listInboundItem = new ArrayList<>();
 
   @CreatedDate

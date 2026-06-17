@@ -20,7 +20,6 @@ import jakarta.persistence.Table;
 @Table(name = "users")
 public class UserJpaEntity {
   @Id
-  @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
@@ -36,12 +35,6 @@ public class UserJpaEntity {
   @Column(name = "status", nullable = false)
   private String status;
 
-  @Column(name = "created_at", nullable = false)
-  private LocalDate createdAt = LocalDate.now();
-
-  @Column(name = "updated_at", nullable = false)
-  private LocalDate updatedAt = LocalDate.now();
-
   @ManyToOne
   @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
   private RoleJpaEntity role;
@@ -52,7 +45,14 @@ public class UserJpaEntity {
   @OneToOne(mappedBy = "userJpaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
   private ContactInformationJpaEntity contactInformationJpaEntity;
 
-  public UserJpaEntity() {}
+  @Column(name = "created_at", nullable = false)
+  private LocalDate createdAt = LocalDate.now();
+
+  @Column(name = "updated_at", nullable = false)
+  private LocalDate updatedAt = LocalDate.now();
+
+  public UserJpaEntity() {
+  }
 
   public UserJpaEntity(
       String username,

@@ -13,13 +13,9 @@ public interface UnitsOfMeasureRepositoryInterface {
 
   UnitsOfMeasure update(UnitsOfMeasure unitsOfMeasure);
 
-  Optional<UnitsOfMeasure> findById(int id);
-
   Optional<UnitsOfMeasure> findByName(String name);
 
-  boolean existsById(int id);
-
-  Long countByIdIn(List<Integer> listId);
+  List<String> findExistingNames(List<String> names);
 
   List<UnitsOfMeasure> findAllById(List<Integer> listId);
 

@@ -14,7 +14,7 @@ public record SupplierRegisterDto(
     String contactName,
 
     @NotBlank(message = "Supplier Register DTO: Phone Number is required.") 
-    @Size(min = 11, max = 15, message = "Supplier Register DTO: Phone Number must be between 10 and 15 characters.")
+    @Size(min = 11, max = 15, message = "Supplier Register DTO: Phone Number must be between 11 and 15 characters.")
     @Pattern(
       regexp = "^(0[2-9]\\d{0,2}|\\(0[2-9]\\d{0,2}\\))?[0-9\\-\\s]+$", 
       message = "Supplier Register DTO: Invalid PH phone number format. Use digits, dashes, or parentheses."

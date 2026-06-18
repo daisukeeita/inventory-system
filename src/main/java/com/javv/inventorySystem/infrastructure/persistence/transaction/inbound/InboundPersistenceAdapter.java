@@ -19,9 +19,7 @@ import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaEnt
 import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaRepository;
 import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaRepository;
-import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaRepository;
-import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaRepository;
 
 @Repository
@@ -55,14 +53,15 @@ public class InboundPersistenceAdapter implements InboundRepositoryInterface {
     return inboundPersistenceMapper.toDomainEntity(savedEntity);
   }
 
+  // TODO: Update the method
   @Override
   public Inbound update(Inbound inbound) {
 
-    SupplierJpaEntity supplierJpaEntity = supplierJpaRepository
-        .getReferenceById(inbound.getSupplierId());
+    // SupplierJpaEntity supplierJpaEntity = supplierJpaRepository
+    // .getReferenceById(inbound.getSupplierId());
 
-    UserJpaEntity userJpaEntity = userJpaRepository
-        .getReferenceById(inbound.getEncoderId());
+    // UserJpaEntity userJpaEntity = userJpaRepository
+    // .getReferenceById(inbound.getEncoderId());
 
     Map<Long, InboundItem> mappedInboundItems = inbound.getListInboundItem()
         .stream()
@@ -75,8 +74,8 @@ public class InboundPersistenceAdapter implements InboundRepositoryInterface {
         .orElseThrow(() -> new ResourceNotFoundException(
             "Inbound Persistence: Inbound does not exist with ID: " + inbound.getId() + "."));
 
-    inboundJpaEntity.setSupplierJpaEntity(supplierJpaEntity);
-    inboundJpaEntity.setUserJpaEntity(userJpaEntity);
+    // inboundJpaEntity.setSupplierJpaEntity(supplierJpaEntity);
+    // inboundJpaEntity.setUserJpaEntity(userJpaEntity);
     inboundJpaEntity.setInvoiceNumber(inbound.getInvoiceNumber());
     inboundJpaEntity.setDateReceived(inbound.getDateReceived());
 

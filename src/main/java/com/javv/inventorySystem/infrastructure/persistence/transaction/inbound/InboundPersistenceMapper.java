@@ -9,9 +9,7 @@ import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaEnt
 import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaRepository;
 import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaRepository;
-import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaRepository;
-import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaRepository;
 
 @Component
@@ -31,15 +29,15 @@ public class InboundPersistenceMapper {
 
   public InboundJpaEntity toJpaEntity(Inbound inbound) {
 
-    UserJpaEntity userJpaEntity = userJpaRepository.getReferenceById(
-        inbound.getEncoderId());
+    // UserJpaEntity userJpaEntity = userJpaRepository.getReferenceById(
+    // inbound.getEncoderId());
 
-    SupplierJpaEntity supplierJpaEntity = supplierJpaRepository.getReferenceById(
-        inbound.getSupplierId());
+    // SupplierJpaEntity supplierJpaEntity = supplierJpaRepository.getReferenceById(
+    // inbound.getSupplierId());
 
     InboundJpaEntity inboundJpaEntity = new InboundJpaEntity();
-    inboundJpaEntity.setSupplierJpaEntity(supplierJpaEntity);
-    inboundJpaEntity.setUserJpaEntity(userJpaEntity);
+    // inboundJpaEntity.setSupplierJpaEntity(supplierJpaEntity);
+    // inboundJpaEntity.setUserJpaEntity(userJpaEntity);
     inboundJpaEntity.setInvoiceNumber(inbound.getInvoiceNumber());
     inboundJpaEntity.setDateReceived(inbound.getDateReceived());
 
@@ -66,8 +64,8 @@ public class InboundPersistenceMapper {
     Inbound inbound = new Inbound();
 
     inbound.setId(inboundJpaEntity.getId());
-    inbound.setSupplierId(inboundJpaEntity.getSupplierJpaEntity().getId());
-    inbound.setEncoderId(inboundJpaEntity.getUserJpaEntity().getUserId());
+    // inbound.setSupplierId(inboundJpaEntity.getSupplierJpaEntity().getId());
+    // inbound.setEncoderId(inboundJpaEntity.getUserJpaEntity().getUserId());
     inbound.setInvoiceNumber(inboundJpaEntity.getInvoiceNumber());
     inbound.setDateReceived(inboundJpaEntity.getDateReceived());
     inbound.setCreatedAt(inboundJpaEntity.getCreatedAt());

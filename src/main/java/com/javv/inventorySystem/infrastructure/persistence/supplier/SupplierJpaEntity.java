@@ -13,11 +13,14 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "supplier")
+@Table(name = "supplier", indexes = {
+    @Index(name = "idx_supplier_supplier_code", columnList = "supplier_code")
+})
 @EntityListeners(AuditingEntityListener.class)
 public class SupplierJpaEntity {
 
@@ -25,6 +28,9 @@ public class SupplierJpaEntity {
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+
+  @Column(name = "supplier_code", unique = true, nullable = false, updatable = false, length = 100)
+  private String supplierCode;
 
   @Column(name = "company_name", nullable = false, length = 255, unique = true)
   private String companyName;
@@ -53,11 +59,13 @@ public class SupplierJpaEntity {
   }
 
   public SupplierJpaEntity(
+      String supplierCode,
       String companyName,
       String contactName,
       String phoneNumber,
       String email,
       SupplierAddressJpaEntity supplierAddressJpaEntity) {
+    this.supplierCode = supplierCode;
     this.companyName = companyName;
     this.contactName = contactName;
     this.phoneNumber = phoneNumber;
@@ -67,6 +75,10 @@ public class SupplierJpaEntity {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  public void setSupplierCode(String supplierCode) {
+    this.supplierCode = supplierCode;
   }
 
   public void setCompanyName(String companyName) {
@@ -91,6 +103,10 @@ public class SupplierJpaEntity {
 
   public Integer getId() {
     return id;
+  }
+
+  public String getSupplierCode() {
+    return supplierCode;
   }
 
   public String getCompanyName() {

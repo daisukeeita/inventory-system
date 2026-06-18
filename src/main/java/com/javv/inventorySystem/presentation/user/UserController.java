@@ -36,7 +36,7 @@ public class UserController {
 
     UserRegisterCommand userRegisterCommand = userDtoMapper.toCommandRecord(userRegistrationDto);
 
-    User user = userService.saveUser(userRegisterCommand);
+    User user = userService.create(userRegisterCommand);
 
     UserResponseDto userResponseDto = userDtoMapper.toDtoEntity(user);
 
@@ -50,7 +50,7 @@ public class UserController {
   @ResponseStatus(HttpStatus.FOUND)
   public ApiResponse<UserResponseDto> getByUsername(@PathVariable String username) {
 
-    User user = userService.getUserByUsername(username);
+    User user = userService.getByUsername(username);
 
     UserResponseDto userResponseDto = userDtoMapper.toDtoEntity(user);
 

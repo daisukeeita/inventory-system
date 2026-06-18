@@ -9,13 +9,9 @@ public interface SupplierRepositoryInterface {
 
   Supplier update(Supplier supplier);
 
-  Optional<Supplier> findById(int id);
+  Optional<Supplier> findBySupplierCode(String supplierCode);
 
-  Optional<Supplier> findByCompanyName(String companyName);
+  boolean existsBySupplierCode(String supplierCode);
 
-  Optional<Supplier> findByEmail(String email);
-
-  boolean existsById(int id);
-
-  boolean existsByEmail(String email);
+  Long count();
 }

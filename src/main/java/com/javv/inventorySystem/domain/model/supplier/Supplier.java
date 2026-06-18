@@ -4,6 +4,7 @@ import java.time.Instant;
 
 public class Supplier {
   private Integer id;
+  private String supplierCode;
   private String companyName;
   private String contactName;
   private String phoneNumber;
@@ -12,9 +13,11 @@ public class Supplier {
   private Instant createdAt;
   private Instant updatedAt;
 
-  public Supplier() {}
+  public Supplier() {
+  }
 
   public Supplier(
+      String supplierCode,
       String companyName,
       String contactName,
       String phoneNumber,
@@ -22,6 +25,7 @@ public class Supplier {
       SupplierAddress supplierAddress,
       Instant createdAt,
       Instant updatedAt) {
+    this.supplierCode = supplierCode;
     this.companyName = companyName;
     this.contactName = contactName;
     this.phoneNumber = phoneNumber;
@@ -33,6 +37,10 @@ public class Supplier {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  public void setSupplierCode(String supplierCode) {
+    this.supplierCode = supplierCode;
   }
 
   public void setCompanyName(String companyName) {
@@ -67,6 +75,10 @@ public class Supplier {
     return id;
   }
 
+  public String getSupplierCode() {
+    return supplierCode;
+  }
+
   public String getCompanyName() {
     return companyName;
   }
@@ -97,6 +109,6 @@ public class Supplier {
 
   public void updateAddress(
       String street, String city, String state, String postalCode, String country) {
-    this.supplierAddress = new SupplierAddress(id, street, city, state, postalCode, country);
+    this.supplierAddress = new SupplierAddress(this.id, street, city, state, postalCode, country);
   }
 }

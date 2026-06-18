@@ -70,6 +70,7 @@ public class SupplierDtoMapper {
         + supplier.getSupplierAddress().getCountry();
 
     return new SupplierResponseDto(
+        supplier.getSupplierCode(),
         supplier.getCompanyName(),
         supplier.getContactName(),
         supplier.getPhoneNumber(),

@@ -5,12 +5,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SupplierJpaRepository extends JpaRepository<SupplierJpaEntity, Integer> {
-  Optional<SupplierJpaEntity> findByCompanyName(String companyName);
+  boolean existsBySupplierCode(String supplierCode);
 
-  Optional<SupplierJpaEntity> findByEmail(String email);
+  SupplierJpaEntity getRererenceBySupplierCode(String supplierCode);
 
-  boolean existsById(int id);
-
-  boolean existsByEmail(String email);
-
+  Optional<SupplierJpaEntity> findBySupplierCode(String supplierCode);
 }

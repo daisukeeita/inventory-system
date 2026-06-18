@@ -4,13 +4,12 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Inbound {
 
   private Long id;
-  private int supplierId;
-  private UUID encoderId;
+  private String supplierCode;
+  private String encoderUsername;
   private String invoiceNumber;
   private LocalDateTime dateReceived;
   private List<InboundItem> listInboundItem = new ArrayList<>();
@@ -22,14 +21,14 @@ public class Inbound {
 
   public Inbound(
       Long id,
-      Integer supplierId,
-      UUID encoderId,
+      String supplierCode,
+      String encoderUsername,
       String invoiceNumber,
       LocalDateTime dateReceived,
       List<InboundItem> listInboundItem) {
     this.id = id;
-    this.supplierId = supplierId;
-    this.encoderId = encoderId;
+    this.supplierCode = supplierCode;
+    this.encoderUsername = encoderUsername;
     this.invoiceNumber = invoiceNumber;
     this.dateReceived = dateReceived;
     this.listInboundItem = listInboundItem;
@@ -56,12 +55,12 @@ public class Inbound {
     this.id = id;
   }
 
-  public void setSupplierId(Integer supplierId) {
-    this.supplierId = supplierId;
+  public void setSupplierCode(String supplierCode) {
+    this.supplierCode = supplierCode;
   }
 
-  public void setEncoderId(UUID encoderId) {
-    this.encoderId = encoderId;
+  public void setEncoderUsername(String encoderUsername) {
+    this.encoderUsername = encoderUsername;
   }
 
   public void setInvoiceNumber(String invoiceNumber) {
@@ -88,12 +87,12 @@ public class Inbound {
     return id;
   }
 
-  public Integer getSupplierId() {
-    return supplierId;
+  public String getSupplierCode() {
+    return supplierCode;
   }
 
-  public UUID getEncoderId() {
-    return encoderId;
+  public String getEncoderUsername() {
+    return encoderUsername;
   }
 
   public String getInvoiceNumber() {

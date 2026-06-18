@@ -50,13 +50,13 @@ public class SupplierController {
   @PutMapping("update/{id}")
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<SupplierResponseDto> updateSupplier(
-      @PathVariable Integer id,
+      @PathVariable String supplierCode,
       @Valid @RequestBody SupplierUpdateDto supplierUpdateDto) {
 
     SupplierUpdateCommand supplierUpdateCommand = supplierDtoMapper
         .toUpdateCommandRecord(supplierUpdateDto);
 
-    Supplier supplier = supplierService.update(id, supplierUpdateCommand);
+    Supplier supplier = supplierService.update(supplierCode, supplierUpdateCommand);
 
     SupplierResponseDto supplierResponseDto = supplierDtoMapper.toResponseDto(supplier);
 

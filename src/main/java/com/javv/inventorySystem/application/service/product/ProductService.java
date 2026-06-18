@@ -24,7 +24,6 @@ import com.javv.inventorySystem.domain.exception.ServiceOperationException;
 import com.javv.inventorySystem.domain.model.product.Product;
 import com.javv.inventorySystem.domain.model.product.ProductPackaging;
 import com.javv.inventorySystem.domain.model.product.UnitsOfMeasure;
-import com.javv.inventorySystem.domain.model.supplier.Supplier;
 import com.javv.inventorySystem.domain.repository.ProductRepositoryInterface;
 
 @Service
@@ -44,10 +43,12 @@ public class ProductService {
   public ProductResponseRead create(ProductRegisterCommand productRegisterCommand) {
 
     try {
-      if (!supplierService.checkIfExistsById(productRegisterCommand.supplierId())) {
-        throw new ResourceNotFoundException(
-            "Supplier does not exist using id: " + productRegisterCommand.supplierId() + ".");
-      }
+      // if (!supplierService.checkIfExistsById(productRegisterCommand.supplierId()))
+      // {
+      // throw new ResourceNotFoundException(
+      // "Supplier does not exist using id: " + productRegisterCommand.supplierId() +
+      // ".");
+      // }
 
       if (!unitsOfMeasureService.checkIfExistsById(productRegisterCommand.baseUnitOfMeasureId())) {
         throw new ResourceNotFoundException(
@@ -79,7 +80,8 @@ public class ProductService {
   // TODO: Modify the updateProduct method
   @Transactional
   public Product update(Long id, ProductUpdateCommand productUpdateCommand) {
-    Supplier supplier = supplierService.getById(productUpdateCommand.supplierId());
+    // Supplier supplier =
+    // supplierService.getById(productUpdateCommand.supplierId());
     UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.getById(productUpdateCommand.baseUnitOfMeasureId());
 
     Product product = productRepositoryInterface
@@ -89,7 +91,7 @@ public class ProductService {
 
     product.setSku(productUpdateCommand.sku());
     product.setName(productUpdateCommand.name());
-    product.setSupplierId(supplier.getId());
+    // product.setSupplierId(supplier.getId());
     product.setBaseUnitsOfMeasureId(unitsOfMeasure.getId());
 
     try {
@@ -141,8 +143,8 @@ public class ProductService {
   }
 
   private ProductResponseRead toProductResponseRead(Product product) {
-    String supplierName = supplierService.getById(
-        product.getSupplierId()).getCompanyName();
+    // String supplierName = supplierService.getById(
+    // product.getSupplierId()).getCompanyName();
     String baseUnitOfMeasureName = unitsOfMeasureService.getById(
         product.getBaseUnitsOfMeasureId()).getName();
 
@@ -163,17 +165,19 @@ public class ProductService {
               packaging.getPrice()));
     }
 
-    ProductResponseRead responseRead = new ProductResponseRead(
-        product.getId(),
-        product.getSku(),
-        product.getName(),
-        product.getSupplierId(),
-        supplierName,
-        product.getBaseUnitsOfMeasureId(),
-        baseUnitOfMeasureName,
-        listProductPackagingRead);
+    // ProductResponseRead responseRead = new ProductResponseRead(
+    // product.getId(),
+    // product.getSku(),
+    // product.getName(),
+    // product.getSupplierId(),
+    // supplierName,
+    // product.getBaseUnitsOfMeasureId(),
+    // baseUnitOfMeasureName,
+    // listProductPackagingRead);
+    //
+    // return responseRead;
 
-    return responseRead;
+    return null;
   }
 
   private Product toDomainEntity(ProductRegisterCommand productRegisterCommand) {

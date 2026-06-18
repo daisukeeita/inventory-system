@@ -1,7 +1,6 @@
 package com.javv.inventorySystem.infrastructure.persistence.user;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Repository;
@@ -46,26 +45,23 @@ public class UserPersistenceAdapter implements UserRepositoryInterface {
   }
 
   @Override
+  public User update(User user) {
+    // TODO: Update this method
+
+    return null;
+  }
+
+  @Override
   public Optional<User> findByUsername(String username) {
     Optional<UserJpaEntity> jpaEntity = userJpaRepository.findByUsername(username);
+
     Optional<User> user = jpaEntity.map(entity -> userPersistenceMapper.toDomainEntity(entity));
 
     return user;
   }
 
   @Override
-  public boolean existsById(UUID id) {
-    return userJpaRepository.existsById(id);
-  }
-
-  public UserJpaEntity getReferenceById(UUID id) {
-    return userJpaRepository.getReferenceById(id);
-  }
-
-  @Override
-  public Optional<User> findById(UUID id) {
-    Optional<UserJpaEntity> jpaEntity = userJpaRepository.findById(id);
-
-    return jpaEntity.map(entity -> userPersistenceMapper.toDomainEntity(entity));
+  public boolean existsByUsername(String username) {
+    return userJpaRepository.existsByUsername(username);
   }
 }

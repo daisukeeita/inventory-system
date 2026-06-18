@@ -6,8 +6,9 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserJpaRepository extends JpaRepository<UserJpaEntity, UUID> {
+  boolean existsByUsername(String username);
 
   Optional<UserJpaEntity> findByUsername(String username);
 
-  boolean existsById(UUID id);
+  UserJpaRepository getReferenceByUsername(String username);
 }

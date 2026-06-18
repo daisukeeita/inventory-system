@@ -12,6 +12,7 @@ public class SupplierPersistenceMapper {
 
     SupplierJpaEntity supplierJpaEntity = new SupplierJpaEntity();
     supplierJpaEntity.setId(supplier.getId());
+    supplierJpaEntity.setSupplierCode(supplier.getSupplierCode());
     supplierJpaEntity.setCompanyName(supplier.getCompanyName());
     supplierJpaEntity.setContactName(supplier.getContactName());
     supplierJpaEntity.setPhoneNumber(supplier.getPhoneNumber());
@@ -42,6 +43,7 @@ public class SupplierPersistenceMapper {
 
     Supplier supplier = new Supplier();
     supplier.setId(supplierJpaEntity.getId());
+    supplier.setSupplierCode(supplierJpaEntity.getSupplierCode());
     supplier.setCompanyName(supplierJpaEntity.getCompanyName());
     supplier.setContactName(supplierJpaEntity.getContactName());
     supplier.setPhoneNumber(supplierJpaEntity.getPhoneNumber());

@@ -30,13 +30,17 @@ public class SupplierService {
     try {
       Supplier supplier = toDomainEntity(supplierRegisterCommand);
 
+      String supplierCode = "SUP-100" + supplierRepositoryInterface.count();
+
+      supplier.setSupplierCode(supplierCode);
+
       Supplier savedEntity = supplierRepositoryInterface.save(supplier);
 
       return savedEntity;
     } catch (DataIntegrityViolationException exception) {
       throw new EntityAlreadyExistsException(
           "Supplier Creation Failed: The provided details conflict with an existing supplier.");
-    } catch (NullPointerException exception) {
+    } catch (ObjectMappingException exception) {
       throw new ServiceOperationException(
           "Supplier Creation Failed: " + exception.getMessage());
     }
@@ -44,9 +48,9 @@ public class SupplierService {
 
   @Transactional
   public Supplier update(
-      Integer id, SupplierUpdateCommand supplierUpdateCommand) {
+      String supplierCode, SupplierUpdateCommand supplierUpdateCommand) {
     try {
-      Supplier supplier = getById(id);
+      Supplier supplier = getBySupplierCode(supplierCode);
 
       supplier.setCompanyName(supplierUpdateCommand.companyName());
       supplier.setContactName(supplierUpdateCommand.contactName());
@@ -72,42 +76,18 @@ public class SupplierService {
     }
   }
 
-  public Supplier getById(int id) {
-    Optional<Supplier> optionalSupplier = supplierRepositoryInterface.findById(id);
-
-    Supplier supplier = optionalSupplier.orElseThrow(
-        () -> new ResourceNotFoundException("Supplier was not found using ID: " + id + "."));
-
-    return supplier;
-  }
-
-  public Supplier getByCompanyName(String companyName) {
-    Optional<Supplier> optionalSupplier = supplierRepositoryInterface.findByCompanyName(companyName);
+  public Supplier getBySupplierCode(String supplierCode) {
+    Optional<Supplier> optionalSupplier = supplierRepositoryInterface.findBySupplierCode(supplierCode);
 
     Supplier supplier = optionalSupplier.orElseThrow(
         () -> new ResourceNotFoundException(
-            "Supplier was not found using companyName: " + companyName + "."));
+            "Supplier was not found with supplier code: " + supplierCode + "."));
 
     return supplier;
   }
 
-  public Supplier getByEmail(String email) {
-    Optional<Supplier> optionalSupplier = supplierRepositoryInterface.findByEmail(email);
-
-    Supplier supplier = optionalSupplier.orElseThrow(
-        () -> new ResourceNotFoundException(
-            "Supplier was not found using email: " + email + "."));
-
-    return supplier;
-
-  }
-
-  public boolean checkIfExistsById(int id) {
-    return supplierRepositoryInterface.existsById(id);
-  }
-
-  public boolean checkIfExistsByEmail(String email) {
-    return supplierRepositoryInterface.existsByEmail(email);
+  public boolean checkIfExistsBySupplierCode(String supplierCoe) {
+    return supplierRepositoryInterface.existsBySupplierCode(supplierCoe);
   }
 
   private Supplier toDomainEntity(SupplierRegisterCommand supplierRegisterCommand) {

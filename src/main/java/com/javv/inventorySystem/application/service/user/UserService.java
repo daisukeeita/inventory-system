@@ -1,7 +1,6 @@
 package com.javv.inventorySystem.application.service.user;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +27,7 @@ public class UserService {
   }
 
   @Transactional
-  public User saveUser(UserRegisterCommand userRegisterCommand) {
+  public User create(UserRegisterCommand userRegisterCommand) {
     Role role = roleService.getRoleByName(userRegisterCommand.roleName());
 
     User user = toDomainEntity(userRegisterCommand, role);
@@ -38,26 +37,25 @@ public class UserService {
     return savedUser;
   }
 
-  public User getUserByUsername(String username) {
+  @Transactional
+  public User update() {
+    // TODO: Update this method
+
+    return null;
+  }
+
+  public User getByUsername(String username) {
     Optional<User> optionalUser = userRepositoryInterface.findByUsername(username);
 
     User user = optionalUser.orElseThrow(
         () -> new ResourceNotFoundException(
-            "User not found in database by the username: '" + username + "'"));
+            "User not found with username: " + username + "."));
 
     return user;
   }
 
-  public User getUserById(UUID id) {
-    User user = userRepositoryInterface.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException(
-            "User Service: User not found for ID: " + id));
-
-    return user;
-  }
-
-  public boolean checkIfExistsById(UUID id) {
-    return userRepositoryInterface.existsById(id);
+  public boolean checkIfExistsByUsername(String username) {
+    return userRepositoryInterface.existsByUsername(username);
   }
 
   private User toDomainEntity(UserRegisterCommand userRegisterCommand, Role role) {

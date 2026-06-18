@@ -2,7 +2,6 @@ package com.javv.inventorySystem.application.service.transaction;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,13 +47,13 @@ public class InboundService {
   @Transactional
   public void processInbound(InboundRegisterCommand inboundRegisterCommand) {
 
-    int supplierId = supplierService
-        .getById(inboundRegisterCommand.supplierId())
-        .getId();
+    // int supplierId = supplierService
+    // .getById(inboundRegisterCommand.supplierId())
+    // .getId();
 
-    UUID encoderId = userService
-        .getUserById(inboundRegisterCommand.encoderId())
-        .getId();
+    // UUID encoderId = userService
+    // .getUserById(inboundRegisterCommand.encoderId())
+    // .getId();
 
     List<Long> listPackagingId = inboundRegisterCommand.listInboundItem().stream()
         .map(item -> item.packagingId())
@@ -77,8 +76,8 @@ public class InboundService {
 
     Inbound inbound = new Inbound();
 
-    inbound.setSupplierId(supplierId);
-    inbound.setEncoderId(encoderId);
+    // inbound.setSupplierId(supplierId);
+    // inbound.setEncoderId(encoderId);
     inbound.setInvoiceNumber(inboundRegisterCommand.invoiceNumber());
     inbound.setDateReceived(inboundRegisterCommand.dateReceived());
 

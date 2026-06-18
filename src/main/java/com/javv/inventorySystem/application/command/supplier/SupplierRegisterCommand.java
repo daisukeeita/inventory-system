@@ -30,14 +30,9 @@ public record SupplierRegisterCommand(
           "Supplier Register Command: Phone number cannot be null or empty.");
     }
 
-    if (!phoneNumber.matches("^(0[2-9]\\d{0,2}|\\(0[2-9]\\d{0,2}\\))?[0-9\\-\\s]+$")) {
+    if (!phoneNumber.matches("^(?=^.{11,16}$)(0[2-9]\\d{0,2}|\\(0[2-9]\\d{0,2}\\))?[0-9\\-\\s]+$")) {
       throw new RecordInitializationException(
-          "Supplier Register Command: Invalid PH phone number format. Use digits, dashes, and/or parenthesis.");
-    }
-
-    if (!phoneNumber.matches("^\\d{10,15}$")) {
-      throw new RecordInitializationException(
-          "Supplier Register Command: Phone Number must be between 10 and 15 digits.");
+          "Supplier Register Command: Invalid PH phone number format. Total length (including spaces, dashes, parentheses) must be 11-16 characters.");
     }
 
     if (email == null || email.isBlank()) {

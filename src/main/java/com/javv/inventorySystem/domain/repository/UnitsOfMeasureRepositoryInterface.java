@@ -15,9 +15,9 @@ public interface UnitsOfMeasureRepositoryInterface {
 
   Optional<UnitsOfMeasure> findByName(String name);
 
-  List<String> findExistingNames(List<String> names);
+  boolean existsByName(String name);
 
-  List<UnitsOfMeasure> findAllById(List<Integer> listId);
+  List<String> findExistingNames(List<String> names);
 
   Page<UnitsOfMeasure> findAll(Pageable pageable);
 }

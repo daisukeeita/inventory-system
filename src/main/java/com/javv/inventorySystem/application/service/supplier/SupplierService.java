@@ -30,7 +30,7 @@ public class SupplierService {
     try {
       Supplier supplier = toDomainEntity(supplierRegisterCommand);
 
-      String supplierCode = "SUP-100" + supplierRepositoryInterface.count();
+      String supplierCode = "SUP-100" + (supplierRepositoryInterface.count() + 1);
 
       supplier.setSupplierCode(supplierCode);
 
@@ -100,7 +100,7 @@ public class SupplierService {
 
     if (supplierRegisterCommand == null) {
       throw new ObjectMappingException(
-          "Supplier Service: Cannot map a null SupplierRegisterCommand to a Domain Entity.");
+          "Cannot map a null SupplierRegisterCommand to a Domain Entity.");
     }
 
     SupplierAddress supplierAddress = new SupplierAddress();

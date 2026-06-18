@@ -24,36 +24,50 @@ public class SupplierPersistenceAdapter implements SupplierRepositoryInterface {
 
     SupplierJpaEntity savedEntity = supplierJpaRepository.saveAndFlush(supplierJpaEntity);
 
-    return supplierPersistenceMapper.toDomainEntity(savedEntity);
+    Supplier supplierDomain = supplierPersistenceMapper.toDomainEntity(savedEntity);
+
+    return supplierDomain;
   }
 
   @Override
   public Supplier update(Supplier supplier) {
+    String supplierCode = supplier.getSupplierCode();
+
     SupplierJpaEntity fetchedEntity = supplierJpaRepository
-        .findById(supplier.getId())
+        .findBySupplierCode(supplierCode)
         .orElseThrow(() -> new ResourceNotFoundException(
-            "Supplier Persistence: Supplier not found using the ID: " + supplier.getId() + "."));
+            "Supplier Persistence: Supplier not found with supplier code: " + supplierCode + "."));
 
     SupplierJpaEntity updatedEntity = supplierPersistenceMapper.updateEntity(supplier, fetchedEntity);
 
     SupplierJpaEntity savedEntity = supplierJpaRepository.saveAndFlush(updatedEntity);
-    return supplierPersistenceMapper.toDomainEntity(savedEntity);
+
+    Supplier supplierDomain = supplierPersistenceMapper.toDomainEntity(savedEntity);
+
+    return supplierDomain;
   }
 
   @Override
   public Optional<Supplier> findBySupplierCode(String supplierCode) {
     Optional<SupplierJpaEntity> jpaEntity = supplierJpaRepository.findBySupplierCode(supplierCode);
 
-    return jpaEntity.map(entity -> supplierPersistenceMapper.toDomainEntity(entity));
+    Optional<Supplier> domainEntity = jpaEntity
+        .map(entity -> supplierPersistenceMapper.toDomainEntity(entity));
+
+    return domainEntity;
   }
 
   @Override
   public boolean existsBySupplierCode(String supplierCode) {
-    return supplierJpaRepository.existsBySupplierCode(supplierCode);
+    boolean result = supplierJpaRepository.existsBySupplierCode(supplierCode);
+
+    return result;
   }
 
   @Override
   public Long count() {
-    return supplierJpaRepository.count();
+    Long result = supplierJpaRepository.count();
+
+    return result;
   }
 }

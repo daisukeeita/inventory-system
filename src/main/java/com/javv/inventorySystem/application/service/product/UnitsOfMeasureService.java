@@ -28,24 +28,28 @@ public class UnitsOfMeasureService {
 
   @Transactional
   public UnitsOfMeasure create(UnitsOfMeasureRegisterCommand unitsOfMeasureRegisterCommand) {
-    UnitsOfMeasure unitsOfMeasure = toDomainEntity(unitsOfMeasureRegisterCommand);
 
     try {
+      UnitsOfMeasure unitsOfMeasure = toDomainEntity(unitsOfMeasureRegisterCommand);
+
       UnitsOfMeasure savedUnitsOfMeasure = unitsOfMeasureRepositoryInterface.save(unitsOfMeasure);
 
       return savedUnitsOfMeasure;
     } catch (DataIntegrityViolationException exception) {
       throw new ServiceOperationException(
           "Units of Measure Creation Failed: The provided details conflict with an existing units of measure.");
+    } catch (ObjectMappingException exception) {
+      throw new ServiceOperationException(
+          "Units of Measure Creation Failed: " + exception.getMessage());
     }
   }
 
   @Transactional
   public UnitsOfMeasure update(
-      int id, UnitsOfMeasureUpdateCommand unitsOfMeasureUpdateCommand) {
+      String name, UnitsOfMeasureUpdateCommand unitsOfMeasureUpdateCommand) {
 
     try {
-      UnitsOfMeasure unitsOfMeasure = getById(id);
+      UnitsOfMeasure unitsOfMeasure = getByName(name);
 
       unitsOfMeasure.setName(unitsOfMeasureUpdateCommand.name());
       unitsOfMeasure.setAbbreviation(unitsOfMeasureUpdateCommand.abbreviation());
@@ -63,13 +67,6 @@ public class UnitsOfMeasureService {
     }
   }
 
-  public UnitsOfMeasure getById(int id) {
-    Optional<UnitsOfMeasure> optionalUnitsOfMeasure = unitsOfMeasureRepositoryInterface.findById(id);
-
-    return optionalUnitsOfMeasure.orElseThrow(
-        () -> new ResourceNotFoundException("Units of Measure not found by id: " + id + "."));
-  }
-
   public UnitsOfMeasure getByName(String name) {
     Optional<UnitsOfMeasure> optionalUnitsOfMeasure = unitsOfMeasureRepositoryInterface.findByName(name);
 
@@ -77,21 +74,25 @@ public class UnitsOfMeasureService {
         () -> new ResourceNotFoundException("Units of Measure not found by name: " + name + "."));
   }
 
-  public boolean checkIfExistsById(int id) {
-    return unitsOfMeasureRepositoryInterface.existsById(id);
+  public boolean checkIfExistsByName(String name) {
+    return unitsOfMeasureRepositoryInterface.existsByName(name);
   }
 
-  public boolean allIdExists(List<Integer> listId) {
-    if (listId == null || listId.isEmpty()) {
+  public boolean doAllNamesExists(List<String> names) {
+
+    if (names == null || names.isEmpty()) {
       return false;
     }
 
-    Long existCount = unitsOfMeasureRepositoryInterface.countByIdIn(listId);
-    return existCount == listId.size();
-  }
+    List<String> filteredLists = names
+        .stream()
+        .distinct()
+        .toList();
 
-  public List<UnitsOfMeasure> getAllById(List<Integer> listId) {
-    return unitsOfMeasureRepositoryInterface.findAllById(listId);
+    List<String> existingLists = unitsOfMeasureRepositoryInterface
+        .findExistingNames(filteredLists);
+
+    return filteredLists.size() == existingLists.size();
   }
 
   public Page<UnitsOfMeasure> getAll(int page, int size) {

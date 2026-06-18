@@ -21,4 +21,5 @@ public interface UnitsOfMeasureJpaRepository
 
   Page<UnitsOfMeasureJpaEntity> findAll(Pageable pageable);
 
+  boolean existsByName(String name);
 }

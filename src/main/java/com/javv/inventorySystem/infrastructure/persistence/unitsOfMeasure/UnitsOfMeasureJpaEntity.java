@@ -12,10 +12,13 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "units_of_measure")
+@Table(name = "units_of_measure", indexes = {
+    @Index(name = "id_units_of_measure_name", columnList = "name")
+})
 @EntityListeners(AuditingEntityListener.class)
 public class UnitsOfMeasureJpaEntity {
 
@@ -37,7 +40,8 @@ public class UnitsOfMeasureJpaEntity {
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  public UnitsOfMeasureJpaEntity() {}
+  public UnitsOfMeasureJpaEntity() {
+  }
 
   public UnitsOfMeasureJpaEntity(String name, String abbreviation) {
     this.name = name;

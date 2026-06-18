@@ -1,6 +1,7 @@
 package com.javv.inventorySystem.presentation.supplier;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,9 +20,12 @@ import com.javv.inventorySystem.presentation.supplier.dto.SupplierResponseDto;
 import com.javv.inventorySystem.presentation.supplier.dto.SupplierUpdateDto;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @RestController
 @RequestMapping(value = "api/v1/supplier")
+@Validated
 public class SupplierController {
 
   private SupplierService supplierService;
@@ -32,7 +36,7 @@ public class SupplierController {
     this.supplierDtoMapper = supplierDtoMapper;
   }
 
-  @PostMapping("/register")
+  @PostMapping("/create")
   @ResponseStatus(HttpStatus.CREATED)
   public ApiResponse<SupplierResponseDto> registerSupplier(
       @Valid @RequestBody SupplierRegisterDto supplierRegisterDto) {
@@ -47,10 +51,10 @@ public class SupplierController {
         supplierResponseDto, "Successfully created new Supplier.", HttpStatus.CREATED.value());
   }
 
-  @PutMapping("update/{id}")
+  @PutMapping("update/{supplierCode}")
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<SupplierResponseDto> updateSupplier(
-      @PathVariable String supplierCode,
+      @PathVariable @NotBlank(message = "Query Parameter: Supplier Code cannot be blank") @Pattern(regexp = "^SUP-\\d{4,5}$", message = "Query Parameter: Supplier Code must match format SUP-xxxx.") String supplierCode,
       @Valid @RequestBody SupplierUpdateDto supplierUpdateDto) {
 
     SupplierUpdateCommand supplierUpdateCommand = supplierDtoMapper

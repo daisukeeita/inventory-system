@@ -2,6 +2,7 @@ package com.javv.inventorySystem.infrastructure.persistence.supplier;
 
 import org.springframework.stereotype.Component;
 
+import com.javv.inventorySystem.domain.exception.ObjectMappingException;
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
 import com.javv.inventorySystem.domain.model.supplier.SupplierAddress;
 
@@ -9,6 +10,11 @@ import com.javv.inventorySystem.domain.model.supplier.SupplierAddress;
 public class SupplierPersistenceMapper {
 
   public SupplierJpaEntity toJpaEntity(Supplier supplier) {
+
+    if (supplier == null) {
+      throw new ObjectMappingException(
+          "Supplier Persistence Mapper: Cannot map a null Supplier to a JPA Entity.");
+    }
 
     SupplierJpaEntity supplierJpaEntity = new SupplierJpaEntity();
     supplierJpaEntity.setId(supplier.getId());
@@ -33,6 +39,11 @@ public class SupplierPersistenceMapper {
 
   public Supplier toDomainEntity(SupplierJpaEntity supplierJpaEntity) {
 
+    if (supplierJpaEntity == null) {
+      throw new ObjectMappingException(
+          "Supplier Persistence Mapper: Cannot map a null SupplierJpaEntity to a Domain Entity.");
+    }
+
     SupplierAddress supplierAddress = new SupplierAddress();
     supplierAddress.setSupplierId(supplierJpaEntity.getSupplierAddressJpaEntity().getSupplierId());
     supplierAddress.setStreet(supplierJpaEntity.getSupplierAddressJpaEntity().getStreet());
@@ -54,6 +65,16 @@ public class SupplierPersistenceMapper {
   }
 
   public SupplierJpaEntity updateEntity(Supplier supplier, SupplierJpaEntity supplierJpaEntity) {
+
+    if (supplierJpaEntity == null) {
+      throw new ObjectMappingException(
+          "Supplier Persistence Mapper: Cannot update a null SupplierJpaEntity.");
+    }
+
+    if (supplier == null) {
+      throw new ObjectMappingException(
+          "Supplier Persistence Mapper: Cannot use a null Supplier to update Supplier JPA Entity.");
+    }
 
     SupplierAddress supplierAddress = supplier.getSupplierAddress();
 

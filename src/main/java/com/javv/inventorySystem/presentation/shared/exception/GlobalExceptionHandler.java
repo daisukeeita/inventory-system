@@ -1,6 +1,7 @@
 package com.javv.inventorySystem.presentation.shared.exception;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.exception.ServiceOperationException;
 import com.javv.inventorySystem.domain.exception.SystemUnavailableException;
 import com.javv.inventorySystem.presentation.shared.payload.ApiResponse;
+
+import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -151,6 +154,28 @@ public class GlobalExceptionHandler {
         HttpStatus.BAD_REQUEST.value());
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+  }
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<ApiResponse<Map<String, Object>>> handleConstrainViolationException(
+      ConstraintViolationException exception) {
+
+    Map<String, Object> errors = new HashMap<>();
+    List<String> errorMsg = exception.getConstraintViolations()
+        .stream()
+        .map(error -> error.getMessage())
+        .toList();
+
+    errors.put("errors", errorMsg);
+
+    ApiResponse<Map<String, Object>> response = ApiResponse.error(
+        errors,
+        exception.getMessage(),
+        HttpStatus.BAD_REQUEST.value());
+
+    return ResponseEntity
+        .status(HttpStatus.BAD_REQUEST)
+        .body(response);
   }
 
   @ExceptionHandler(SystemUnavailableException.class)

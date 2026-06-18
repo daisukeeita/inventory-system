@@ -23,9 +23,11 @@ public class UnitsOfMeasurePersistenceAdapter implements UnitsOfMeasureRepositor
 
   @Override
   public UnitsOfMeasure save(UnitsOfMeasure unitsOfMeasure) {
-    UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity = unitsOfMeasurePersistenceMapper.toJpaEntity(unitsOfMeasure);
+    UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity = unitsOfMeasurePersistenceMapper
+        .toJpaEntity(unitsOfMeasure);
 
-    UnitsOfMeasureJpaEntity savedEntity = unitsOfMeasureJpaRepository.saveAndFlush(unitsOfMeasureJpaEntity);
+    UnitsOfMeasureJpaEntity savedEntity = unitsOfMeasureJpaRepository
+        .saveAndFlush(unitsOfMeasureJpaEntity);
 
     return unitsOfMeasurePersistenceMapper.toDomainEntity(savedEntity);
   }
@@ -34,7 +36,7 @@ public class UnitsOfMeasurePersistenceAdapter implements UnitsOfMeasureRepositor
   public UnitsOfMeasure update(UnitsOfMeasure unitsOfMeasure) {
 
     UnitsOfMeasureJpaEntity fetchedEntity = unitsOfMeasureJpaRepository
-        .findById(unitsOfMeasure.getId())
+        .findByName(unitsOfMeasure.getName())
         .orElseThrow(() -> new ResourceNotFoundException(
             "Units of Measure Persistence: Units of Measure not found using ID: " + unitsOfMeasure.getId() + "."));
 
@@ -47,36 +49,21 @@ public class UnitsOfMeasurePersistenceAdapter implements UnitsOfMeasureRepositor
   }
 
   @Override
-  public Optional<UnitsOfMeasure> findById(int id) {
-    Optional<UnitsOfMeasureJpaEntity> optionalEntity = unitsOfMeasureJpaRepository.findById(id);
-
-    return optionalEntity.map(entity -> unitsOfMeasurePersistenceMapper.toDomainEntity(entity));
-  }
-
-  @Override
   public Optional<UnitsOfMeasure> findByName(String name) {
     Optional<UnitsOfMeasureJpaEntity> optionalEntity = unitsOfMeasureJpaRepository.findByName(name);
 
-    return optionalEntity.map(entity -> unitsOfMeasurePersistenceMapper.toDomainEntity(entity));
+    return optionalEntity
+        .map(entity -> unitsOfMeasurePersistenceMapper.toDomainEntity(entity));
   }
 
   @Override
-  public boolean existsById(int id) {
-    return unitsOfMeasureJpaRepository.existsById(id);
+  public boolean existsByName(String name) {
+    return unitsOfMeasureJpaRepository.existsByName(name);
   }
 
   @Override
-  public Long countByIdIn(List<Integer> listId) {
-    return unitsOfMeasureJpaRepository.countByIdIn(listId);
-  }
-
-  @Override
-  public List<UnitsOfMeasure> findAllById(List<Integer> listId) {
-    List<UnitsOfMeasureJpaEntity> listJpaEntity = unitsOfMeasureJpaRepository.findAllById(listId);
-
-    return listJpaEntity.stream()
-        .map(entity -> unitsOfMeasurePersistenceMapper.toDomainEntity(entity))
-        .toList();
+  public List<String> findExistingNames(List<String> names) {
+    return unitsOfMeasureJpaRepository.findExistingNames(names);
   }
 
   @Override

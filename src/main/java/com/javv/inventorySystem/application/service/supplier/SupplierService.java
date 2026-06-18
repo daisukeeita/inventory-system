@@ -47,8 +47,8 @@ public class SupplierService {
   }
 
   @Transactional
-  public Supplier update(
-      String supplierCode, SupplierUpdateCommand supplierUpdateCommand) {
+  public Supplier update(String supplierCode, SupplierUpdateCommand supplierUpdateCommand) {
+
     try {
       Supplier supplier = getBySupplierCode(supplierCode);
 
@@ -73,6 +73,10 @@ public class SupplierService {
       throw new ServiceOperationException(
           "Supplier Update Failed: " + exception.getMessage(),
           exception);
+    } catch (ObjectMappingException exception) {
+      throw new ServiceOperationException(
+          "Supplier Update Failed: " + exception.getMessage(),
+          exception);
     }
   }
 
@@ -87,7 +91,9 @@ public class SupplierService {
   }
 
   public boolean checkIfExistsBySupplierCode(String supplierCoe) {
-    return supplierRepositoryInterface.existsBySupplierCode(supplierCoe);
+    boolean result = supplierRepositoryInterface.existsBySupplierCode(supplierCoe);
+
+    return result;
   }
 
   private Supplier toDomainEntity(SupplierRegisterCommand supplierRegisterCommand) {

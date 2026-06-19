@@ -29,10 +29,10 @@ public class ProductPersistenceMapper {
     }
 
     SupplierJpaEntity supplierJpaEntity = supplierJpaRepository
-        .getReferenceById(product.getSupplierId());
+        .getRererenceBySupplierCode(product.getSupplierCode());
 
     UnitsOfMeasureJpaEntity unitsOfMeasureJpaEntity = unitsOfMeasureJpaRepository
-        .getReferenceById(product.getBaseUnitsOfMeasureId());
+        .getReferenceByName(product.getBaseUnitsOfMeasureName());
 
     ProductJpaEntity jpaEntity = new ProductJpaEntity();
     jpaEntity.setSku(product.getSku());
@@ -43,7 +43,7 @@ public class ProductPersistenceMapper {
     for (ProductPackaging packaging : product.getListPackages()) {
 
       UnitsOfMeasureJpaEntity unitMeasure = unitsOfMeasureJpaRepository
-          .getReferenceById(packaging.getUnitsOfMeasureId());
+          .getReferenceByName(packaging.getUnitsOfMeasureName());
 
       jpaEntity.addPackaging(
           packaging.getPackagingCode(),
@@ -66,15 +66,15 @@ public class ProductPersistenceMapper {
     domainEntity.setId(productJpaEntity.getId());
     domainEntity.setSku(productJpaEntity.getSku());
     domainEntity.setName(productJpaEntity.getName());
-    domainEntity.setSupplierId(productJpaEntity.getSupplier().getId());
-    domainEntity.setBaseUnitsOfMeasureId(productJpaEntity.getBaseUnitOfMeasure().getId());
+    domainEntity.setSupplierCode(productJpaEntity.getSupplier().getSupplierCode());
+    domainEntity.setBaseUnitsOfMeasureName(productJpaEntity.getBaseUnitOfMeasure().getName());
     domainEntity.setCreatedAt(productJpaEntity.getCreatedAt());
     domainEntity.setUpdatedAt(productJpaEntity.getUpdatedAt());
 
     for (ProductPackagingJpaEntity jpaPackaging : productJpaEntity.getListPackages()) {
       ProductPackaging domainPackaging = domainEntity.addPackaging(
           jpaPackaging.getPackagingCode(),
-          jpaPackaging.getUnitsOfMeasure().getId(),
+          jpaPackaging.getUnitsOfMeasure().getName(),
           jpaPackaging.getConversionFactor(),
           jpaPackaging.getPrice());
 

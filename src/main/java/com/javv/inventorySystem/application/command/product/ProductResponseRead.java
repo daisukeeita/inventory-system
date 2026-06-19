@@ -1,44 +1,48 @@
 package com.javv.inventorySystem.application.command.product;
 
 import java.util.List;
-import java.util.Objects;
 
 import com.javv.inventorySystem.application.command.productPackaging.ProductPackagingResponseRead;
+import com.javv.inventorySystem.domain.exception.RecordInitializationException;
 
 public record ProductResponseRead(
-    Long id,
     String sku,
     String name,
-    int supplierId,
+    String supplierCode,
     String supplierName,
-    int baseUnitOfMeasureId,
     String baseUnitsOfMeasure,
     List<ProductPackagingResponseRead> listProductPackaging) {
 
   public ProductResponseRead {
 
-    Objects.requireNonNull(id,
-        "Product Response Read: ID cannot be null.");
+    if (sku == null || sku.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Response Read: SKU cannot be null or blank.");
+    }
 
-    Objects.requireNonNull(sku,
-        "Product Response Read: SKU cannot be null.");
+    if (name == null || name.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Response Read: Name cannot be null or blank.");
+    }
 
-    Objects.requireNonNull(name,
-        "Product Response Read: Name cannot be null.");
+    if (supplierCode == null || supplierCode.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Response Read: Supplier Code cannot be null or blank.");
+    }
 
-    Objects.requireNonNull(supplierId,
-        "Product Response Read: Supplier ID cannot be null.");
+    if (supplierName == null || supplierName.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Response Read: Supplier Name cannot be null or blank.");
+    }
 
-    Objects.requireNonNull(supplierName,
-        "Product Response Read: Supplier Name cannot be null.");
+    if (baseUnitsOfMeasure == null || baseUnitsOfMeasure.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Response Read: Base Unit of Measure cannot be null or blank.");
+    }
 
-    Objects.requireNonNull(baseUnitOfMeasureId,
-        "Product Response Read: Base Unit of Measure ID cannot be null.");
-
-    Objects.requireNonNull(baseUnitsOfMeasure,
-        "Product Response Read: Base Units of Measure Name cannot be null.");
-
-    Objects.requireNonNull(listProductPackaging,
-        "Product Response Read: List of Product Packages cannot be null.");
+    if (listProductPackaging == null || listProductPackaging.isEmpty()) {
+      throw new RecordInitializationException(
+          "Product Response Read: List of Packages cannot be null or empty.");
+    }
   }
 }

@@ -51,19 +51,13 @@ public class ProductPersistenceAdapter implements ProductRepositoryInterface {
   }
 
   @Override
-  public Optional<Product> findById(Long id) {
-    Optional<ProductJpaEntity> jpaEntity = productJpaRepository.findById(id);
-
-    return jpaEntity.map(entity -> productPersistenceMapper.toDomainEntity(entity));
+  public boolean existsBySku(String sku) {
+    return productJpaRepository.existsBySku(sku);
   }
 
   @Override
-  public List<Product> findAllById(List<Long> id) {
-    List<ProductJpaEntity> listJpa = productJpaRepository.findAllById(id);
-
-    return listJpa.stream()
-        .map(jpaEntity -> productPersistenceMapper.toDomainEntity(jpaEntity))
-        .toList();
+  public List<String> findExistingSkus(List<String> sku) {
+    return productJpaRepository.findExistingSku(sku);
   }
 
   @Override
@@ -72,19 +66,5 @@ public class ProductPersistenceAdapter implements ProductRepositoryInterface {
 
     return jpaPage.map(
         entity -> productPersistenceMapper.toDomainEntity(entity));
-  }
-
-  @Override
-  public boolean existsById(Long id) {
-    return productJpaRepository.existsById(id);
-  }
-
-  @Override
-  public Long countByIdIn(List<Long> listId) {
-    return productJpaRepository.countByIdIn(listId);
-  }
-
-  public ProductJpaEntity getReferenceById(Long id) {
-    return productJpaRepository.getReferenceById(id);
   }
 }

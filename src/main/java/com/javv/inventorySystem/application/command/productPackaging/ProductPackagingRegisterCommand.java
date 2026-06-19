@@ -1,26 +1,30 @@
 package com.javv.inventorySystem.application.command.productPackaging;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+
+import com.javv.inventorySystem.domain.exception.RecordInitializationException;
 
 public record ProductPackagingRegisterCommand(
-    String packagingCode,
-    int unitOfMeasureId,
-    int conversionFactor,
+    String unitOfMeasureName,
+    Integer conversionFactor,
     BigDecimal price) {
 
   public ProductPackagingRegisterCommand {
-    Objects.requireNonNull(
-        packagingCode, "Product Packaging Register Command: Packaging Code cannot be null.");
 
-    Objects.requireNonNull(
-        unitOfMeasureId, "Product Packaging Register Command: Unit of Measure ID cannot be null.");
+    if (unitOfMeasureName == null || unitOfMeasureName.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Packaging Register Command: Unit Of Measure cannot be null or blank.");
+    }
 
-    Objects.requireNonNull(
-        conversionFactor, "Product Packaging Register Command: Conversion Factor cannot be null.");
+    if (conversionFactor == null) {
+      throw new RecordInitializationException(
+          "Product Packaging Register Command: Conversion Factor cannot be null.");
+    }
 
-    Objects.requireNonNull(
-        price, "Product Packaging Register Command: Packaging Price cannot be null.");
+    if (price == null) {
+      throw new RecordInitializationException(
+          "Product Packaging Register Command: Price cannot be null.");
+    }
 
     if (conversionFactor <= 0) {
       throw new IllegalArgumentException(

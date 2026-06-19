@@ -16,11 +16,11 @@ public record ProductRegisterDto(
     @NotBlank(message = "Product Register DTO: Product Name is required.") 
     String name,
 
-    @NotNull(message = "Product Register DTO: Supplier Name is required.") 
-    Integer supplierId,
+    @NotBlank(message = "Product Register DTO: Supplier Code is required.") 
+    String supplierCode,
 
-    @NotNull(message = "Product Register DTO: Base Unit of Measure is required.") 
-    Integer baseUnitOfMeasureId,
+    @NotBlank(message = "Product Register DTO: Base Unit of Measure Name is required.") 
+    String baseUnitOfMeasureName,
 
     @NotNull(message = "Product Register DTO: Product Packaging is required.")
     @Valid

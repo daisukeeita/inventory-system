@@ -20,6 +20,7 @@ import com.javv.inventorySystem.presentation.unitsOfMeasure.dto.UnitsOfMeasureRe
 import com.javv.inventorySystem.presentation.unitsOfMeasure.dto.UnitsOfMeasureUpdateDto;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
 @RestController
 @RequestMapping("api/v1/uom")
@@ -31,7 +32,7 @@ public class UnitsOfMeasureController {
   @Autowired
   private UnitsOfMeasureDtoMapper unitsOfMeasureDtoMapper;
 
-  @PostMapping("/save")
+  @PostMapping("/create")
   @ResponseStatus(HttpStatus.CREATED)
   public ApiResponse<UnitsOfMeasureResponseDto> create(
       @Valid @RequestBody UnitsOfMeasureRegisterDto unitsOfMeasureRegisterDto) {
@@ -44,23 +45,27 @@ public class UnitsOfMeasureController {
     UnitsOfMeasureResponseDto responseDto = unitsOfMeasureDtoMapper.toResponseDto(unitsOfMeasure);
 
     return ApiResponse.success(
-        responseDto, "Units of Measure created successfully.", HttpStatus.CREATED.value());
+        responseDto,
+        "Units of Measure created successfully.",
+        HttpStatus.CREATED.value());
   }
 
-  @PutMapping("/update/{id}")
+  @PutMapping("/update/{name}")
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<UnitsOfMeasureResponseDto> update(
-      @PathVariable int id,
+      @PathVariable @NotBlank(message = "Query Parameter: Unit of Measure Name cannot be blank.") String name,
       @Valid @RequestBody UnitsOfMeasureUpdateDto unitsOfMeasureUpdateDto) {
 
     UnitsOfMeasureUpdateCommand unitsOfMeasureUpdateCommand = unitsOfMeasureDtoMapper
         .toUpdateCommandRecord(unitsOfMeasureUpdateDto);
 
-    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.update(id, unitsOfMeasureUpdateCommand);
+    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.update(name, unitsOfMeasureUpdateCommand);
 
     UnitsOfMeasureResponseDto responseDto = unitsOfMeasureDtoMapper.toResponseDto(unitsOfMeasure);
 
     return ApiResponse.success(
-        responseDto, "Units of Measure updated successfully.", HttpStatus.OK.value());
+        responseDto,
+        "Units of Measure updated successfully.",
+        HttpStatus.OK.value());
   }
 }

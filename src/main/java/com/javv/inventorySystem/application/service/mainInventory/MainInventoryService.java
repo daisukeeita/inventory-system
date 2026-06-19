@@ -2,6 +2,7 @@ package com.javv.inventorySystem.application.service.mainInventory;
 
 import java.util.Objects;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,15 +25,11 @@ import jakarta.persistence.EntityNotFoundException;
 @Transactional(readOnly = true)
 public class MainInventoryService {
 
+  @Autowired
   private MainInventoryRepositoryInterface mainInventoryRepositoryInterface;
-  private ProductService productService;
 
-  public MainInventoryService(
-      ProductService productService,
-      MainInventoryRepositoryInterface mainInventoryRepositoryInterface) {
-    this.productService = productService;
-    this.mainInventoryRepositoryInterface = mainInventoryRepositoryInterface;
-  }
+  @Autowired
+  private ProductService productService;
 
   @Transactional
   public MainInventoryResponseRead create(MainInventoryRegisterCommand mainInventoryRegisterCommand) {

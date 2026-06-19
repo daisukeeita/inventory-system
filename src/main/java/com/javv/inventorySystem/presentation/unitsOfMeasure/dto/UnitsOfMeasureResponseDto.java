@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 
 // @formatter:off
 public record UnitsOfMeasureResponseDto(
-    @NotNull(message = "Measure Response DTO: Measure ID is required for response.") 
-    Integer id,
 
     @NotBlank(message = "Measure Response DTO: Measure Name is required for response.") 
     String name,

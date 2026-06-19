@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 public class ProductPackaging {
   private Long id;
   private String packagingCode;
-  private Long productId;
-  private int unitsOfMeasureId;
+  private String productSku;
+  private String unitsOfMeasureName;
   private int conversionFactor;
   private BigDecimal price;
 
@@ -16,14 +16,14 @@ public class ProductPackaging {
   public ProductPackaging(
       Long id,
       String packagingCode,
-      Long productId,
-      int unitsOfMeasureId,
+      String productSku,
+      String unitsOfMeasureName,
       int conversionFactor,
       BigDecimal price) {
     this.id = id;
     this.packagingCode = packagingCode;
-    this.productId = productId;
-    this.unitsOfMeasureId = unitsOfMeasureId;
+    this.productSku = productSku;
+    this.unitsOfMeasureName = unitsOfMeasureName;
     this.conversionFactor = conversionFactor;
     this.price = price;
   }
@@ -36,12 +36,12 @@ public class ProductPackaging {
     this.packagingCode = packagingCode;
   }
 
-  public void setProductId(Long productId) {
-    this.productId = productId;
+  public void setProductSku(String productSku) {
+    this.productSku = productSku;
   }
 
-  public void setUnitsOfMeasureId(int unitsOfMeasureId) {
-    this.unitsOfMeasureId = unitsOfMeasureId;
+  public void setUnitsOfMeasureName(String unitsOfMeasureName) {
+    this.unitsOfMeasureName = unitsOfMeasureName;
   }
 
   public void setConversionFactor(int conversionFactor) {
@@ -60,12 +60,12 @@ public class ProductPackaging {
     return packagingCode;
   }
 
-  public Long getProductId() {
-    return productId;
+  public String getProductSku() {
+    return productSku;
   }
 
-  public int getUnitsOfMeasureId() {
-    return unitsOfMeasureId;
+  public String getUnitsOfMeasureName() {
+    return unitsOfMeasureName;
   }
 
   public int getConversionFactor() {

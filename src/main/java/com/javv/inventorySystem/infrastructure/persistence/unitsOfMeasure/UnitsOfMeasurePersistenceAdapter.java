@@ -63,7 +63,7 @@ public class UnitsOfMeasurePersistenceAdapter implements UnitsOfMeasureRepositor
 
   @Override
   public List<String> findExistingNames(List<String> names) {
-    return unitsOfMeasureJpaRepository.findExistingNames(names);
+    return unitsOfMeasureJpaRepository.findExistingName(names);
   }
 
   @Override

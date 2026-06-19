@@ -14,8 +14,8 @@ public class ProductPackagingPersistenceMapper {
     ProductPackaging productPackaging = new ProductPackaging();
     productPackaging.setId(productPackagingJpaEntity.getId());
     productPackaging.setPackagingCode(productPackagingJpaEntity.getPackagingCode());
-    productPackaging.setProductId(productPackagingJpaEntity.getProduct().getId());
-    productPackaging.setUnitsOfMeasureId(productPackagingJpaEntity.getUnitsOfMeasure().getId());
+    productPackaging.setProductSku(productPackagingJpaEntity.getProduct().getSku());
+    productPackaging.setUnitsOfMeasureName(productPackagingJpaEntity.getUnitsOfMeasure().getName());
     productPackaging.setConversionFactor(productPackagingJpaEntity.getConversionFactor());
     productPackaging.setPrice(productPackagingJpaEntity.getPrice());
 

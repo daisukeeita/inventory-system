@@ -22,7 +22,8 @@ public class UnitsOfMeasureDtoMapper {
     }
 
     return new UnitsOfMeasureRegisterCommand(
-        unitsOfMeasureRegisterDto.name(), unitsOfMeasureRegisterDto.abbreviation());
+        unitsOfMeasureRegisterDto.name(),
+        unitsOfMeasureRegisterDto.abbreviation());
   }
 
   public UnitsOfMeasureUpdateCommand toUpdateCommandRecord(
@@ -34,7 +35,8 @@ public class UnitsOfMeasureDtoMapper {
     }
 
     return new UnitsOfMeasureUpdateCommand(
-        unitsOfMeasureUpdateDto.name(), unitsOfMeasureUpdateDto.abbreviation());
+        unitsOfMeasureUpdateDto.name(),
+        unitsOfMeasureUpdateDto.abbreviation());
   }
 
   public UnitsOfMeasureResponseDto toResponseDto(UnitsOfMeasure unitsOfMeasure) {
@@ -45,7 +47,6 @@ public class UnitsOfMeasureDtoMapper {
     }
 
     return new UnitsOfMeasureResponseDto(
-        unitsOfMeasure.getId(),
         unitsOfMeasure.getName().trim(),
         unitsOfMeasure.getAbbreviation().trim(),
         unitsOfMeasure.getCreatedAt(),

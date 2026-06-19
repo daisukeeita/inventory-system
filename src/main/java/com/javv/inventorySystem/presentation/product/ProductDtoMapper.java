@@ -2,7 +2,6 @@ package com.javv.inventorySystem.presentation.product;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
@@ -10,6 +9,7 @@ import com.javv.inventorySystem.application.command.product.ProductRegisterComma
 import com.javv.inventorySystem.application.command.product.ProductResponseRead;
 import com.javv.inventorySystem.application.command.product.ProductUpdateCommand;
 import com.javv.inventorySystem.application.command.productPackaging.ProductPackagingRegisterCommand;
+import com.javv.inventorySystem.domain.exception.RecordInitializationException;
 import com.javv.inventorySystem.presentation.product.dto.ProductRegisterDto;
 import com.javv.inventorySystem.presentation.product.dto.ProductResponseDto;
 import com.javv.inventorySystem.presentation.product.dto.ProductUpdateDto;
@@ -20,33 +20,38 @@ public class ProductDtoMapper {
 
   public ProductRegisterCommand toRegisterCommand(ProductRegisterDto productRegisterDto) {
 
-    Objects.requireNonNull(productRegisterDto,
-        "Product DTO Mapper: Cannot map a null ProductRegisterDto to a Command Record.");
+    if (productRegisterDto == null) {
+      throw new RecordInitializationException(
+          "Product DTO Mapper: Cannot map a null ProductRegisterDTO to a Command.");
+    }
 
-    Objects.requireNonNull(productRegisterDto.listPackagingDto(),
-        "Product DTO Mapper: Cannot map a null ProductPackagingRegisterDto to a Command Record.");
+    if (productRegisterDto.listPackagingDto() == null) {
+      throw new RecordInitializationException(
+          "Product DTO Mapper: Cannot map a null ProductPackagingRegisterDTO to a Command.");
+    }
 
     List<ProductPackagingRegisterCommand> listPackagingCommand = new ArrayList<ProductPackagingRegisterCommand>();
 
     productRegisterDto.listPackagingDto().forEach(
         packaging -> listPackagingCommand.add(new ProductPackagingRegisterCommand(
-            packaging.packagingCode().trim(),
-            packaging.unitsOfMeasureId(),
+            packaging.unitsOfMeasureName(),
             packaging.conversionFactor(),
             packaging.price())));
 
     return new ProductRegisterCommand(
         productRegisterDto.sku().trim(),
         productRegisterDto.name().trim(),
-        productRegisterDto.supplierId(),
-        productRegisterDto.baseUnitOfMeasureId(),
+        productRegisterDto.supplierCode().trim(),
+        productRegisterDto.baseUnitOfMeasureName().trim(),
         listPackagingCommand);
   }
 
   public ProductUpdateCommand toUpdateCommand(ProductUpdateDto productUpdateDto) {
 
-    Objects.requireNonNull(productUpdateDto,
-        "Product DTO Mapper: Cannot map a null ProductUpdateDto to a Command Record.");
+    if (productUpdateDto == null) {
+      throw new RecordInitializationException(
+          "Product DTO Mapper: Cannot map a null ProductUpdateDto to a Command.");
+    }
 
     return new ProductUpdateCommand(
         productUpdateDto.sku(),
@@ -57,28 +62,27 @@ public class ProductDtoMapper {
 
   public ProductResponseDto toResponseDto(ProductResponseRead responseRead) {
 
-    Objects.requireNonNull(responseRead,
-        "Product DTO Mapper: Cannot map a null ProductResponseRead to a Response DTO Record.");
+    if (responseRead == null)
+      throw new RecordInitializationException(
+          "Product DTO Mapper: Cannot map a null ProductResponseRead to a Response DTO Record.");
 
     List<ProductPackagingResponseDto> listProductPackagingResponseDto = new ArrayList<>();
 
     responseRead.listProductPackaging().forEach(
         packaging -> listProductPackagingResponseDto.add(
             new ProductPackagingResponseDto(
-                packaging.id(),
                 packaging.packagingCode(),
                 packaging.sku(),
-                packaging.sku(),
+                packaging.productName(),
+                packaging.unitOfMeasure(),
                 packaging.conversionFactor(),
                 packaging.price())));
 
     return new ProductResponseDto(
-        responseRead.id(),
         responseRead.sku(),
         responseRead.name(),
-        responseRead.supplierId(),
+        responseRead.supplierCode(),
         responseRead.supplierName(),
-        responseRead.baseUnitOfMeasureId(),
         responseRead.baseUnitsOfMeasure(),
         listProductPackagingResponseDto);
   }

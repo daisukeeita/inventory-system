@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 
 // @formatter:off
 public record ProductPackagingResponseDto(
-    @NotNull(message = "Product Packaging Response DTO: ID is required for response.") 
-    Long id,
 
     @NotBlank(message = "Product Packaging Response DTO: Packaging Code is required for response.")
     String packagingCode,
@@ -16,14 +14,14 @@ public record ProductPackagingResponseDto(
     @NotBlank(message = "Product Packaging Response DTO: Product SKU is required for response.")
     String sku,
 
-    // @NotBlank(message = "Product Packaging Response DTO: Product Name is required for response.")
-    // String productName,
+    @NotBlank(message = "Product Packaging Response DTO: Product Name is required for response.")
+    String productName,
 
     @NotBlank(message = "Product Packaging Response DTO: Unit of Measure is required for response.")
     String unitOfMeasure,
 
     @NotNull(message = "Product Packaging Respone DTO: Conversion Factor is required for response.")
-    int conversionFactor,
+    Integer conversionFactor,
 
     @NotNull(message = "Product Packaging Response DTO: Packaging Price is required for response.")
     BigDecimal price) {}

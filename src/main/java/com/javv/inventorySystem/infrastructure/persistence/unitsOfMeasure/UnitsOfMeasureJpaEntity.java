@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "units_of_measure", indexes = {
-    @Index(name = "id_units_of_measure_name", columnList = "name")
+    @Index(name = "idx_units_of_measure_name", columnList = "name")
 })
 @EntityListeners(AuditingEntityListener.class)
 public class UnitsOfMeasureJpaEntity {

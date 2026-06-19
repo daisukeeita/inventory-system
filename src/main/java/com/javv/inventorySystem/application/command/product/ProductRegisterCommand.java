@@ -1,32 +1,42 @@
 package com.javv.inventorySystem.application.command.product;
 
 import java.util.List;
-import java.util.Objects;
 
 import com.javv.inventorySystem.application.command.productPackaging.ProductPackagingRegisterCommand;
+import com.javv.inventorySystem.domain.exception.RecordInitializationException;
 
 public record ProductRegisterCommand(
     String sku,
     String name,
-    int supplierId,
-    int baseUnitOfMeasureId,
+    String supplierCode,
+    String baseUnitOfMeasureName,
     List<ProductPackagingRegisterCommand> listPackagingCommand) {
 
   public ProductRegisterCommand {
 
-    Objects.requireNonNull(sku,
-        "Product Register Command: SKU cannot be null");
+    if (sku == null || sku.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Register Command: SKU cannot be null or blank.");
+    }
 
-    Objects.requireNonNull(name,
-        "Product Register Command: Product Name cannot be null.");
+    if (name == null || name.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Register Command: Name cannot be null or blank.");
+    }
 
-    Objects.requireNonNull(supplierId,
-        "Product Register Command: Supplier Name cannot be null.");
+    if (supplierCode == null || supplierCode.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Register Command: Supplier Code cannot be null or blank.");
+    }
 
-    Objects.requireNonNull(baseUnitOfMeasureId,
-        "Product Register Command: Base Unit of Measure cannot be null.");
+    if (baseUnitOfMeasureName == null || baseUnitOfMeasureName.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Register Command: Base Unit of Measure Name cannot be null or blank.");
+    }
 
-    Objects.requireNonNull(listPackagingCommand,
-        "Product Register Command: List of Packages cannot be null.");
+    if (listPackagingCommand == null || listPackagingCommand.isEmpty()) {
+      throw new RecordInitializationException(
+          "Product Register Command: List of Packages cannot be null or empty.");
+    }
   }
 }

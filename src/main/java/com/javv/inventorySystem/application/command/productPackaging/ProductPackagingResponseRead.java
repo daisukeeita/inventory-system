@@ -1,34 +1,47 @@
 package com.javv.inventorySystem.application.command.productPackaging;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+
+import com.javv.inventorySystem.domain.exception.RecordInitializationException;
 
 public record ProductPackagingResponseRead(
-    Long id,
     String packagingCode,
     String sku,
+    String productName,
     String unitOfMeasure,
-    int conversionFactor,
+    Integer conversionFactor,
     BigDecimal price) {
 
   public ProductPackagingResponseRead {
 
-    Objects.requireNonNull(id,
-        "Product Packaging Response Read: ID cannot be null.");
+    if (packagingCode == null || packagingCode.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Packaging Response Read: Packaging Code cannot be null or empty.");
+    }
 
-    Objects.requireNonNull(packagingCode,
-        "Product Packaging Response Read: Packaging Code cannot be null.");
+    if (sku == null || sku.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Packaging Response Read: Product SKU cannot be null or empty.");
+    }
 
-    Objects.requireNonNull(sku,
-        "Product Packaging Response Read: Product SKU cannot be null.");
+    if (productName == null || productName.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Packaging Response Read: Product Name cannot be null or empty.");
+    }
 
-    Objects.requireNonNull(unitOfMeasure,
-        "Product Packaging Response Read: Unit of Measure cannot be null.");
+    if (unitOfMeasure == null || unitOfMeasure.isBlank()) {
+      throw new RecordInitializationException(
+          "Product Packaging Response Read: Unit of Measure cannot be null or empty.");
+    }
 
-    Objects.requireNonNull(conversionFactor,
-        "Product Packaging Response Read: Conversion Factor cannot be null.");
+    if (conversionFactor == null) {
+      throw new RecordInitializationException(
+          "Product Packaging Response Read: Conversion Factor cannot be null or empty.");
+    }
 
-    Objects.requireNonNull(price,
-        "Product Packaging Response Read: Price cannot be null.");
+    if (price == null) {
+      throw new RecordInitializationException(
+          "Product Packaging Response Read: Price cannot be null or empty.");
+    }
   }
 }

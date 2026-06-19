@@ -9,8 +9,8 @@ public class Product {
   private Long id;
   private String sku;
   private String name;
-  private int supplierId;
-  private int baseUomId;
+  private String supplierCode;
+  private String baseUomName;
   private List<ProductPackaging> listPackages = new ArrayList<ProductPackaging>();
   private Instant createdAt;
   private Instant updatedAt;
@@ -22,29 +22,29 @@ public class Product {
       Long id,
       String sku,
       String name,
-      int supplierId,
-      int baseUomId,
+      String supplierCode,
+      String baseUomName,
       List<ProductPackaging> listPackages) {
     this.id = id;
     this.sku = sku;
     this.name = name;
-    this.supplierId = supplierId;
-    this.baseUomId = baseUomId;
+    this.supplierCode = supplierCode;
+    this.baseUomName = baseUomName;
     this.listPackages = listPackages;
   }
 
   public ProductPackaging addPackaging(
       String packagingCode,
-      int unitsOfMeasureId,
+      String unitsOfMeasureName,
       int conversionFactor,
       BigDecimal price) {
 
     ProductPackaging productPackaging = new ProductPackaging();
     productPackaging.setPackagingCode(packagingCode);
-    productPackaging.setUnitsOfMeasureId(unitsOfMeasureId);
+    productPackaging.setUnitsOfMeasureName(unitsOfMeasureName);
     productPackaging.setConversionFactor(conversionFactor);
     productPackaging.setPrice(price);
-    productPackaging.setProductId(this.getId());
+    productPackaging.setProductSku(this.getSku());
 
     this.listPackages.add(productPackaging);
 
@@ -63,12 +63,12 @@ public class Product {
     this.name = name;
   }
 
-  public void setSupplierId(int supplierId) {
-    this.supplierId = supplierId;
+  public void setSupplierCode(String supplierCode) {
+    this.supplierCode = supplierCode;
   }
 
-  public void setBaseUnitsOfMeasureId(int baseUomId) {
-    this.baseUomId = baseUomId;
+  public void setBaseUnitsOfMeasureName(String baseUomName) {
+    this.baseUomName = baseUomName;
   }
 
   public void setListPackages(List<ProductPackaging> listPackages) {
@@ -95,12 +95,12 @@ public class Product {
     return name;
   }
 
-  public int getSupplierId() {
-    return supplierId;
+  public String getSupplierCode() {
+    return supplierCode;
   }
 
-  public int getBaseUnitsOfMeasureId() {
-    return baseUomId;
+  public String getBaseUnitsOfMeasureName() {
+    return baseUomName;
   }
 
   public List<ProductPackaging> getListPackages() {

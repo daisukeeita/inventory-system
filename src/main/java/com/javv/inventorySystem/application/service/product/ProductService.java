@@ -23,7 +23,6 @@ import com.javv.inventorySystem.domain.exception.ResourceNotFoundException;
 import com.javv.inventorySystem.domain.exception.ServiceOperationException;
 import com.javv.inventorySystem.domain.model.product.Product;
 import com.javv.inventorySystem.domain.model.product.ProductPackaging;
-import com.javv.inventorySystem.domain.model.product.UnitsOfMeasure;
 import com.javv.inventorySystem.domain.repository.ProductRepositoryInterface;
 
 @Service
@@ -43,24 +42,25 @@ public class ProductService {
   public ProductResponseRead create(ProductRegisterCommand productRegisterCommand) {
 
     try {
-      // if (!supplierService.checkIfExistsById(productRegisterCommand.supplierId()))
-      // {
-      // throw new ResourceNotFoundException(
-      // "Supplier does not exist using id: " + productRegisterCommand.supplierId() +
-      // ".");
-      // }
-
-      if (!unitsOfMeasureService.checkIfExistsById(productRegisterCommand.baseUnitOfMeasureId())) {
+      if (!supplierService
+          .checkIfExistsBySupplierCode(productRegisterCommand.supplierCode())) {
         throw new ResourceNotFoundException(
-            "Unit of Measure does not exists using id: " + productRegisterCommand.baseUnitOfMeasureId() + ".");
+            "Supplier does not exist with Supplier Code: " +
+                productRegisterCommand.supplierCode() + ".");
       }
 
-      List<Integer> listUomId = productRegisterCommand.listPackagingCommand()
+      if (!unitsOfMeasureService.checkIfExistsByName(productRegisterCommand.baseUnitOfMeasureName())) {
+        throw new ResourceNotFoundException(
+            "Unit of Measure does not exists using Measure Name: " +
+                productRegisterCommand.baseUnitOfMeasureName() + ".");
+      }
+
+      List<String> listUomName = productRegisterCommand.listPackagingCommand()
           .stream()
-          .map(packaging -> packaging.unitOfMeasureId())
+          .map(packaging -> packaging.unitOfMeasureName())
           .toList();
 
-      if (!unitsOfMeasureService.allIdExists(listUomId)) {
+      if (!unitsOfMeasureService.doAllNamesExists(listUomName)) {
         throw new ResourceNotFoundException(
             "One or more unit of measure IDs do not exists.");
       }
@@ -79,20 +79,21 @@ public class ProductService {
 
   // TODO: Modify the updateProduct method
   @Transactional
-  public Product update(Long id, ProductUpdateCommand productUpdateCommand) {
+  public Product update(String sku, ProductUpdateCommand productUpdateCommand) {
     // Supplier supplier =
     // supplierService.getById(productUpdateCommand.supplierId());
-    UnitsOfMeasure unitsOfMeasure = unitsOfMeasureService.getById(productUpdateCommand.baseUnitOfMeasureId());
+    // UnitsOfMeasure unitsOfMeasure =
+    // unitsOfMeasureService.getById(productUpdateCommand.baseUnitOfMeasureId());
 
     Product product = productRepositoryInterface
-        .findById(id)
+        .findBySku(sku)
         .orElseThrow(
-            () -> new ResourceNotFoundException("Product was not found using id: '" + id + "'"));
+            () -> new ResourceNotFoundException("Product was not found with SKU: " + sku + "."));
 
     product.setSku(productUpdateCommand.sku());
     product.setName(productUpdateCommand.name());
     // product.setSupplierId(supplier.getId());
-    product.setBaseUnitsOfMeasureId(unitsOfMeasure.getId());
+    // product.setBaseUnitsOfMeasureId(unitsOfMeasure.getId());
 
     try {
       return productRepositoryInterface.update(product);
@@ -110,17 +111,22 @@ public class ProductService {
     return product;
   }
 
-  public Product getById(Long id) {
-    Optional<Product> optionalProduct = productRepositoryInterface.findById(id);
-    Product product = optionalProduct.orElseThrow(
-        () -> new ResourceNotFoundException(
-            "Product was not found using ID: '" + id + "'"));
-
-    return product;
+  public boolean checkIfExistsBySku(String sku) {
+    return productRepositoryInterface.existsBySku(sku);
   }
 
-  public List<Product> getAllById(List<Long> id) {
-    return productRepositoryInterface.findAllById(id);
+  public boolean doAllSkuExists(List<String> sku) {
+    if (sku == null || sku.isEmpty()) {
+      return false;
+    }
+
+    List<String> filteredList = sku
+        .stream()
+        .distinct()
+        .toList();
+
+    List<String> existingList = productRepositoryInterface.findExistingSkus(sku);
+    return filteredList.size() == existingList.size();
   }
 
   public Page<Product> getAll(int page, int size) {
@@ -129,55 +135,40 @@ public class ProductService {
     return productRepositoryInterface.findAll(pageable);
   }
 
-  public boolean checkIfExistsById(Long id) {
-    return productRepositoryInterface.existsById(id);
-  }
-
-  public boolean allIdsExists(List<Long> listId) {
-    if (listId == null || listId.isEmpty()) {
-      return false;
-    }
-
-    Long existCount = productRepositoryInterface.countByIdIn(listId);
-    return existCount == listId.size();
-  }
-
   private ProductResponseRead toProductResponseRead(Product product) {
-    // String supplierName = supplierService.getById(
-    // product.getSupplierId()).getCompanyName();
-    String baseUnitOfMeasureName = unitsOfMeasureService.getById(
-        product.getBaseUnitsOfMeasureId()).getName();
+    String supplierName = supplierService
+        .getBySupplierCode(product.getSupplierCode())
+        .getCompanyName();
+    String baseUnitOfMeasureName = unitsOfMeasureService
+        .getByName(product.getBaseUnitsOfMeasureName())
+        .getName();
 
     List<ProductPackagingResponseRead> listProductPackagingRead = new ArrayList<>();
 
     for (ProductPackaging packaging : product.getListPackages()) {
-      String productSku = getById(packaging.getProductId()).getSku();
-      String unitOfMeasureName = unitsOfMeasureService.getById(
-          packaging.getUnitsOfMeasureId()).getName();
+      String productName = getBySku(packaging.getProductSku()).getName();
+
+      String unitOfMeasureName = packaging.getUnitsOfMeasureName();
 
       listProductPackagingRead.add(
           new ProductPackagingResponseRead(
-              packaging.getId(),
               packaging.getPackagingCode(),
-              productSku,
+              packaging.getProductSku(),
+              productName,
               unitOfMeasureName,
               packaging.getConversionFactor(),
               packaging.getPrice()));
     }
 
-    // ProductResponseRead responseRead = new ProductResponseRead(
-    // product.getId(),
-    // product.getSku(),
-    // product.getName(),
-    // product.getSupplierId(),
-    // supplierName,
-    // product.getBaseUnitsOfMeasureId(),
-    // baseUnitOfMeasureName,
-    // listProductPackagingRead);
-    //
-    // return responseRead;
+    ProductResponseRead responseRead = new ProductResponseRead(
+        product.getSku(),
+        product.getName(),
+        product.getSupplierCode(),
+        supplierName,
+        baseUnitOfMeasureName,
+        listProductPackagingRead);
 
-    return null;
+    return responseRead;
   }
 
   private Product toDomainEntity(ProductRegisterCommand productRegisterCommand) {
@@ -185,13 +176,15 @@ public class ProductService {
     Product product = new Product();
     product.setSku(productRegisterCommand.sku());
     product.setName(productRegisterCommand.name());
-    product.setSupplierId(productRegisterCommand.supplierId());
-    product.setBaseUnitsOfMeasureId(productRegisterCommand.baseUnitOfMeasureId());
+    product.setSupplierCode(productRegisterCommand.supplierCode());
+    product.setBaseUnitsOfMeasureName(productRegisterCommand.baseUnitOfMeasureName());
 
     for (ProductPackagingRegisterCommand packaging : productRegisterCommand.listPackagingCommand()) {
+      String packagingCode = product.getSku() + "-" + packaging.unitOfMeasureName();
+
       product.addPackaging(
-          packaging.packagingCode(),
-          packaging.unitOfMeasureId(),
+          packagingCode.toUpperCase(),
+          packaging.unitOfMeasureName(),
           packaging.conversionFactor(),
           packaging.price());
     }

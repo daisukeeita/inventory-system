@@ -15,13 +15,9 @@ public interface ProductRepositoryInterface {
 
   Optional<Product> findBySku(String sku);
 
-  Optional<Product> findById(Long id);
+  boolean existsBySku(String sku);
 
-  List<Product> findAllById(List<Long> listId);
+  List<String> findExistingSkus(List<String> sku);
 
   Page<Product> findAll(Pageable pageable);
-
-  boolean existsById(Long id);
-
-  Long countByIdIn(List<Long> listId);
 }

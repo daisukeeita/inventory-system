@@ -2,7 +2,6 @@ package com.javv.inventorySystem.presentation.transaction.inbound.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -11,11 +10,11 @@ import jakarta.validation.constraints.NotNull;
 
 // @formatter:off
 public record InboundRegisterDto(
-    @NotNull(message = "Inbound Register DTO: Supplier ID is required for register.") 
-    Integer supplierId,
+    @NotBlank(message = "Inbound Register DTO: Supplier Code is required for register.") 
+    String supplierCode,
 
-    @NotNull(message = "Inbound Register DTO: Encoder Username is required for register.") 
-    UUID encoderId,
+    @NotBlank(message = "Inbound Register DTO: Encoder Username is required for register.") 
+    String encoderUsername,
 
     @NotBlank(message = "Inbound Register DTO: Invoice Number is required for register.") 
     String invoiceNumber,

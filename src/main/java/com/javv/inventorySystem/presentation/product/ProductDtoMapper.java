@@ -25,16 +25,16 @@ public class ProductDtoMapper {
           "Product DTO Mapper: Cannot map a null ProductRegisterDTO to a Command.");
     }
 
-    if (productRegisterDto.listPackagingDto() == null) {
+    if (productRegisterDto.listPackagingRegisterDto() == null) {
       throw new RecordInitializationException(
           "Product DTO Mapper: Cannot map a null ProductPackagingRegisterDTO to a Command.");
     }
 
     List<ProductPackagingRegisterCommand> listPackagingCommand = new ArrayList<ProductPackagingRegisterCommand>();
 
-    productRegisterDto.listPackagingDto().forEach(
+    productRegisterDto.listPackagingRegisterDto().forEach(
         packaging -> listPackagingCommand.add(new ProductPackagingRegisterCommand(
-            packaging.unitsOfMeasureName(),
+            packaging.unitOfMeasure(),
             packaging.conversionFactor(),
             packaging.price())));
 
@@ -42,7 +42,7 @@ public class ProductDtoMapper {
         productRegisterDto.sku().trim(),
         productRegisterDto.name().trim(),
         productRegisterDto.supplierCode().trim(),
-        productRegisterDto.baseUnitOfMeasureName().trim(),
+        productRegisterDto.baseUnitOfMeasure().trim(),
         listPackagingCommand);
   }
 

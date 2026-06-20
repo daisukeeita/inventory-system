@@ -47,7 +47,7 @@ public class InboundPersistenceMapper {
           .getReferenceBySku(inboundItem.getProductSku());
 
       ProductPackagingJpaEntity productPackagingJpaEntity = productPackagingJpaRepository
-          .getReferenceById(inboundItem.getPackagingId());
+          .getReferenceById(inboundItem.getPackagingCode());
 
       inboundJpaEntity.addItem(
           productJpaEntity,

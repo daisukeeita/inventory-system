@@ -1,31 +1,32 @@
 package com.javv.inventorySystem.application.command.transaction.inbound;
 
-import java.util.Objects;
+import com.javv.inventorySystem.domain.exception.RecordInitializationException;
 
 public record InboundItemRegisterCommand(
-    Long productId,
-    Long packagingId,
-    int quantityReceived) {
+    String productSku,
+    String packagingCode,
+    Integer quantityReceived) {
 
   public InboundItemRegisterCommand {
 
-    Objects.requireNonNull(productId,
-        "Inbound Item Register Command: Product ID cannot be null.");
-    if (productId <= 0) {
-      throw new IllegalArgumentException(
-          "Inbound Item Register Command: Product ID must be greater than zero.");
+    if (productSku == null || productSku.isBlank()) {
+      throw new RecordInitializationException(
+          "Inbound Item Register Command: Product SKU cannot be null or empty.");
     }
 
-    Objects.requireNonNull(packagingId,
-        "Inbound Item Register Command: Packaging ID cannot be null.");
-    if (packagingId <= 0) {
-      throw new IllegalArgumentException(
-          "Inbound Item Register Command: Packaging ID must be greater than zero.");
+    if (packagingCode == null || packagingCode.isBlank()) {
+      throw new RecordInitializationException(
+          "Inbound Item Register Command: Packaging Code cannot be null or empty.");
     }
 
-    if (quantityReceived <= 0) {
+    if (quantityReceived == null) {
+      throw new RecordInitializationException(
+          "Inbound Item Register Command: Quantity Received cannot be null.");
+    }
+
+    if (quantityReceived < 0) {
       throw new IllegalArgumentException(
-          "Inbound Item Register Command: Quantity Received cannot be less than or equal to zero.");
+          "Inbound Item Register Command: Quantity Received cannot be less than to zero.");
     }
   }
 }

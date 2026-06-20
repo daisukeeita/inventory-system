@@ -5,13 +5,13 @@ import java.math.BigDecimal;
 import com.javv.inventorySystem.domain.exception.RecordInitializationException;
 
 public record ProductPackagingRegisterCommand(
-    String unitOfMeasureName,
+    String unitOfMeasure,
     Integer conversionFactor,
     BigDecimal price) {
 
   public ProductPackagingRegisterCommand {
 
-    if (unitOfMeasureName == null || unitOfMeasureName.isBlank()) {
+    if (unitOfMeasure == null || unitOfMeasure.isBlank()) {
       throw new RecordInitializationException(
           "Product Packaging Register Command: Unit Of Measure cannot be null or blank.");
     }

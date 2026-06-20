@@ -20,10 +20,10 @@ public record ProductRegisterDto(
     String supplierCode,
 
     @NotBlank(message = "Product Register DTO: Base Unit of Measure Name is required.") 
-    String baseUnitOfMeasureName,
+    String baseUnitOfMeasure,
 
     @NotNull(message = "Product Register DTO: Product Packaging is required.")
     @Valid
-    List<ProductPackagingRegisterDto> listPackagingDto
+    List<ProductPackagingRegisterDto> listPackagingRegisterDto
     ) {
 }

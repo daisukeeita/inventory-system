@@ -2,40 +2,35 @@ package com.javv.inventorySystem.application.command.transaction.inbound;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+
+import com.javv.inventorySystem.domain.exception.RecordInitializationException;
 
 public record InboundRegisterCommand(
-    int supplierId,
-    UUID encoderId,
+    String supplierCode,
+    String encoderUsername,
     String invoiceNumber,
     LocalDateTime dateReceived,
     List<InboundItemRegisterCommand> listInboundItem) {
 
   public InboundRegisterCommand {
-    if (supplierId <= 0) {
-      throw new IllegalArgumentException(
-          "Inbound Register Command: Supplier ID must be greater that zero.");
+    if (supplierCode == null || supplierCode.isBlank()) {
+      throw new RecordInitializationException(
+          "Inbound Register Command: Supplier code cannot be null or empty.");
     }
 
-    Objects.requireNonNull(encoderId,
-        "Inbound Register Command: Username cannot be null.");
-
-    Objects.requireNonNull(invoiceNumber,
-        "Inbound Register Command: Invoice Number cannot be null.");
-    if (invoiceNumber.isBlank()) {
-      throw new IllegalArgumentException(
-          "Inbound Register Command: Invoice Number cannot be empty.");
+    if (encoderUsername == null || encoderUsername.isBlank()) {
+      throw new RecordInitializationException(
+          "Inbound Register Command: Encoder Username cannot be null or empty.");
     }
 
-    Objects.requireNonNull(dateReceived,
-        "Inbound Register Command: Date Received cannot be null.");
+    if (invoiceNumber == null || invoiceNumber.isBlank()) {
+      throw new IllegalArgumentException(
+          "Inbound Register Command: Invoice Number cannot be null or empty.");
+    }
 
-    Objects.requireNonNull(listInboundItem,
-        "Inbound Register Command: List Items cannot be null.");
     if (listInboundItem.isEmpty()) {
       throw new IllegalArgumentException(
-          "Inbound Register Command: List Items cannot be empty.");
+          "Inbound Register Command: List of Inbound Items cannot be empty.");
     }
 
     listInboundItem = List.copyOf(listInboundItem);

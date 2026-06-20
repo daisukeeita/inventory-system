@@ -10,8 +10,8 @@ import jakarta.validation.constraints.Positive;
 // @formatter:off
 public record ProductPackagingRegisterDto(
     @NotBlank(
-      message = "Product Packaging Register DTO: Unit of Measure Name is required for registration.")
-    String unitsOfMeasureName,
+      message = "Product Packaging Register DTO: Unit of Measure is required for registration.")
+    String unitOfMeasure,
 
     @NotNull(
       message = "Product Packaging Register DTO: Conversion Factor is required for registration.")

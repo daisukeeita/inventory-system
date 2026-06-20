@@ -36,13 +36,13 @@ public class Inbound {
 
   public InboundItem addInboundItem(
       String productSku,
-      Long packagingId,
+      String packagingCode,
       int quantityReceived,
       int baseQuantityEquivalent) {
 
     InboundItem item = new InboundItem();
     item.setProductSku(productSku);
-    item.setPackagingId(packagingId);
+    item.setPackagingId(packagingCode);
     item.setQuantityReceived(quantityReceived);
     item.setBasedQuantityEquivalent(baseQuantityEquivalent);
 

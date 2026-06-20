@@ -9,7 +9,7 @@ public record ProductRegisterCommand(
     String sku,
     String name,
     String supplierCode,
-    String baseUnitOfMeasureName,
+    String baseUnitOfMeasure,
     List<ProductPackagingRegisterCommand> listPackagingCommand) {
 
   public ProductRegisterCommand {
@@ -29,7 +29,7 @@ public record ProductRegisterCommand(
           "Product Register Command: Supplier Code cannot be null or blank.");
     }
 
-    if (baseUnitOfMeasureName == null || baseUnitOfMeasureName.isBlank()) {
+    if (baseUnitOfMeasure == null || baseUnitOfMeasure.isBlank()) {
       throw new RecordInitializationException(
           "Product Register Command: Base Unit of Measure Name cannot be null or blank.");
     }

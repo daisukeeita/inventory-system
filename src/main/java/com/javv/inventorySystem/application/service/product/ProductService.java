@@ -2,7 +2,6 @@ package com.javv.inventorySystem.application.service.product;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -49,20 +48,20 @@ public class ProductService {
                 productRegisterCommand.supplierCode() + ".");
       }
 
-      if (!unitsOfMeasureService.checkIfExistsByName(productRegisterCommand.baseUnitOfMeasureName())) {
+      if (!unitsOfMeasureService.checkIfExistsByName(productRegisterCommand.baseUnitOfMeasure())) {
         throw new ResourceNotFoundException(
             "Unit of Measure does not exists using Measure Name: " +
-                productRegisterCommand.baseUnitOfMeasureName() + ".");
+                productRegisterCommand.baseUnitOfMeasure() + ".");
       }
 
       List<String> listUomName = productRegisterCommand.listPackagingCommand()
           .stream()
-          .map(packaging -> packaging.unitOfMeasureName())
+          .map(packaging -> packaging.unitOfMeasure())
           .toList();
 
       if (!unitsOfMeasureService.doAllNamesExists(listUomName)) {
         throw new ResourceNotFoundException(
-            "One or more unit of measure IDs do not exists.");
+            "One or more unit of measure does not exist.");
       }
 
       Product product = toDomainEntity(productRegisterCommand);
@@ -103,10 +102,10 @@ public class ProductService {
   }
 
   public Product getBySku(String sku) {
-    Optional<Product> optionalProduct = productRepositoryInterface.findBySku(sku);
-    Product product = optionalProduct.orElseThrow(
-        () -> new ResourceNotFoundException(
-            "Product was not found using SKU: '" + sku + "'"));
+    Product product = productRepositoryInterface.findBySku(sku)
+        .orElseThrow(
+            () -> new ResourceNotFoundException(
+                "Product was not found using SKU: '" + sku + "'"));
 
     return product;
   }
@@ -117,7 +116,8 @@ public class ProductService {
 
   public boolean doAllSkuExists(List<String> sku) {
     if (sku == null || sku.isEmpty()) {
-      return false;
+      throw new IllegalArgumentException(
+          "Cannot retrieve record with an empty or null list of SKUs.");
     }
 
     List<String> filteredList = sku
@@ -126,6 +126,7 @@ public class ProductService {
         .toList();
 
     List<String> existingList = productRepositoryInterface.findExistingSkus(sku);
+
     return filteredList.size() == existingList.size();
   }
 
@@ -139,23 +140,16 @@ public class ProductService {
     String supplierName = supplierService
         .getBySupplierCode(product.getSupplierCode())
         .getCompanyName();
-    String baseUnitOfMeasureName = unitsOfMeasureService
-        .getByName(product.getBaseUnitsOfMeasureName())
-        .getName();
 
     List<ProductPackagingResponseRead> listProductPackagingRead = new ArrayList<>();
 
     for (ProductPackaging packaging : product.getListPackages()) {
-      String productName = getBySku(packaging.getProductSku()).getName();
-
-      String unitOfMeasureName = packaging.getUnitsOfMeasureName();
-
       listProductPackagingRead.add(
           new ProductPackagingResponseRead(
               packaging.getPackagingCode(),
-              packaging.getProductSku(),
-              productName,
-              unitOfMeasureName,
+              product.getSku(),
+              product.getName(),
+              packaging.getUnitsOfMeasureName(),
               packaging.getConversionFactor(),
               packaging.getPrice()));
     }
@@ -165,7 +159,7 @@ public class ProductService {
         product.getName(),
         product.getSupplierCode(),
         supplierName,
-        baseUnitOfMeasureName,
+        product.getBaseUnitsOfMeasureName(),
         listProductPackagingRead);
 
     return responseRead;
@@ -174,17 +168,19 @@ public class ProductService {
   private Product toDomainEntity(ProductRegisterCommand productRegisterCommand) {
 
     Product product = new Product();
+
     product.setSku(productRegisterCommand.sku());
     product.setName(productRegisterCommand.name());
     product.setSupplierCode(productRegisterCommand.supplierCode());
-    product.setBaseUnitsOfMeasureName(productRegisterCommand.baseUnitOfMeasureName());
+    product.setBaseUnitsOfMeasureName(productRegisterCommand.baseUnitOfMeasure());
 
     for (ProductPackagingRegisterCommand packaging : productRegisterCommand.listPackagingCommand()) {
-      String packagingCode = product.getSku() + "-" + packaging.unitOfMeasureName();
+
+      String packagingCode = product.getSku() + "-" + packaging.unitOfMeasure();
 
       product.addPackaging(
           packagingCode.toUpperCase(),
-          packaging.unitOfMeasureName(),
+          packaging.unitOfMeasure(),
           packaging.conversionFactor(),
           packaging.price());
     }

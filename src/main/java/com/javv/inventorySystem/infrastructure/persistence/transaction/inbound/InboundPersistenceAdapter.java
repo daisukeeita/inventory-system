@@ -87,7 +87,7 @@ public class InboundPersistenceAdapter implements InboundRepositoryInterface {
           .getReferenceBySku(inboundItem.getProductSku());
 
       ProductPackagingJpaEntity productPackagingJpaEntity = productPackagingJpaRepository
-          .getReferenceById(inboundItem.getPackagingId());
+          .getReferenceById(inboundItem.getPackagingCode());
 
       inboundItemJpaEntity.setProduct(productJpaEntity);
       inboundItemJpaEntity.setProductPackaging(productPackagingJpaEntity);

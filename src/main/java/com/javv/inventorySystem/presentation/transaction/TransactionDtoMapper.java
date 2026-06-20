@@ -16,14 +16,14 @@ public class TransactionDtoMapper {
     List<InboundItemRegisterCommand> listItem = inboundRegisterDto.listInboundItem()
         .stream()
         .map(item -> new InboundItemRegisterCommand(
-            item.productId(),
-            item.packagingId(),
+            item.productSku(),
+            item.packagingCode(),
             item.quantityReceived()))
         .toList();
 
     return new InboundRegisterCommand(
-        inboundRegisterDto.supplierId(),
-        inboundRegisterDto.encoderId(),
+        inboundRegisterDto.supplierCode(),
+        inboundRegisterDto.encoderUsername(),
         inboundRegisterDto.invoiceNumber(),
         inboundRegisterDto.dateReceived(),
         listItem);

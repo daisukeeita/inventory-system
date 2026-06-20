@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.presentation.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,17 +22,16 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(value = "api/v1/user")
 public class UserController {
+
+  @Autowired
   private UserService userService;
+
+  @Autowired
   private UserDtoMapper userDtoMapper;
 
-  public UserController(UserService userService, UserDtoMapper userDtoMapper) {
-    this.userService = userService;
-    this.userDtoMapper = userDtoMapper;
-  }
-
-  @PostMapping("/save")
+  @PostMapping("/create")
   @ResponseStatus(HttpStatus.CREATED)
-  public ApiResponse<UserResponseDto> saveUser(
+  public ApiResponse<UserResponseDto> create(
       @Valid @RequestBody UserRegistrationDto userRegistrationDto) {
 
     UserRegisterCommand userRegisterCommand = userDtoMapper.toCommandRecord(userRegistrationDto);

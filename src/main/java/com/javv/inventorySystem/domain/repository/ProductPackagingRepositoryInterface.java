@@ -7,9 +7,13 @@ import com.javv.inventorySystem.domain.model.product.ProductPackaging;
 
 public interface ProductPackagingRepositoryInterface {
 
-  List<ProductPackaging> findByProductId(Long productId);
+  List<ProductPackaging> findByProductSku(String productSku);
 
-  Optional<ProductPackaging> findById(Long id);
+  List<ProductPackaging> findAllByPackagingCode(List<String> packagingCodes);
 
-  List<ProductPackaging> findAllById(List<Long> listId);
+  Optional<ProductPackaging> findByPackagingCode(String packagingCode);
+
+  boolean existsByPackagingCode(String packagingCode);
+
+  List<String> findExistingPackagingCodes(List<String> packagingCodes);
 }

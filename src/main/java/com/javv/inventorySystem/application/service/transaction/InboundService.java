@@ -1,11 +1,14 @@
 package com.javv.inventorySystem.application.service.transaction;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.javv.inventorySystem.application.command.transaction.inbound.InboundItemRegisterCommand;
 import com.javv.inventorySystem.application.command.transaction.inbound.InboundRegisterCommand;
 import com.javv.inventorySystem.application.service.mainInventory.MainInventoryService;
 import com.javv.inventorySystem.application.service.product.ProductService;
@@ -13,6 +16,9 @@ import com.javv.inventorySystem.application.service.productPackaging.ProductPack
 import com.javv.inventorySystem.application.service.supplier.SupplierService;
 import com.javv.inventorySystem.application.service.user.UserService;
 import com.javv.inventorySystem.domain.exception.ServiceOperationException;
+import com.javv.inventorySystem.domain.model.product.ProductPackaging;
+import com.javv.inventorySystem.domain.model.transaction.inbound.Inbound;
+import com.javv.inventorySystem.domain.model.transaction.inbound.InboundItem;
 import com.javv.inventorySystem.domain.repository.InboundRepositoryInterface;
 
 @Service
@@ -67,82 +73,48 @@ public class InboundService {
 
     if (!productService.doAllSkuExists(listProductSku)) {
       throw new ServiceOperationException(
-          "Processing Inbound Failed: One or more product does not exist.");
+          "Processing Inbound Failed: One or more product does not exist from the provided list of SKU.");
     }
 
-  }
+    if (!productPackagingService.doAllPackagingCodeExists(listPackagingCode)) {
+      throw new ServiceOperationException(
+          "Processing Inbound Failed: One or more product packaging does not exists from the provided list of packaging codes.");
+    }
 
-  // @Transactional
-  // public void processInbound(InboundRegisterCommand inboundRegisterCommand) {
-  //
-  // // int supplierId = supplierService
-  // // .getById(inboundRegisterCommand.supplierId())
-  // // .getId();
-  //
-  // // UUID encoderId = userService
-  // // .getUserById(inboundRegisterCommand.encoderId())
-  // // .getId();
-  //
-  // List<Long> listPackagingId =
-  // inboundRegisterCommand.listInboundItem().stream()
-  // .map(item -> item.packagingId())
-  // .toList();
-  //
-  // List<Long> listProductId = inboundRegisterCommand.listInboundItem().stream()
-  // .map(item -> item.productId())
-  // .toList();
-  //
-  // Map<Long, Product> productMap = productService.get(listProductId)
-  // .stream()
-  // .collect(Collectors.toMap(
-  // entity -> entity.getId(),
-  // entity -> entity));
-  //
-  // Map<Long, ProductPackaging> packagingMap =
-  // productPackagingService.getAllById(listPackagingId).stream()
-  // .collect(Collectors.toMap(
-  // entity -> entity.getId(),
-  // entity -> entity));
-  //
-  // Inbound inbound = new Inbound();
-  //
-  // // inbound.setSupplierId(supplierId);
-  // // inbound.setEncoderId(encoderId);
-  // inbound.setInvoiceNumber(inboundRegisterCommand.invoiceNumber());
-  // inbound.setDateReceived(inboundRegisterCommand.dateReceived());
-  //
-  // for (InboundItemRegisterCommand item :
-  // inboundRegisterCommand.listInboundItem()) {
-  //
-  // Product product = productMap.get(item.productId());
-  // ProductPackaging packaging = packagingMap.get(item.packagingId());
-  //
-  // if (product == null) {
-  // throw new ResourceNotFoundException(
-  // "Inbound Process Fail: Product not found for ID: " + item.productId());
-  // }
-  //
-  // if (packaging == null) {
-  // throw new ResourceNotFoundException(
-  // "Inbound Process Fail: Product Packaging not found for ID: " +
-  // item.packagingId());
-  // }
-  //
-  // int baseQuantityEquivalent =
-  // packaging.calculateBaseQuantity(item.quantityReceived());
-  //
-  // inbound.addInboundItem(
-  // product.getSku(),
-  // packaging.getId(),
-  // item.quantityReceived(),
-  // baseQuantityEquivalent);
-  // }
-  //
-  // Inbound savedInbound = inboundRepositoryInterface.save(inbound);
-  //
-  // for (InboundItem item : savedInbound.getListInboundItem()) {
-  // mainInventoryService.incrementStock(item.getProductSku(),
-  // item.getBaseQuantityEquivalent());
-  // }
-  // }
+    Map<String, ProductPackaging> mappedPackaging = productPackagingService
+        .getAllByPackagingCodes(listPackagingCode)
+        .stream()
+        .collect(Collectors.toMap(
+            productPackaging -> productPackaging.getPackagingCode(),
+            productPackaging -> productPackaging));
+
+    Inbound inbound = new Inbound();
+
+    inbound.setSupplierCode(supplierCode);
+    inbound.setEncoderUsername(username);
+    inbound.setInvoiceNumber(inboundRegisterCommand.invoiceNumber());
+    inbound.setDateReceived(inboundRegisterCommand.dateReceived());
+
+    for (InboundItemRegisterCommand inboundItemCommand : inboundRegisterCommand.listInboundItem()) {
+
+      ProductPackaging productPackaging = mappedPackaging.get(inboundItemCommand.packagingCode());
+
+      int baseQuantityEquivalent = productPackaging
+          .calculateBaseQuantity(inboundItemCommand.quantityReceived());
+
+      inbound.addInboundItem(
+          inboundItemCommand.productSku(),
+          inboundItemCommand.packagingCode(),
+          inboundItemCommand.quantityReceived(),
+          baseQuantityEquivalent);
+    }
+
+    Inbound savedInbound = inboundRepositoryInterface.save(inbound);
+
+    for (InboundItem inboundItem : savedInbound.getListInboundItem()) {
+      mainInventoryService.incrementStock(
+          inboundItem.getProductSku(),
+          inboundItem.getBaseQuantityEquivalent());
+    }
+  }
 }

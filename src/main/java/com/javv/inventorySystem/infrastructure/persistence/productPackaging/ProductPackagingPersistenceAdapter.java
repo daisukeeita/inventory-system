@@ -20,19 +20,21 @@ public class ProductPackagingPersistenceAdapter implements ProductPackagingRepos
   private ProductPackagingPersistenceMapper productPackagingPersistenceMapper;
 
   @Override
-  public Optional<ProductPackaging> findById(Long id) {
-    Optional<ProductPackagingJpaEntity> optionalEntity = productPackagingJpaRepository.findById(id);
+  public Optional<ProductPackaging> findByPackagingCode(String packagingCode) {
+    Optional<ProductPackagingJpaEntity> optionalEntity = productPackagingJpaRepository
+        .findByPackagingCode(packagingCode);
 
     return optionalEntity.map(
         entity -> productPackagingPersistenceMapper.toDomainEntity(entity));
   }
 
   @Override
-  public List<ProductPackaging> findByProductId(Long productId) {
+  public List<ProductPackaging> findByProductSku(String productSku) {
     List<ProductPackagingJpaEntity> optionalListEntity = productPackagingJpaRepository
-        .findByProductId(productId);
+        .findByProductSku(productSku);
 
     List<ProductPackaging> listDomain = new ArrayList<ProductPackaging>();
+
     optionalListEntity.forEach(
         entity -> listDomain.add(
             productPackagingPersistenceMapper.toDomainEntity(entity)));
@@ -41,16 +43,22 @@ public class ProductPackagingPersistenceAdapter implements ProductPackagingRepos
   }
 
   @Override
-  public List<ProductPackaging> findAllById(List<Long> id) {
-    List<ProductPackagingJpaEntity> listJpa = productPackagingJpaRepository.findAllById(id);
+  public List<ProductPackaging> findAllByPackagingCode(List<String> packagingCode) {
+    List<ProductPackagingJpaEntity> listEntity = productPackagingJpaRepository
+        .findAllByPackagingCodeIn(packagingCode);
 
-    return listJpa.stream()
-        .map(jpaEntity -> productPackagingPersistenceMapper
-            .toDomainEntity(jpaEntity))
+    return listEntity.stream()
+        .map(entity -> productPackagingPersistenceMapper.toDomainEntity(entity))
         .toList();
   }
 
-  public ProductPackagingJpaEntity getReferenceById(Long id) {
-    return productPackagingJpaRepository.getReferenceById(id);
+  @Override
+  public List<String> findExistingPackagingCodes(List<String> packagingCodes) {
+    return productPackagingJpaRepository.findExistingPackagingCode(packagingCodes);
+  }
+
+  @Override
+  public boolean existsByPackagingCode(String packagingCode) {
+    return productPackagingJpaRepository.existsByPackagingCode(packagingCode);
   }
 }

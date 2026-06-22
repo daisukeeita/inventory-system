@@ -10,5 +10,5 @@ public interface UserJpaRepository extends JpaRepository<UserJpaEntity, UUID> {
 
   Optional<UserJpaEntity> findByUsername(String username);
 
-  UserJpaRepository getReferenceByUsername(String username);
+  UserJpaEntity getReferenceByUsername(String username);
 }

@@ -9,7 +9,9 @@ import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaEnt
 import com.javv.inventorySystem.infrastructure.persistence.product.ProductJpaRepository;
 import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.productPackaging.ProductPackagingJpaRepository;
+import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.supplier.SupplierJpaRepository;
+import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaEntity;
 import com.javv.inventorySystem.infrastructure.persistence.user.UserJpaRepository;
 
 @Component
@@ -29,15 +31,15 @@ public class InboundPersistenceMapper {
 
   public InboundJpaEntity toJpaEntity(Inbound inbound) {
 
-    // UserJpaEntity userJpaEntity = userJpaRepository.getReferenceById(
-    // inbound.getEncoderId());
+    UserJpaEntity userJpaEntity = userJpaRepository
+        .getReferenceByUsername(inbound.getEncoderUsername());
 
-    // SupplierJpaEntity supplierJpaEntity = supplierJpaRepository.getReferenceById(
-    // inbound.getSupplierId());
+    SupplierJpaEntity supplierJpaEntity = supplierJpaRepository
+        .getRererenceBySupplierCode(inbound.getSupplierCode());
 
     InboundJpaEntity inboundJpaEntity = new InboundJpaEntity();
-    // inboundJpaEntity.setSupplierJpaEntity(supplierJpaEntity);
-    // inboundJpaEntity.setUserJpaEntity(userJpaEntity);
+    inboundJpaEntity.setSupplierJpaEntity(supplierJpaEntity);
+    inboundJpaEntity.setUserJpaEntity(userJpaEntity);
     inboundJpaEntity.setInvoiceNumber(inbound.getInvoiceNumber());
     inboundJpaEntity.setDateReceived(inbound.getDateReceived());
 
@@ -47,7 +49,7 @@ public class InboundPersistenceMapper {
           .getReferenceBySku(inboundItem.getProductSku());
 
       ProductPackagingJpaEntity productPackagingJpaEntity = productPackagingJpaRepository
-          .getReferenceById(inboundItem.getPackagingCode());
+          .getReferenceByPackagingCode(inboundItem.getPackagingCode());
 
       inboundJpaEntity.addItem(
           productJpaEntity,
@@ -75,7 +77,7 @@ public class InboundPersistenceMapper {
 
       InboundItem inboundItem = inbound.addInboundItem(
           inboundItemJpaEntity.getProduct().getSku(),
-          inboundItemJpaEntity.getProductPackagingJpaEntity().getId(),
+          inboundItemJpaEntity.getProductPackagingJpaEntity().getPackagingCode(),
           inboundItemJpaEntity.getQuantityReceived(),
           inboundItemJpaEntity.getBaseQuantityEquivalent());
 

@@ -130,10 +130,13 @@ public class ProductService {
     return filteredList.size() == existingList.size();
   }
 
-  public Page<Product> getAll(int page, int size) {
+  public Page<ProductResponseRead> getAll(int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
 
-    return productRepositoryInterface.findAll(pageable);
+    Page<Product> productPage = productRepositoryInterface.findAll(pageable);
+
+    return productPage
+        .map(product -> toProductResponseRead(product));
   }
 
   private ProductResponseRead toProductResponseRead(Product product) {

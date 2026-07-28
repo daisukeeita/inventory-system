@@ -72,4 +72,9 @@ public class UnitsOfMeasurePersistenceAdapter implements UnitsOfMeasureRepositor
 
     return pageableMeasure.map(entity -> unitsOfMeasurePersistenceMapper.toDomainEntity(entity));
   }
+
+  @Override
+  public List<String> findAllNames() {
+    return unitsOfMeasureJpaRepository.findAllNames();
+  }
 }

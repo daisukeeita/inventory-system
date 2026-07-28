@@ -19,5 +19,7 @@ public interface UnitsOfMeasureRepositoryInterface {
 
   List<String> findExistingNames(List<String> names);
 
+  List<String> findAllNames();
+
   Page<UnitsOfMeasure> findAll(Pageable pageable);
 }

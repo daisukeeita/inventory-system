@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.infrastructure.persistence.supplier;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,13 @@ public class SupplierPersistenceAdapter implements SupplierRepositoryInterface {
     boolean result = supplierJpaRepository.existsBySupplierCode(supplierCode);
 
     return result;
+  }
+
+  @Override
+  public List<String> findAllSupplierCode() {
+    List<String> listOfSupplierCode = supplierJpaRepository.findAllSupplierCode();
+
+    return listOfSupplierCode;
   }
 
   @Override

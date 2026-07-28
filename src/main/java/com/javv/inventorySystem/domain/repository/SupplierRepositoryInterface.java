@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.domain.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.javv.inventorySystem.domain.model.supplier.Supplier;
@@ -12,6 +13,8 @@ public interface SupplierRepositoryInterface {
   Optional<Supplier> findBySupplierCode(String supplierCode);
 
   boolean existsBySupplierCode(String supplierCode);
+
+  List<String> findAllSupplierCode();
 
   Long count();
 }

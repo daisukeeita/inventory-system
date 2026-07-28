@@ -1,5 +1,6 @@
 package com.javv.inventorySystem.application.service.supplier;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +95,12 @@ public class SupplierService {
     boolean result = supplierRepositoryInterface.existsBySupplierCode(supplierCoe);
 
     return result;
+  }
+
+  public List<String> getAllSupplierCode() {
+    List<String> listOfSupplierCode = supplierRepositoryInterface.findAllSupplierCode();
+
+    return listOfSupplierCode;
   }
 
   private Supplier toDomainEntity(SupplierRegisterCommand supplierRegisterCommand) {

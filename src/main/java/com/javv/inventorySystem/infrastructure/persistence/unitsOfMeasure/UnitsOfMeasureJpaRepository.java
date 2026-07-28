@@ -17,6 +17,9 @@ public interface UnitsOfMeasureJpaRepository
   @NativeQuery("SELECT DISTINCT units_of_measure.name from units_of_measure WHERE units_of_measure.name IN :names")
   List<String> findExistingName(@Param("names") List<String> names);
 
+  @NativeQuery("SELECT name FROM units_of_measure")
+  List<String> findAllNames();
+
   Optional<UnitsOfMeasureJpaEntity> findByName(String name);
 
   UnitsOfMeasureJpaEntity getReferenceByName(String name);

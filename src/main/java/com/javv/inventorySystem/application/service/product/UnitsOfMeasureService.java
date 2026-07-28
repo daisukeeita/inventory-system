@@ -101,6 +101,12 @@ public class UnitsOfMeasureService {
     return unitsOfMeasureRepositoryInterface.findAll(pageable);
   }
 
+  public List<String> getAllNames() {
+    List<String> listUomNames = unitsOfMeasureRepositoryInterface.findAllNames();
+
+    return listUomNames;
+  }
+
   private UnitsOfMeasure toDomainEntity(
       UnitsOfMeasureRegisterCommand unitsOfMeasureRegisterCommand) {
 
